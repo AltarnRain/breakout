@@ -1,3 +1,4 @@
 export interface AppState {
-    message: string;
+
+    gameSize: number;
 }
