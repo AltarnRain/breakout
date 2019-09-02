@@ -6,8 +6,8 @@ import { appStore } from "./Store";
 
 // Dispatch a setDimensions action whenever the resize event fires. This will trigger an update of
 // the game field and the block and paddle size.
-window.addEventListener("resize", () => appStore().dispatch({type: GameActions.setDimensions}));
+window.addEventListener("resize", () => appStore().dispatch({type: GameActions.setDimensions, payload: undefined}));
 
-appStore().dispatch({ type: GameActions.setDimensions });
+appStore().dispatch({ type: GameActions.setDimensions, payload: undefined });
 
 ReactDOM.render(<Main />, document.getElementById("root"));

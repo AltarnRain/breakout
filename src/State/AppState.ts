@@ -6,6 +6,8 @@ export interface AppState {
     blocks?: Block[];
 
     paddle: Shape;
+
+    ball: Ball;
 }
 
 export interface Block extends Shape {
@@ -27,4 +29,8 @@ export interface GameDimensions {
     size: number;
     blockHeight: number;
     blockWidth: number;
+}
+
+export interface Ball extends Shape {
+    angle: number;
 }

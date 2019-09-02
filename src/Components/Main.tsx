@@ -1,5 +1,5 @@
 import React, { CSSProperties } from "react";
-import { Shape } from "../State/AppState";
+import { Ball, Shape } from "../State/AppState";
 import { GameActions } from "../State/GameActions";
 import { appState, appStore } from "../Store";
 
@@ -48,46 +48,54 @@ export class Main extends React.Component {
         this.tickHandler = window.requestAnimationFrame(this.tick);
     }
 
-    public render() {
-
+    private gameFieldStyle(): CSSProperties | undefined {
         const gameDimensions = appState().gameDimensions;
-
-        const gameFieldStyle = (): CSSProperties | undefined => {
-            if (gameDimensions) {
-                return {
-                    position: "absolute",
-                    left: gameDimensions.left,
-                    top: gameDimensions.top,
-                    width: gameDimensions.size,
-                    height: gameDimensions.size,
-                    borderColor: "white",
-                    borderStyle: "solid"
-                };
-            }
-        };
-
-        const positionStyle = (block: Shape): CSSProperties => {
-
+        if (gameDimensions) {
             return {
                 position: "absolute",
-                left: block.left,
-                top: block.top,
-                height: block.height,
-                width: block.width,
-                backgroundColor: block.color,
+                left: gameDimensions.left,
+                top: gameDimensions.top,
+                width: gameDimensions.size,
+                height: gameDimensions.size,
+                borderColor: "white",
+                borderStyle: "solid"
             };
-        };
+        }
+    }
 
+    private positionStyle(block: Shape): CSSProperties {
+        return {
+            position: "absolute",
+            left: block.left,
+            top: block.top,
+            height: block.height,
+            width: block.width,
+            backgroundColor: block.color,
+        };
+    }
+
+    private ballStyle(ball: Ball): CSSProperties {
+        const newPosition = this.positionStyle(ball);
+        newPosition.borderRadius = "50%";
+
+        return newPosition;
+    }
+
+    public render() {
         const blocks = appState().blocks ? appState().blocks : undefined;
         const paddle = appState().paddle ? appState().paddle : undefined;
+        const ball = appState().ball ? appState().ball : undefined;
 
         return (
-            <div style={gameFieldStyle()} onMouseMove={this.onMouseMove} >
+            <div style={this.gameFieldStyle()} onMouseMove={this.onMouseMove} >
                 {
-                    blocks ? blocks.map((b, index) => <div key={index} style={positionStyle(b)} />) : null
+                    blocks ? blocks.map((b, index) => <div key={index} style={this.positionStyle(b)} />) : null
                 }
                 {
-                    paddle ? <div style={positionStyle(paddle)} /> : null
+                    paddle ? <div style={this.positionStyle(paddle)} /> : null
+                }
+                {
+                    ball ? <div style={this.ballStyle(ball)} /> : null
                 }
             </div>
         );
