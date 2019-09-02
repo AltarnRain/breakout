@@ -1,13 +1,18 @@
 import { Action } from "redux";
-import { AppState } from "../State/AppState";
-import { SetGameSize } from "../State/StateConstants";
+import { alteredDimensions, getDimentions } from "../Lib";
+import { GameDimensions } from "../State/AppState";
+import { GameActions } from "../State/GameActions";
 
-export function GamedimensionsReducer(state: AppState["gameSize"] = 0, action: Action): AppState["gameSize"] {
-    if (action.type === SetGameSize) {
-        if (window.screen.availHeight > window.screen.availWidth) {
-            state = window.screen.availWidth;
+export function GamedimensionsReducer(state: GameDimensions = {} as GameDimensions, action: Action): GameDimensions {
+    if (action.type === GameActions.setDimensions) {
+
+        const gameDimensions = getDimentions();
+
+        const changed = alteredDimensions(gameDimensions, state);
+        if (changed) {
+            return gameDimensions;
         } else {
-            state = window.screen.availWidth;
+            return state;
         }
     }
 
