@@ -3,14 +3,16 @@ export interface AppState {
 
     gameDimensions?: GameDimensions;
 
-    blocks?: Block[];
+    blocks?: Shape[];
+
+    paddle: Shape;
 }
 
-export interface Block {
-    left?: number;
-    top?: number;
-    width?: number;
-    height?: number;
+export interface Shape {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
     color: string;
     x: number;
     y: number;

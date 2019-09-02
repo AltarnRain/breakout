@@ -1,14 +1,14 @@
-import { Block, GameDimensions } from "./State/AppState";
+import { Shape, GameDimensions } from "./State/AppState";
 
-export const getInitialBlocks = (): Block[] => {
+export const getInitialBlocks = (): Shape[] => {
 
-    const blocks: Block[] = [];
+    const blocks: Shape[] = [];
 
     let index = 0;
     for (let r = 0; r < 5; r++) {
         index ++;
         for (let c = 0; c < 12; c++) {
-            const block: Block = {
+            const block: Shape = {
                 color: index % 2 === 0 ? "red" : "blue",
                 x: c,
                 y: r,

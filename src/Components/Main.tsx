@@ -1,13 +1,13 @@
 
 import React, { CSSProperties, useEffect, useState } from "react";
 import { setStateWhenChanged } from "../Lib";
-import { Block, GameDimensions } from "../State/AppState";
+import { Shape, GameDimensions } from "../State/AppState";
 import { appState, appStore } from "../Store";
 
 export const Main: React.FC = () => {
 
     const [gameDimensions, setGameDimensions] = useState<GameDimensions | undefined>(appState().gameDimensions);
-    const [blocks, setBlocks] = useState<Block[] | undefined>(appState().blocks);
+    const [blocks, setBlocks] = useState<Shape[] | undefined>(appState().blocks);
 
     useEffect(() => {
         appStore().subscribe(() => {
@@ -30,7 +30,7 @@ export const Main: React.FC = () => {
         }
     };
 
-    const blockStyle = (block: Block): CSSProperties => {
+    const blockStyle = (block: Shape): CSSProperties => {
 
         return {
             position: "absolute",
