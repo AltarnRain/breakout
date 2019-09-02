@@ -1,4 +1,5 @@
 export enum GameActions {
     setDimensions,
-    hit
+    hit,
+    paddleMove
 }

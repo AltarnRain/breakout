@@ -3,9 +3,14 @@ export interface AppState {
 
     gameDimensions?: GameDimensions;
 
-    blocks?: Shape[];
+    blocks?: Block[];
 
     paddle: Shape;
+}
+
+export interface Block extends Shape {
+    x: number;
+    y: number;
 }
 
 export interface Shape {
@@ -14,8 +19,6 @@ export interface Shape {
     width: number;
     height: number;
     color: string;
-    x: number;
-    y: number;
 }
 
 export interface GameDimensions {
