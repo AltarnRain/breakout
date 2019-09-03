@@ -1,8 +1,8 @@
 import React, { CSSProperties } from "react";
+import { gameTick } from "./Constants";
 import { Ball, Shape } from "./State/AppState";
 import { GameActions } from "./State/GameActions";
 import { appState, appStore } from "./Store";
-import { gameTick } from "./Constants";
 
 export class Main extends React.Component {
     private tickHandler?: number;

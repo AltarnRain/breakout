@@ -1,4 +1,4 @@
-import { ballVelocity, degreeToRadian } from "../Constants";
+import { ballVelocity, degreeToRadian, ballAngleStartRandomFactor } from "../Constants";
 import { getDimentions } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
 import { Ball } from "../State/AppState";
@@ -10,8 +10,17 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<numb
 
     switch (action.type) {
         case GameActions.initialize:
+
+            const angleManipulator = (Math.random() * ballAngleStartRandomFactor);
+            let angle = 90;
+            if (Math.random() >= 0.5) {
+                angle = angle - angleManipulator;
+            } else {
+                angle = angle + angleManipulator;
+            }
+
             return {
-                angle: 90,
+                angle,
                 color: "yellow",
                 height: gameDimensions.size * 0.02,
                 width: gameDimensions.size * 0.02,
