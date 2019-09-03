@@ -1,6 +1,4 @@
-
 export interface AppState {
-
     gameDimensions?: GameDimensions;
 
     blocks?: Block[];

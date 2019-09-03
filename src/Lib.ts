@@ -1,4 +1,4 @@
-import { GameDimensions, Block } from "./State/AppState";
+import { Block, GameDimensions } from "./State/AppState";
 
 export const getInitialBlocks = (): Block[] => {
 
@@ -6,7 +6,7 @@ export const getInitialBlocks = (): Block[] => {
 
     let index = 0;
     for (let r = 0; r < 5; r++) {
-        index ++;
+        index++;
         for (let c = 0; c < 12; c++) {
             const block: Block = {
                 color: index % 2 === 0 ? "red" : "blue",
@@ -52,8 +52,8 @@ export const alteredDimensions = (valueA: GameDimensions, valueB: GameDimensions
         valueA.blockWidth !== valueB.blockWidth;
 };
 
-export function setStateWhenChanged<T>(f: (value: T) => void, oldValue: T, newValue: T): void {
+export const setStateWhenChanged = <T>(f: (value: T) => void, oldValue: T, newValue: T): void => {
     if (oldValue !== newValue) {
         f(newValue);
     }
-}
+};

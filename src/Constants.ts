@@ -1,0 +1,1 @@
+export const degreeToRadian = Math.PI / 180;

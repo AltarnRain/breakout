@@ -6,11 +6,7 @@ import { appState, appStore } from "../Store";
 export class Main extends React.Component {
     private tickHandler?: number;
     private tickStart?: number;
-    private fps: number = 0;
 
-    /**
-     *
-     */
     constructor(props: object) {
         super(props);
 
@@ -36,16 +32,25 @@ export class Main extends React.Component {
         const diff = tick - this.tickStart;
 
         // Redraw at 60 fps.
-        if (diff > (1000 / 60)) {
+        if (diff > 16.6) {
             this.forceUpdate();
-            this.tickHandler = window.requestAnimationFrame(this.tick);
+            appStore().dispatch({type: GameActions.Tick, payload: diff});
+            this.tickStart = tick;
         } else {
-            this.tickHandler = window.requestAnimationFrame(this.tick);
+            appStore().dispatch({type: GameActions.Tick, payload: diff});
         }
+
+        this.tickHandler = window.requestAnimationFrame(this.tick);
     }
 
     public componentDidMount(): void {
         this.tickHandler = window.requestAnimationFrame(this.tick);
+    }
+
+    public componentWillUnmount(): void {
+        if (this.tickHandler) {
+            window.cancelAnimationFrame(this.tickHandler);
+        }
     }
 
     private gameFieldStyle(): CSSProperties | undefined {
