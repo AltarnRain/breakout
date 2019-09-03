@@ -1,7 +1,7 @@
 export enum GameActions {
-
     initialize,
-    hit,
+    hitBlock,
     paddleMove,
-    Tick
+    Tick,
+    ballBounce
 }

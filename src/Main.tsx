@@ -34,6 +34,38 @@ export class Main extends React.Component {
 
         // Redraw at 60 fps.
         if (diff > gameTick) {
+
+            const ball = appState().ball;
+            const blocks = appState().blocks;
+
+            if (blocks) {
+                const blockhit = blocks.find((block) => {
+                    const blockXL = block.left;
+                    const blockXR = block.left + block.width;
+                    const blockYU = block.top;
+                    const blockYB = block.top + block.height;
+
+                    const ballXL = ball.left;
+                    const ballXR = ball.left + ball.width;
+                    const ballYU = ball.top;
+                    const ballYB = ball.top + ball.height;
+
+                    const inside =
+                        ballXL > blockXL &&
+                        ballXR < blockXR &&
+                        ballYU > blockYU &&
+                        ballYB > blockYB;
+
+                    return inside;
+                });
+
+                if (blockhit) {
+                    appStore().dispatch({type: GameActions.hitBlock, payload: blockhit});
+                    appStore().dispatch({type: GameActions.ballBounce, payload: undefined});
+                }
+
+            }
+
             this.forceUpdate();
             appStore().dispatch({type: GameActions.Tick, payload: diff});
             this.tickStart = tick;

@@ -33,6 +33,9 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<numb
             const y = Math.sin(state.angle * degreeToRadian * -1) * ballVelocity + state.top;
 
             return { ...state, left: x, top: y };
+
+        case GameActions.ballBounce:
+            return {...state, angle: state.angle - 180 };
         default:
             return state;
     }

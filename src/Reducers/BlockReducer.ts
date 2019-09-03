@@ -9,8 +9,8 @@ export function blockReducer(state: Block[] = [], action: ActionPayload<Block>):
     }
 
     switch (action.type) {
-        case GameActions.hit:
-           return state;
+        case GameActions.hitBlock:
+           return state.filter((b) => b.x !== action.payload.x && b.y !== action.payload.y);
 
         case GameActions.initialize:
             // The setDimension action is called once during bootup, then, it dispached via a resize event.
