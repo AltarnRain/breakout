@@ -12,16 +12,11 @@ export function blockReducer(state: Block[] = [], action: ActionPayload<Block>):
         case GameActions.hit:
            return state;
 
-        case GameActions.setDimensions:
+        case GameActions.initialize:
             // The setDimension action is called once during bootup, then, it dispached via a resize event.
             const gameDimensions = getDimentions();
 
-            let newState: Block[];
-            if (state.length === 0) {
-                newState = getInitialBlocks();
-            } else {
-                newState = [...state];
-            }
+            const newState = getInitialBlocks();
 
             newState.forEach((b) => {
                 b.height = gameDimensions.blockHeight;

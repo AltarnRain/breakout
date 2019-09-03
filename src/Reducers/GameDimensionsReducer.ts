@@ -4,7 +4,8 @@ import { GameDimensions } from "../State/AppState";
 import { GameActions } from "../State/GameActions";
 
 export function GamedimensionsReducer(state: GameDimensions = {} as GameDimensions, action: Action): GameDimensions {
-    if (action.type === GameActions.setDimensions) {
+
+    if (action.type === GameActions.initialize) {
 
         const gameDimensions = getDimentions();
 

@@ -1,7 +1,8 @@
 import React, { CSSProperties } from "react";
-import { Ball, Shape } from "../State/AppState";
-import { GameActions } from "../State/GameActions";
-import { appState, appStore } from "../Store";
+import { Ball, Shape } from "./State/AppState";
+import { GameActions } from "./State/GameActions";
+import { appState, appStore } from "./Store";
+import { gameTick } from "./Constants";
 
 export class Main extends React.Component {
     private tickHandler?: number;
@@ -32,7 +33,7 @@ export class Main extends React.Component {
         const diff = tick - this.tickStart;
 
         // Redraw at 60 fps.
-        if (diff > 16.6) {
+        if (diff > gameTick) {
             this.forceUpdate();
             appStore().dispatch({type: GameActions.Tick, payload: diff});
             this.tickStart = tick;

@@ -7,7 +7,7 @@ export function paddleReducer(state: Shape = {} as Shape, action: ActionPayload<
     const gameDimensions = getDimentions();
 
     switch (action.type) {
-        case GameActions.setDimensions:
+        case GameActions.initialize:
 
             const height = gameDimensions.size / 40;
             const width = gameDimensions.size / 10;
