@@ -15,7 +15,7 @@ export class Main extends React.Component {
         this.tick = this.tick.bind(this);
     }
 
-    private onMouseMove(e: React.MouseEvent): void {
+    private onMouseMove(e: MouseEvent): void {
         if (e) {
             const gameDimensions = appState().gameDimensions;
             if (gameDimensions) {
@@ -46,6 +46,8 @@ export class Main extends React.Component {
 
     public componentDidMount(): void {
         this.tickHandler = window.requestAnimationFrame(this.tick);
+
+        window.addEventListener("mousemove", this.onMouseMove);
     }
 
     public componentWillUnmount(): void {
@@ -93,7 +95,7 @@ export class Main extends React.Component {
         const ball = appState().ball ? appState().ball : undefined;
 
         return (
-            <div style={this.gameFieldStyle()} onMouseMove={this.onMouseMove} >
+            <div style={this.gameFieldStyle()}>
                 {
                     blocks ? blocks.map((b, index) => <div key={index} style={this.positionStyle(b)} />) : null
                 }
