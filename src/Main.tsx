@@ -41,24 +41,35 @@ export class Main extends React.Component {
             const paddle = appState().paddle;
 
             if (blocks) {
-                const blockhit = blocks.some((b) => overlaps(b, ball));
+                const hitBlock = blocks.find((b) => overlaps(b, ball));
 
-                if (blockhit) {
-                    appStore().dispatch({type: GameActions.hitBlock, payload: blockhit});
-                    appStore().dispatch({type: GameActions.ballBounce, payload: undefined});
+                if (hitBlock) {
+                    appStore().dispatch({ type: GameActions.hitBlock, payload: hitBlock });
+                    appStore().dispatch({ type: GameActions.ballBounce, payload: undefined });
                 }
             }
 
             const paddleHit = overlaps(paddle, ball);
             if (paddleHit) {
-                appStore().dispatch({type: GameActions.ballBounce, payload: undefined});
+                appStore().dispatch({ type: GameActions.ballBounce, payload: undefined });
+            }
+
+            const gameDimensions = appState().gameDimensions;
+            if (gameDimensions) {
+                const hitWall = ball.top < 0 ||
+                ball.left < 0 ||
+                ball.left > gameDimensions.size;
+
+                if (hitWall) {
+                    appStore().dispatch({ type: GameActions.ballBounce, payload: undefined });
+                }
             }
 
             this.forceUpdate();
-            appStore().dispatch({type: GameActions.Tick, payload: diff});
+            appStore().dispatch({ type: GameActions.Tick, payload: diff });
             this.tickStart = tick;
         } else {
-            appStore().dispatch({type: GameActions.Tick, payload: diff});
+            appStore().dispatch({ type: GameActions.Tick, payload: diff });
         }
 
         this.tickHandler = window.requestAnimationFrame(this.tick);
