@@ -1,4 +1,4 @@
-import { Block, GameDimensions } from "./State/AppState";
+import { Block, GameDimensions, Shape } from "./State/AppState";
 
 export const getInitialBlocks = (): Block[] => {
 
@@ -57,3 +57,27 @@ export const setStateWhenChanged = <T>(f: (value: T) => void, oldValue: T, newVa
         f(newValue);
     }
 };
+
+export function overlaps(shape1: Shape, shape2: Shape) {
+
+    const left1 = shape1.left;
+    const right1 = shape1.left + shape1.width;
+    const top1 = shape1.top;
+    const bottom1 = shape1.top + shape1.height;
+
+    const left2 = shape2.left;
+    const right2 = shape2.left + shape2.width;
+    const top2 = shape2.top;
+    const bottom2 = shape2.top + shape2.height;
+
+    if (bottom1 < top2 || top1 > bottom2) {
+        return false;
+    }
+
+    if (right2 < left1 || left2 > right1) {
+        return false;
+    }
+
+    // Rectangles overlap
+    return true;
+}

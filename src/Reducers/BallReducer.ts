@@ -1,4 +1,4 @@
-import { ballVelocity, degreeToRadian, ballAngleStartRandomFactor } from "../Constants";
+import { ballAngleStartRandomFactor, ballVelocity, degreeToRadian } from "../Constants";
 import { getDimentions } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
 import { Ball } from "../State/AppState";

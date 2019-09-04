@@ -3,6 +3,7 @@ import { gameTick } from "./Constants";
 import { Ball, Shape } from "./State/AppState";
 import { GameActions } from "./State/GameActions";
 import { appState, appStore } from "./Store";
+import { overlaps } from "./Lib";
 
 export class Main extends React.Component {
     private tickHandler?: number;
@@ -37,33 +38,20 @@ export class Main extends React.Component {
 
             const ball = appState().ball;
             const blocks = appState().blocks;
+            const paddle = appState().paddle;
 
             if (blocks) {
-                const blockhit = blocks.find((block) => {
-                    const blockXL = block.left;
-                    const blockXR = block.left + block.width;
-                    const blockYU = block.top;
-                    const blockYB = block.top + block.height;
-
-                    const ballXL = ball.left;
-                    const ballXR = ball.left + ball.width;
-                    const ballYU = ball.top;
-                    const ballYB = ball.top + ball.height;
-
-                    const inside =
-                        ballXL > blockXL &&
-                        ballXR < blockXR &&
-                        ballYU > blockYU &&
-                        ballYB > blockYB;
-
-                    return inside;
-                });
+                const blockhit = blocks.some((b) => overlaps(b, ball));
 
                 if (blockhit) {
                     appStore().dispatch({type: GameActions.hitBlock, payload: blockhit});
                     appStore().dispatch({type: GameActions.ballBounce, payload: undefined});
                 }
+            }
 
+            const paddleHit = overlaps(paddle, ball);
+            if (paddleHit) {
+                appStore().dispatch({type: GameActions.ballBounce, payload: undefined});
             }
 
             this.forceUpdate();
