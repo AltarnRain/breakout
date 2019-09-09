@@ -35,4 +35,6 @@ export interface GameDimensions {
 
 export interface Ball extends Shape {
     angle: number;
+
+    velocity: number;
 }

@@ -1,4 +1,4 @@
-import { BallResizeFactor, BallVelocity, BounceIncreaseConstant, DegreeToRadian } from "../Constants";
+import { BallResizeFactor, BounceIncreaseConstant, DegreeToRadian } from "../Constants";
 import { Guard } from "../Guard";
 import { angleRandomizer, getDimentions } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
@@ -19,12 +19,13 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Shap
                 width: gameDimensions.size * BallResizeFactor,
                 left: (gameDimensions.size / 2) - (gameDimensions.size * BallResizeFactor / 2),
                 top: (gameDimensions.size / 2) - (gameDimensions.size * BallResizeFactor / 2),
+                velocity: 6
             };
         }
 
         case GameActions.Tick: {
-            const x = Math.cos(state.angle * DegreeToRadian * -1) * BallVelocity + state.left;
-            const y = Math.sin(state.angle * DegreeToRadian * -1) * BallVelocity + state.top;
+            const x = Math.cos(state.angle * DegreeToRadian * -1) * state.velocity + state.left;
+            const y = Math.sin(state.angle * DegreeToRadian * -1) * state.velocity  + state.top;
 
             return { ...state, left: x, top: y };
         }
@@ -51,8 +52,9 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Shap
                     }
                 }
 
-                angle = (angle + angleChange) * -1;
                 // When the ball top or bottom makes contact, multiply the current angle by -1 for it to bounce.
+                angle = (angle + angleChange) * -1;
+
                 return { ...state, angle };
             }
 
@@ -60,9 +62,14 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Shap
         }
 
         case GameActions.ballBounceVertically:
+            // If the ball hits a side, the new angle is 180 - current angle.
             const verticalBounceAngle = 180 - state.angle;
 
             return { ...state, angle: verticalBounceAngle };
+
+            case GameActions.hitBlock:
+                // Increase the ball speed for each hit block
+                return {...state, velocity: state.velocity * 1.01 };
         default:
             return state;
     }

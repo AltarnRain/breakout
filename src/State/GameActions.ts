@@ -4,5 +4,6 @@ export enum GameActions {
     paddleMove,
     Tick,
     ballBounceHorizantally,
-    ballBounceVertically
+    ballBounceVertically,
+    gameLost
 }

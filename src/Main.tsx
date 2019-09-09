@@ -46,22 +46,13 @@ export class Main extends React.Component {
                 if (hitBlock) {
                     appStore().dispatch({ type: GameActions.hitBlock, payload: hitBlock });
 
-                    const hitBottomOfBlock = ball.top >= hitBlock.top + hitBlock.height;
-                    const hitTopOfBlock = ball.top + ball.height >= hitBlock.top;
-                    const hitLeftSide = ball.left + ball.width >= hitBlock.left;
-                    const hitRightSide = ball.left >= hitBlock.left + hitBlock.width;
-
-                    if (hitBottomOfBlock || hitTopOfBlock) {
-                        appStore().dispatch({type: GameActions.ballBounceHorizantally, payload: hitBlock });
-                    } else if (hitLeftSide || hitRightSide) {
-                        appStore().dispatch({type: GameActions.ballBounceVertically, payload: hitBlock});
-                    }
+                    this.hitShape(ball, hitBlock);
                 }
             }
 
             const paddleHit = overlaps(paddle, ball);
             if (paddleHit) {
-                appStore().dispatch({ type: GameActions.ballBounceHorizantally, payload: paddle });
+                this.hitShape(ball, paddle);
             }
 
             const gameDimensions = appState().gameDimensions;
@@ -89,6 +80,19 @@ export class Main extends React.Component {
         }
 
         this.tickHandler = window.requestAnimationFrame(this.tick);
+    }
+
+    private hitShape(ball: Ball, shape: Shape) {
+        const hitTop = ball.top >= shape.top + shape.height;
+        const hitBottom = ball.top + ball.height >= shape.top;
+        const hitLeft = ball.left + ball.width >= shape.left;
+        const hitRight = ball.left >= shape.left + shape.width;
+
+        if (hitTop || hitBottom) {
+            appStore().dispatch({ type: GameActions.ballBounceHorizantally, payload: shape });
+        } else if (hitLeft || hitRight) {
+            appStore().dispatch({ type: GameActions.ballBounceVertically, payload: shape });
+        }
     }
 
     public componentDidMount(): void {
