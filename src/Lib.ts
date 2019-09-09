@@ -1,4 +1,5 @@
 import { Block, GameDimensions, Shape } from "./State/AppState";
+import { BallAngleStartRandomFactor } from "./Constants";
 
 export const getInitialBlocks = (): Block[] => {
 
@@ -80,4 +81,13 @@ export function overlaps(shape1: Shape, shape2: Shape) {
 
     // Rectangles overlap
     return true;
+}
+
+export function angleRandomizer(): number {
+    const angleManipulator = (Math.random() * BallAngleStartRandomFactor);
+    if (Math.random() >= 0.5) {
+        return angleManipulator;
+    } else {
+        return angleManipulator * -1;
+    }
 }

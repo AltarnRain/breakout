@@ -1,9 +1,9 @@
 import { getDimentions } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
-import { Shape } from "../State/AppState";
+import { Paddle } from "../State/AppState";
 import { GameActions } from "../State/GameActions";
 
-export function paddleReducer(state: Shape = {} as Shape, action: ActionPayload<number>): Shape {
+export function paddleReducer(state: Paddle = { isPaddle: true } as Paddle, action: ActionPayload<number>): Paddle {
     const gameDimensions = getDimentions();
 
     switch (action.type) {
@@ -20,6 +20,7 @@ export function paddleReducer(state: Shape = {} as Shape, action: ActionPayload<
                 top,
                 left,
                 height,
+                isPaddle: true
             };
 
         case GameActions.paddleMove:

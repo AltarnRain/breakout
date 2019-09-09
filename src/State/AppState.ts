@@ -3,7 +3,7 @@ export interface AppState {
 
     blocks?: Block[];
 
-    paddle: Shape;
+    paddle: Paddle;
 
     ball: Ball;
 }
@@ -19,6 +19,10 @@ export interface Shape {
     width: number;
     height: number;
     color: string;
+}
+
+export interface Paddle extends Shape {
+    isPaddle: true;
 }
 
 export interface GameDimensions {

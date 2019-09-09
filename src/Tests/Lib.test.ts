@@ -1,6 +1,6 @@
 import "jest";
-import { overlaps } from "./Lib";
-import { Shape } from "./State/AppState";
+import { overlaps } from "../Lib";
+import { Shape } from "../State/AppState";
 
 describe("Lib tests", () => {
     it("returns true when a shape overlaps.", () => {

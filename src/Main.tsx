@@ -1,9 +1,9 @@
 import React, { CSSProperties } from "react";
-import { gameTick } from "./Constants";
+import { GameTick } from "./Constants";
+import { overlaps } from "./Lib";
 import { Ball, Shape } from "./State/AppState";
 import { GameActions } from "./State/GameActions";
 import { appState, appStore } from "./Store";
-import { overlaps } from "./Lib";
 
 export class Main extends React.Component {
     private tickHandler?: number;
@@ -34,7 +34,7 @@ export class Main extends React.Component {
         const diff = tick - this.tickStart;
 
         // Redraw at 60 fps.
-        if (diff > gameTick) {
+        if (diff > GameTick) {
 
             const ball = appState().ball;
             const blocks = appState().blocks;
@@ -45,23 +45,39 @@ export class Main extends React.Component {
 
                 if (hitBlock) {
                     appStore().dispatch({ type: GameActions.hitBlock, payload: hitBlock });
-                    appStore().dispatch({ type: GameActions.ballBounce, payload: undefined });
+
+                    const hitBottomOfBlock = ball.top >= hitBlock.top + hitBlock.height;
+                    const hitTopOfBlock = ball.top + ball.height >= hitBlock.top;
+                    const hitLeftSide = ball.left + ball.width >= hitBlock.left;
+                    const hitRightSide = ball.left >= hitBlock.left + hitBlock.width;
+
+                    if (hitBottomOfBlock || hitTopOfBlock) {
+                        appStore().dispatch({type: GameActions.ballBounceHorizantally, payload: hitBlock });
+                    } else if (hitLeftSide || hitRightSide) {
+                        appStore().dispatch({type: GameActions.ballBounceVertically, payload: hitBlock});
+                    }
                 }
             }
 
             const paddleHit = overlaps(paddle, ball);
             if (paddleHit) {
-                appStore().dispatch({ type: GameActions.ballBounce, payload: undefined });
+                appStore().dispatch({ type: GameActions.ballBounceHorizantally, payload: paddle });
             }
 
             const gameDimensions = appState().gameDimensions;
             if (gameDimensions) {
-                const hitWall = ball.top < 0 ||
-                ball.left < 0 ||
-                ball.left > gameDimensions.size;
 
-                if (hitWall) {
-                    appStore().dispatch({ type: GameActions.ballBounce, payload: undefined });
+                if (ball.top < 0) {
+                    // Hit the top  wall
+                    appStore().dispatch({ type: GameActions.ballBounceHorizantally });
+                } else if (ball.left + ball.width > gameDimensions.size) {
+                    // Hit the left wall
+                    appStore().dispatch({ type: GameActions.ballBounceVertically });
+                } else if (ball.top + ball.height > gameDimensions.size) {
+                    appStore().dispatch({ type: GameActions.ballBounceHorizantally });
+                } else if (ball.left < 0) {
+                    // Hit the right wall
+                    appStore().dispatch({ type: GameActions.ballBounceVertically });
                 }
             }
 
