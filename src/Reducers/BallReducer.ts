@@ -1,10 +1,9 @@
-import { BallResizeFactor, BallVelocity, DegreeToRadian } from "../Constants";
+import { BallResizeFactor, BallVelocity, BounceIncreaseConstant, DegreeToRadian } from "../Constants";
 import { Guard } from "../Guard";
 import { angleRandomizer, getDimentions } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
 import { Ball, Shape } from "../State/AppState";
 import { GameActions } from "../State/GameActions";
-
 
 export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Shape>): Ball {
 
@@ -46,9 +45,9 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Shap
 
                     if (v <= 0.5) {
                         // ball hit the left side.
-                        angleChange = 30 * (0.5 - v) * -1;
+                        angleChange = BounceIncreaseConstant * (0.5 - v) * -1;
                     } else {
-                        angleChange = 30 * (v - 0.5);
+                        angleChange = BounceIncreaseConstant * (v - 0.5);
                     }
                 }
 

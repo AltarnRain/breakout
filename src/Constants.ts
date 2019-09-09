@@ -7,3 +7,5 @@ export const BallVelocity = 6;
 export const BallAngleStartRandomFactor = 10;
 
 export const BallResizeFactor = 0.02;
+
+export const BounceIncreaseConstant = 40;
