@@ -2,7 +2,6 @@ import "jest";
 import { ballReducer } from "../Reducers/BallReducer";
 import { Ball, Paddle } from "../State/AppState";
 import { GameActions } from "../State/GameActions";
-import { getBall } from "./Helper";
 
 describe("ball reducer tests", () => {
     it("can return the initial state of the ball", () => {
@@ -20,7 +19,13 @@ describe("ball reducer tests", () => {
 
     it ("goes up at 90 degrees", () => {
         // Arrange
-        const ball =  getBall();
+        const ball: Ball = {
+            left: 50,
+            top: 50,
+            angle: 180,
+            velocity: 1,
+        } as Ball;
+
         ball.angle = 90;
 
         // Act
@@ -33,7 +38,12 @@ describe("ball reducer tests", () => {
 
     it ("goes right at 180 degrees", () => {
         // Arrange
-        const ball: Ball = getBall();
+        const ball: Ball = {
+            left: 50,
+            top: 50,
+            angle: 180,
+            velocity: 1,
+        } as Ball;
 
         // Act
         const newBall = ballReducer(ball, {type: GameActions.Tick});

@@ -3,6 +3,7 @@ import { NumberOfBlockColumns, NumberOfBlockRows } from "../Constants";
 import { angleRandomizer, getBounceAction, getInitialBlocks, overlaps } from "../Lib";
 import { Ball, Block, Shape } from "../State/AppState";
 import { GameActions } from "../State/GameActions";
+import { getBall } from "./Helper";
 
 describe("Lib tests", () => {
 
@@ -144,6 +145,24 @@ describe("Lib tests", () => {
     });
 
     it("return vertical when the ball bounces off the left side of a shape", ()  => {
-        const ball = get
+        // Arrange
+        const ball = {
+            left: 50,
+            top: 50,
+            width: 10
+        } as Ball;
+
+        const shape = {
+            left: 50,
+            top: 100,
+            width: 100,
+        } as Shape;
+
+        // Act
+        const result = getBounceAction(ball, shape);
+
+        // Assert
+        expect(result).toBe(GameActions.ballBounceVertically);
+
     });
 });
