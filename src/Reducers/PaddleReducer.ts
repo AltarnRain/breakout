@@ -1,4 +1,5 @@
-import { getDimentions } from "../Lib";
+
+import { getDimentions } from "../GameDimensions";
 import ActionPayload from "../State/ActionPayLoad";
 import { Paddle } from "../State/AppState";
 import { GameActions } from "../State/GameActions";
