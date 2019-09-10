@@ -1,8 +1,49 @@
 import "jest";
-import { overlaps } from "../Lib";
-import { Shape } from "../State/AppState";
+import { NumberOfBlockColumns, NumberOfBlockRows } from "../Constants";
+import { angleRandomizer, getInitialBlocks, overlaps, getBounceAction } from "../Lib";
+import { Shape, Ball, Block } from "../State/AppState";
+import { GameActions } from "../State/GameActions";
 
 describe("Lib tests", () => {
+
+    it("returns the initial block array based on defined constants", () => {
+        // Act
+        const result = getInitialBlocks();
+
+        // Assert
+        expect(result).toBeDefined();
+        expect(result.length).toBe(NumberOfBlockRows * NumberOfBlockColumns);
+    });
+
+    it("returns a number to manipulate an angle", () => {
+        // Act
+        const result = angleRandomizer();
+
+        // Assert - The result is based on a random number. Check if the output is a number.
+        expect(typeof (result)).toBe("number");
+    });
+
+    it("returns the verticle bounce action", () => {
+
+        const ball = {
+            left: 50,
+            top: 39,
+            width: 10,
+        } as Ball;
+
+        const block = {
+            left: 30,
+            top: 50,
+            width: 20
+        } as Block;
+
+        // Act
+        const result = getBounceAction(ball, block);
+
+        // Assert
+        expect(result).toBe(GameActions.ballBounceVertically);
+    });
+
     it("returns true when a shape overlaps.", () => {
 
         // Shape

@@ -19,11 +19,8 @@ describe("ball reducer tests", () => {
 
     it ("goes up at 90 degrees", () => {
         // Arrange
-        const ball = {
-            left : 50,
-            top: 50,
-            angle: 90,
-        } as unknown as Ball;
+        const ball =  getBall();
+        ball.angle = 90;
 
         // Act
         const newBall = ballReducer(ball, {type: GameActions.Tick});
@@ -35,11 +32,7 @@ describe("ball reducer tests", () => {
 
     it ("goes right at 180 degrees", () => {
         // Arrange
-        const ball = {
-            left : 50,
-            top: 50,
-            angle: 180,
-        } as unknown as Ball;
+        const ball: Ball = getBall();
 
         // Act
         const newBall = ballReducer(ball, {type: GameActions.Tick});
@@ -72,3 +65,20 @@ describe("ball reducer tests", () => {
         expect(result).toBeDefined();
     });
 });
+
+/**
+ * Returns a ball object for units tests
+ * @return {Ball}.
+ */
+function getBall(): Ball {
+    return {
+        left: 50,
+        top: 50,
+        angle: 180,
+        velocity: 1,
+        color: "blue",
+        height: 10,
+        lastObject: undefined,
+        width: 10
+    };
+}

@@ -81,6 +81,11 @@ export const angleRandomizer = (): number => {
  * @returns {GameActions}. The bounce action or undefined if no bounce action could be determined.
  */
 export const getBounceAction = (ball: Ball, shape: Shape): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically | undefined => {
+
+    if (!overlaps(ball, shape)) {
+        return undefined;
+    }
+
     const hitTop = ball.top >= shape.top + shape.height;
     const hitBottom = ball.top + ball.height >= shape.top;
     const hitLeft = ball.left + ball.width >= shape.left;
@@ -100,8 +105,9 @@ export const getBounceAction = (ball: Ball, shape: Shape): GameActions.ballBounc
  * @param {Ball} ball. A ball object
  * @param {Paddle} paddle. A paddle object
  */
-export const angleChange = (ball: Ball, paddle: Paddle): number => {
+export const changeAngle = (ball: Ball, paddle: Paddle): number => {
     const p = Math.abs(ball.left - paddle.left);
+
     // calculate a factor based on the shape's width. Since this is a horizantol hit, this results in a
     // number between 0 and 1.
     const v = p / paddle.width;
