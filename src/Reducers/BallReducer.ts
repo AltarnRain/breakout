@@ -49,12 +49,7 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Shap
                     if (Guard.isPaddle(action.payload)) {
 
                         // calculate where the ball hit relative to the shape from the left size.
-                        const p = Math.abs(action.payload.left - state.left);
-
-                        // calculate a factor based on the shape's width. Since this is a horizantol hit, this results in a
-                        // number between 0 and 1.
-                        const v = p / action.payload.width;
-                        angleChange = BounceAngleIncreaseConstant * (0.5 - v) * -1;
+                        angleChange = angleChange(angleChange);
                     }
 
                     // When the ball top or bottom makes contact, multiply the current angle by -1 for it to bounce.

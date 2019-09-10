@@ -66,9 +66,9 @@ describe("ball reducer tests", () => {
         } as Paddle;
 
         // Act
-        const result = ballReducer(ball, { type: GameActions.ballBounceHorizantally, payload: paddle})
+        const result = ballReducer(ball, { type: GameActions.ballBounceHorizantally, payload: paddle});
 
         // Assert
-        expect(result).toBeDefined()
+        expect(result).toBeDefined();
     });
 });
