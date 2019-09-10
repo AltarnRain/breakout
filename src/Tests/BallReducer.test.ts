@@ -2,6 +2,7 @@ import "jest";
 import { ballReducer } from "../Reducers/BallReducer";
 import { Ball, Paddle } from "../State/AppState";
 import { GameActions } from "../State/GameActions";
+import { getBall } from "./Helper";
 
 describe("ball reducer tests", () => {
     it("can return the initial state of the ball", () => {
@@ -65,20 +66,3 @@ describe("ball reducer tests", () => {
         expect(result).toBeDefined();
     });
 });
-
-/**
- * Returns a ball object for units tests
- * @return {Ball}.
- */
-function getBall(): Ball {
-    return {
-        left: 50,
-        top: 50,
-        angle: 180,
-        velocity: 1,
-        color: "blue",
-        height: 10,
-        lastObject: undefined,
-        width: 10
-    };
-}

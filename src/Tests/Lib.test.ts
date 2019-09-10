@@ -1,7 +1,7 @@
 import "jest";
 import { NumberOfBlockColumns, NumberOfBlockRows } from "../Constants";
-import { angleRandomizer, getInitialBlocks, overlaps, getBounceAction } from "../Lib";
-import { Shape, Ball, Block } from "../State/AppState";
+import { angleRandomizer, getBounceAction, getInitialBlocks, overlaps } from "../Lib";
+import { Ball, Block, Shape } from "../State/AppState";
 import { GameActions } from "../State/GameActions";
 
 describe("Lib tests", () => {
@@ -141,5 +141,9 @@ describe("Lib tests", () => {
         // Assert
         expect(result1).toBe(false);
         expect(result2).toBe(false);
+    });
+
+    it("return vertical when the ball bounces off the left side of a shape", ()  => {
+        const ball = get
     });
 });
