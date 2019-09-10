@@ -1,17 +1,17 @@
 import { BallResizeFactor, BounceAngleIncreaseConstant, DegreeToRadian, InitialBallVelocity } from "../Constants";
-import { getDimentions } from "../GameDimensions";
+import { getGameDimensions } from "../GameDimensions";
 import { Guard } from "../Guard";
-import { angleRandomizer } from "../Lib";
+import { angleRandomizer, changeAngle } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
 import { Ball, Shape } from "../State/AppState";
 import { GameActions } from "../State/GameActions";
+
+const gameDimensions = getGameDimensions();
 
 /**
  * Handles ball actions.
  */
 export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Shape>): Ball {
-
-    const gameDimensions = getDimentions();
 
     switch (action.type) {
         case GameActions.initialize: {
@@ -49,7 +49,7 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Shap
                     if (Guard.isPaddle(action.payload)) {
 
                         // calculate where the ball hit relative to the shape from the left size.
-                        angleChange = angleChange(angleChange);
+                        angleChange = changeAngle(state, action.payload);
                     }
 
                     // When the ball top or bottom makes contact, multiply the current angle by -1 for it to bounce.

@@ -1,12 +1,12 @@
 
-import { getDimentions } from "../GameDimensions";
+import { getGameDimensions } from "../GameDimensions";
 import ActionPayload from "../State/ActionPayLoad";
 import { Paddle } from "../State/AppState";
 import { GameActions } from "../State/GameActions";
 
-export function paddleReducer(state: Paddle = { isPaddle: true } as Paddle, action: ActionPayload<number>): Paddle {
-    const gameDimensions = getDimentions();
+const gameDimensions = getGameDimensions();
 
+export function paddleReducer(state: Paddle = { isPaddle: true } as Paddle, action: ActionPayload<number>): Paddle {
     switch (action.type) {
         case GameActions.initialize:
 

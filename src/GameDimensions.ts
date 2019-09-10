@@ -7,7 +7,7 @@ import { GameDimensions } from "./State/AppState";
 
 let gameDimensions: GameDimensions;
 
-export function getDimentions(): GameDimensions {
+export function getGameDimensions(): GameDimensions {
     if (!gameDimensions) {
         let size = 0;
 

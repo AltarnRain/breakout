@@ -1,11 +1,13 @@
 import React, { CSSProperties } from "react";
 import { GameTick } from "./Constants";
-import { getDimentions } from "./GameDimensions";
+import { getGameDimensions } from "./GameDimensions";
 import { getBounceAction, overlaps } from "./Lib";
 import { Ball, Shape } from "./State/AppState";
 import { GameActions } from "./State/GameActions";
 import { appState, appStore } from "./Store";
 import { Walls } from "./WallConstants";
+
+const gameDimensions = getGameDimensions();
 
 /**
  * Main game component.
@@ -38,11 +40,8 @@ export class Main extends React.Component {
      */
     private onMouseMove(e: MouseEvent): void {
         if (e) {
-            const gameDimensions = getDimentions();
-            if (gameDimensions) {
-                const x = e.clientX - gameDimensions.left;
-                appStore().dispatch({ type: GameActions.paddleMove, payload: x });
-            }
+            const x = e.clientX - gameDimensions.left;
+            appStore().dispatch({ type: GameActions.paddleMove, payload: x });
         }
     }
 
@@ -87,7 +86,6 @@ export class Main extends React.Component {
                 }
             }
 
-
             // The ball's top and left are inside the game field.
             // Use the game dimension object to store a wall hit.
             if (ball.top <= 0) {
@@ -98,12 +96,12 @@ export class Main extends React.Component {
                 // Hit the left wall
                 appStore().dispatch({ type: GameActions.ballBounceVertically, payload: Walls.leftWall });
 
-            } else if (ball.top + ball.width >= getDimentions().size) {
+            } else if (ball.top + ball.width >= gameDimensions.size) {
                 // Hit bottom wall.
 
                 appStore().dispatch({ type: GameActions.ballBounceHorizantally, payload: Walls.bottomWall });
 
-            } else if (ball.left + ball.width >= getDimentions().size) {
+            } else if (ball.left + ball.width >= gameDimensions.size) {
                 // Hit the right wall
 
                 appStore().dispatch({ type: GameActions.ballBounceVertically, payload: Walls.rightWall });
@@ -144,12 +142,13 @@ export class Main extends React.Component {
      * @returns {CSSProperties}. CSSProperties for the gamefield.
      */
     private gameFieldStyle(): CSSProperties | undefined {
+
         return {
             position: "absolute",
-            left: getDimentions().left,
-            top: getDimentions().top,
-            width: getDimentions().size,
-            height: getDimentions().size,
+            left: gameDimensions.left,
+            top: gameDimensions.top,
+            width: gameDimensions.size,
+            height: gameDimensions.size,
             borderColor: "white",
             borderStyle: "solid"
         };

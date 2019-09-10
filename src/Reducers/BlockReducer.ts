@@ -1,9 +1,10 @@
-import { getDimentions } from "../GameDimensions";
+import { getGameDimensions } from "../GameDimensions";
 import { getInitialBlocks } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
 import { Block } from "../State/AppState";
 import { GameActions } from "../State/GameActions";
 
+const gameDimensions = getGameDimensions();
 export function blockReducer(state: Block[] = [], action: ActionPayload<Block>): Block[] {
     if (!state) {
         state = [];
@@ -18,10 +19,10 @@ export function blockReducer(state: Block[] = [], action: ActionPayload<Block>):
             const newState = getInitialBlocks();
 
             newState.forEach((b) => {
-                b.height =  getDimentions().blockHeight;
-                b.width =  getDimentions().blockWidth;
-                b.left = b.x *  getDimentions().blockWidth;
-                b.top = b.y *  getDimentions().blockHeight;
+                b.height =  gameDimensions.blockHeight;
+                b.width =  gameDimensions.blockWidth;
+                b.left = b.x *  gameDimensions.blockWidth;
+                b.top = b.y *  gameDimensions.blockHeight;
             });
 
             return newState;
