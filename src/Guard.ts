@@ -1,4 +1,4 @@
-import { Paddle } from "./State/AppState";
+import { Paddle } from "./State/Paddle";
 
 /**
  * A constats that contains type guards.

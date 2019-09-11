@@ -43,3 +43,18 @@ export const NumberOfBlockColumns = 12;
  * Constant to used to calculate the size of the playing field.
  */
 export const WindowResizeConstant = 0.9;
+
+/**
+ * Used to calculate the paddle with relative to the game field width.
+ */
+export const PaddleWithFactor = 40;
+
+/**
+ * Used to calculate the height of the paddle relative to the game field height.
+ */
+export const PaddleHeightFactor = 10;
+
+/**
+ * Used to calculate the paddle's top coordinate relative to the game field height.
+ */
+export const PaddlePositionFactor = 0.9;

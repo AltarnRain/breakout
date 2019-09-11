@@ -1,17 +1,18 @@
-import { BallResizeFactor, BounceAngleIncreaseConstant, DegreeToRadian, InitialBallVelocity } from "../Constants";
+import { BallResizeFactor, DegreeToRadian, InitialBallVelocity } from "../Constants";
 import { getGameDimensions } from "../GameDimensions";
 import { Guard } from "../Guard";
 import { angleRandomizer, changeAngle } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
-import { Ball, Shape } from "../State/AppState";
+import { Ball } from "../State/Ball";
 import { GameActions } from "../State/GameActions";
+import { ScreenObject } from "../State/ScreenObject";
 
 const gameDimensions = getGameDimensions();
 
 /**
  * Handles ball actions.
  */
-export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Shape>): Ball {
+export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<ScreenObject>): Ball {
 
     switch (action.type) {
         case GameActions.initialize: {

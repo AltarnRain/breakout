@@ -3,7 +3,7 @@
  */
 
 import { NumberOfBlockColumns, WindowResizeConstant } from "./Constants";
-import { GameDimensions } from "./State/AppState";
+import { GameDimensions } from "./State/GameDimensions";
 
 let gameDimensions: GameDimensions;
 

@@ -1,6 +1,9 @@
 import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, NumberOfBlockColumns, NumberOfBlockRows } from "./Constants";
-import { Ball, Block, GameDimensions, Paddle, Shape } from "./State/AppState";
+import { Ball } from "./State/Ball";
+import { Block } from "./State/Block";
 import { GameActions } from "./State/GameActions";
+import { Paddle } from "./State/Paddle";
+import { ScreenObject } from "./State/ScreenObject";
 
 /**
  * Returns the initial block setup.
@@ -34,10 +37,10 @@ export const getInitialBlocks = (): Block[] => {
 
 /**
  * Checks if two shapes overlap
- * @param {Shape} shape1. A Shape.
- * @param {Shape} shape2. A Shape
+ * @param {ScreenObject} shape1. A Shape.
+ * @param {ScreenObject} shape2. A Shape
  */
-export const overlaps = (shape1: Shape, shape2: Shape) => {
+export const overlaps = (shape1: ScreenObject, shape2: ScreenObject) => {
 
     const left1 = shape1.left;
     const right1 = shape1.left + shape1.width;
@@ -77,27 +80,11 @@ export const angleRandomizer = (): number => {
 /**
  * Determine the right action to dispatch when the ball bounces off an object.
  * @param {Ball} ball. Ball object.
- * @param {Shape} shape. A shape object.
+ * @param {ScreenObject} shape. A shape object.
  * @returns {GameActions}. The bounce action or undefined if no bounce action could be determined.
  */
-export const getBounceAction = (ball: Ball, shape: Shape): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically | undefined => {
-
-    if (!overlaps(ball, shape)) {
-        return undefined;
-    }
-
-    const hitTop = ball.top >= shape.top + shape.height;
-    const hitBottom = ball.top + ball.height >= shape.top;
-    const hitLeft = ball.left + ball.width >= shape.left;
-    const hitRight = ball.left >= shape.left + shape.width;
-
-    if (hitTop || hitBottom) {
-        return GameActions.ballBounceHorizantally;
-    } else if (hitLeft || hitRight) {
-        return GameActions.ballBounceVertically;
-    } else {
-        return undefined;
-    }
+export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically | undefined => {
+    return undefined;
 };
 
 /**
@@ -114,3 +101,4 @@ export const changeAngle = (ball: Ball, paddle: Paddle): number => {
     const returnValue = BounceAngleIncreaseConstant * (0.5 - v) * -1;
     return returnValue;
 };
+

@@ -2,8 +2,9 @@ import React, { CSSProperties } from "react";
 import { GameTick } from "./Constants";
 import { getGameDimensions } from "./GameDimensions";
 import { getBounceAction, overlaps } from "./Lib";
-import { Ball, Shape } from "./State/AppState";
+import { Ball } from "./State/Ball";
 import { GameActions } from "./State/GameActions";
+import { GameObject } from "./State/GameObject";
 import { appState, appStore } from "./Store";
 import { Walls } from "./WallConstants";
 
@@ -156,10 +157,10 @@ export class Main extends React.Component {
 
     /**
      * Returns css properties for positioning a shape.
-     * @param {Shape} shape. A shape object.
+     * @param {ScreenObject} shape. A shape object.
      * @returns {CSSProperties}.
      */
-    private positionStyle(shape: Shape): CSSProperties {
+    private positionStyle(shape: GameObject): CSSProperties {
         return {
             position: "absolute",
             left: shape.left,

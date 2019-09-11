@@ -1,7 +1,9 @@
 import "jest";
 import { NumberOfBlockColumns, NumberOfBlockRows } from "../Constants";
 import { angleRandomizer, getBounceAction, getInitialBlocks, overlaps } from "../Lib";
-import { Ball, Block, Shape } from "../State/AppState";
+import { ScreenObject } from "../State/ScreenObject";
+import { Block } from "../State/Block";
+import { Ball } from "../State/Ball";
 import { GameActions } from "../State/GameActions";
 import { getBall } from "./Helper";
 
@@ -48,7 +50,7 @@ describe("Lib tests", () => {
     it("returns true when a shape overlaps.", () => {
 
         // Shape
-        const shape: Shape = {
+        const shape: ScreenObject = {
             color: "white",
             height: 10,
             left: 10,
@@ -66,7 +68,7 @@ describe("Lib tests", () => {
     it("returns true when a smaller shape is insize a larger one.", () => {
 
         // Shape
-        const bigShape: Shape = {
+        const bigShape: ScreenObject = {
             color: "white",
             left: 10,
             top: 10,
@@ -74,7 +76,7 @@ describe("Lib tests", () => {
             width: 20,
         };
 
-        const smallShape: Shape = {
+        const smallShape: ScreenObject = {
             color: "white",
             left: 11,
             top: 11,
@@ -93,7 +95,7 @@ describe("Lib tests", () => {
     it("returns false when two rectangles share the y axis, but not the x asix.", () => {
 
         // Shape
-        const shape1: Shape = {
+        const shape1: ScreenObject = {
             color: "white",
             left: 10,
             top: 10,
@@ -101,7 +103,7 @@ describe("Lib tests", () => {
             width: 20,
         };
 
-        const shape2: Shape = {
+        const shape2: ScreenObject = {
             color: "white",
             left: 31,
             top: 10,
@@ -120,7 +122,7 @@ describe("Lib tests", () => {
     it("returns false when two rectangles share the x axis, but not the y asix.", () => {
 
         // Shape
-        const shape1: Shape = {
+        const shape1: ScreenObject = {
             color: "white",
             left: 10,
             top: 10,
@@ -128,7 +130,7 @@ describe("Lib tests", () => {
             width: 20,
         };
 
-        const shape2: Shape = {
+        const shape2: ScreenObject = {
             color: "white",
             left: 10,
             top: 21,
@@ -156,13 +158,98 @@ describe("Lib tests", () => {
             left: 50,
             top: 100,
             width: 100,
-        } as Shape;
+        } as ScreenObject;
 
         // Act
         const result = getBounceAction(ball, shape);
 
         // Assert
         expect(result).toBe(GameActions.ballBounceVertically);
+    });
 
+    it("return vertical when the ball bounces off the right side of a shape", ()  => {
+        // Arrange
+        const ball = {
+            left: 150,
+            top: 50,
+            width: 10
+        } as Ball;
+
+        const shape = {
+            left: 50,
+            top: 100,
+            width: 100,
+        } as ScreenObject;
+
+        // Act
+        const result = getBounceAction(ball, shape);
+
+        // Assert
+        expect(result).toBe(GameActions.ballBounceVertically);
+    });
+
+    it("return horizantal when the ball bounces off the top side of a shape", ()  => {
+        // Arrange
+        const ball = {
+            left: 75,
+            top: 101,
+            width: 10
+        } as Ball;
+
+        const shape = {
+            left: 50,
+            top: 100,
+            width: 100,
+        } as ScreenObject;
+
+        // Act
+        const result = getBounceAction(ball, shape);
+
+        // Assert
+        expect(result).toBe(GameActions.ballBounceHorizantally);
+    });
+
+    it("return horizantal when the ball bounces off the bottom side of a shape", ()  => {
+        // Arrange
+        const ball = {
+            left: 75,
+            top: 120,
+            width: 10
+        } as Ball;
+
+        const shape = {
+            left: 50,
+            top: 100,
+            width: 100,
+            height: 20
+        } as ScreenObject;
+
+        // Act
+        const result = getBounceAction(ball, shape);
+
+        // Assert
+        expect(result).toBe(GameActions.ballBounceHorizantally);
+    });
+
+    it("return vertical when the ball bounces off the left side of a shape", ()  => {
+        // Arrange
+        const ball = {
+            left: 40,
+            top: 110,
+            width: 10
+        } as Ball;
+
+        const shape = {
+            left: 50,
+            top: 100,
+            width: 100,
+            height: 20
+        } as ScreenObject;
+
+        // Act
+        const result = getBounceAction(ball, shape);
+
+        // Assert
+        expect(result).toBe(GameActions.ballBounceVertically);
     });
 });
