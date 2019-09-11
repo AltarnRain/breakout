@@ -2,8 +2,8 @@
 import { PaddleHeightFactor, PaddlePositionFactor, PaddleWithFactor } from "../Constants";
 import { getGameDimensions } from "../GameDimensions";
 import ActionPayload from "../State/ActionPayLoad";
-import { Paddle } from "../State/Paddle";
 import { GameActions } from "../State/GameActions";
+import { Paddle } from "../State/Paddle";
 
 const gameDimensions = getGameDimensions();
 

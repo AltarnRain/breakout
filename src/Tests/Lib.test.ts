@@ -1,11 +1,10 @@
 import "jest";
 import { NumberOfBlockColumns, NumberOfBlockRows } from "../Constants";
 import { angleRandomizer, getBounceAction, getInitialBlocks, overlaps } from "../Lib";
-import { ScreenObject } from "../State/ScreenObject";
-import { Block } from "../State/Block";
 import { Ball } from "../State/Ball";
+import { Block } from "../State/Block";
 import { GameActions } from "../State/GameActions";
-import { getBall } from "./Helper";
+import { ScreenObject } from "../State/ScreenObject";
 
 describe("Lib tests", () => {
 
@@ -51,7 +50,6 @@ describe("Lib tests", () => {
 
         // Shape
         const shape: ScreenObject = {
-            color: "white",
             height: 10,
             left: 10,
             top: 10,
@@ -69,7 +67,6 @@ describe("Lib tests", () => {
 
         // Shape
         const bigShape: ScreenObject = {
-            color: "white",
             left: 10,
             top: 10,
             height: 10,
@@ -77,7 +74,6 @@ describe("Lib tests", () => {
         };
 
         const smallShape: ScreenObject = {
-            color: "white",
             left: 11,
             top: 11,
             height: 5,
@@ -96,7 +92,6 @@ describe("Lib tests", () => {
 
         // Shape
         const shape1: ScreenObject = {
-            color: "white",
             left: 10,
             top: 10,
             height: 10,
@@ -104,7 +99,6 @@ describe("Lib tests", () => {
         };
 
         const shape2: ScreenObject = {
-            color: "white",
             left: 31,
             top: 10,
             height: 10,
@@ -123,7 +117,6 @@ describe("Lib tests", () => {
 
         // Shape
         const shape1: ScreenObject = {
-            color: "white",
             left: 10,
             top: 10,
             height: 10,
@@ -131,7 +124,6 @@ describe("Lib tests", () => {
         };
 
         const shape2: ScreenObject = {
-            color: "white",
             left: 10,
             top: 21,
             height: 10,
@@ -211,18 +203,19 @@ describe("Lib tests", () => {
 
     it("return horizantal when the ball bounces off the bottom side of a shape", ()  => {
         // Arrange
-        const ball = {
+        const ball: ScreenObject = {
             left: 75,
             top: 120,
-            width: 10
-        } as Ball;
+            width: 10,
+            height: 10
+        };
 
-        const shape = {
+        const shape: ScreenObject = {
             left: 50,
             top: 100,
             width: 100,
             height: 20
-        } as ScreenObject;
+        };
 
         // Act
         const result = getBounceAction(ball, shape);
@@ -233,18 +226,19 @@ describe("Lib tests", () => {
 
     it("return vertical when the ball bounces off the left side of a shape", ()  => {
         // Arrange
-        const ball = {
+        const ball: ScreenObject = {
             left: 40,
             top: 110,
-            width: 10
-        } as Ball;
+            width: 10,
+            height: 10
+        };
 
-        const shape = {
+        const shape: ScreenObject = {
             left: 50,
             top: 100,
             width: 100,
             height: 20
-        } as ScreenObject;
+        };
 
         // Act
         const result = getBounceAction(ball, shape);

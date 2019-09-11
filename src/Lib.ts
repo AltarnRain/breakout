@@ -1,8 +1,6 @@
 import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, NumberOfBlockColumns, NumberOfBlockRows } from "./Constants";
-import { Ball } from "./State/Ball";
 import { Block } from "./State/Block";
 import { GameActions } from "./State/GameActions";
-import { Paddle } from "./State/Paddle";
 import { ScreenObject } from "./State/ScreenObject";
 
 /**
@@ -77,14 +75,65 @@ export const angleRandomizer = (): number => {
     }
 };
 
+const SubShapeHeight = 2;
 /**
  * Determine the right action to dispatch when the ball bounces off an object.
  * @param {Ball} ball. Ball object.
  * @param {ScreenObject} shape. A shape object.
  * @returns {GameActions}. The bounce action or undefined if no bounce action could be determined.
  */
-export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically | undefined => {
-    return undefined;
+export const getBounceAction = (ball: ScreenObject, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically | undefined => {
+
+    // Create a ScreenObject object for the top, bottom, left and right sides of the shape. We can use the overlap function
+    // to determine where the ball hit the shape.
+
+    const top: ScreenObject = {
+        left: shape.left,
+        height: SubShapeHeight,
+        width: shape.width,
+        top: shape.top
+    };
+
+    const bottom: ScreenObject = {
+        left: shape.left,
+        height: 2,
+        width: shape.width,
+        top: shape.top + shape.width
+    };
+
+    const left: ScreenObject = {
+        left: shape.left,
+        height: shape.height,
+        width: 2,
+        top: shape.top
+    };
+
+    const right: ScreenObject = {
+        left: shape.left + shape.width,
+        height: shape.height,
+        width: 2,
+        top: shape.top
+    };
+
+    const overlapsTop = overlaps(ball, top);
+    const overlapsBottom = overlaps(ball, bottom);
+    const overlapsLeft = overlaps(ball, left);
+    const overlapsRight = overlaps(ball, right);
+
+    // At the corners there's some overlap since the ball us much more likely to hit a bottom
+    // We'll give the bottom preference.
+
+    if (overlapsBottom) {
+        return GameActions.ballBounceHorizantally;
+    } else if (overlapsLeft || overlapsRight) {
+        // Next are the sides.
+        return GameActions.ballBounceVertically;
+    } else if (overlapsTop) {
+        // Last we'll check if the top of a screen object was hit.
+        return GameActions.ballBounceHorizantally;
+    } else {
+        return undefined;
+    }
 };
 
 /**
@@ -92,7 +141,7 @@ export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ba
  * @param {Ball} ball. A ball object
  * @param {Paddle} paddle. A paddle object
  */
-export const changeAngle = (ball: Ball, paddle: Paddle): number => {
+export const changeAngle = (ball: ScreenObject, paddle: ScreenObject): number => {
     const p = Math.abs(ball.left - paddle.left);
 
     // calculate a factor based on the shape's width. Since this is a horizantol hit, this results in a
@@ -101,4 +150,3 @@ export const changeAngle = (ball: Ball, paddle: Paddle): number => {
     const returnValue = BounceAngleIncreaseConstant * (0.5 - v) * -1;
     return returnValue;
 };
-
