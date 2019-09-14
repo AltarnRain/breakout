@@ -3,7 +3,7 @@ import { Ball } from "../Definitions/Ball";
 import { ScreenObject } from "../Definitions/ScreenObject";
 import { getGameDimensions } from "../GameDimensions";
 import { Guard } from "../Guard";
-import { angleRandomizer, changeAngle } from "../Lib";
+import { angleRandomizer, changeAngle, getNextX, getNextY } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
 import { GameActions } from "../State/GameActions";
 
@@ -30,8 +30,8 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Scre
         }
 
         case GameActions.Tick: {
-            const x = Math.cos(state.angle * DegreeToRadian * -1) * state.velocity + state.left;
-            const y = Math.sin(state.angle * DegreeToRadian * -1) * state.velocity + state.top;
+            const x = getNextX(state.angle, state.velocity, state.left);
+            const y = getNextY(state.angle, state.velocity, state.top);
 
             return { ...state, left: x, top: y, previousState: state };
         }

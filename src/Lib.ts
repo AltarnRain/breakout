@@ -1,7 +1,9 @@
-import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, NumberOfBlockColumns, NumberOfBlockRows } from "./Constants";
+import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, NumberOfBlockColumns, NumberOfBlockRows, DegreeToRadian } from "./Constants";
 import { Block } from "./Definitions/Block";
 import { ScreenObject } from "./Definitions/ScreenObject";
 import { GameActions } from "./State/GameActions";
+import { Ball } from "./Definitions/Ball";
+
 
 /**
  * Returns the initial block setup.
@@ -82,58 +84,31 @@ const SubShapeHeight = 2;
  * @param {ScreenObject} shape. A shape object.
  * @returns {GameActions}. The bounce action or undefined if no bounce action could be determined.
  */
-export const getBounceAction = (ball: ScreenObject, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically | undefined => {
+export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically | undefined => {
 
-    // Create a ScreenObject object for the top, bottom, left and right sides of the shape. We can use the overlap function
-    // to determine where the ball hit the shape.
+    if (ball.previousState) {
+        let x = ball.previousState.left + (ball.previousState.width / 2);
+        let y = ball.previousState.top + (ball.previousState.height / 2);
 
-    const top: ScreenObject = {
-        left: shape.left,
-        height: SubShapeHeight,
-        width: shape.width,
-        top: shape.top
-    };
+        do {
+            if (x === shape.left && y >= shape.top && y <= shape.top + shape.width) {
+                // Hit lift side
+                return GameActions.ballBounceVertically;
+            } else if (y === shape.top && x >= shape.left && x <= shape.left + shape.width) {
+                return GameActions.ballBounceHorizantally;
+            } else if (x === shape.left + shape.width && y >= shape.top && y <= shape.top + shape.width) {
+                return GameActions.ballBounceVertically;
+            } else if (y === shape.top + shape.height && x >= shape.left && x <= shape.left + shape.width) {
+                return GameActions.ballBounceHorizantally;
+            }
 
-    const bottom: ScreenObject = {
-        left: shape.left,
-        height: 2,
-        width: shape.width,
-        top: shape.top + shape.width
-    };
+            x = getNextX(ball.angle, 1, x);
+            y = getNextY(ball.angle, 1, y);
 
-    const left: ScreenObject = {
-        left: shape.left,
-        height: shape.height,
-        width: 2,
-        top: shape.top
-    };
-
-    const right: ScreenObject = {
-        left: shape.left + shape.width,
-        height: shape.height,
-        width: 2,
-        top: shape.top
-    };
-
-    const overlapsTop = overlaps(ball, top);
-    const overlapsBottom = overlaps(ball, bottom);
-    const overlapsLeft = overlaps(ball, left);
-    const overlapsRight = overlaps(ball, right);
-
-    // At the corners there's some overlap since the ball us much more likely to hit a bottom
-    // We'll give the bottom preference.
-
-    if (overlapsBottom) {
-        return GameActions.ballBounceHorizantally;
-    } else if (overlapsLeft || overlapsRight) {
-        // Next are the sides.
-        return GameActions.ballBounceVertically;
-    } else if (overlapsTop) {
-        // Last we'll check if the top of a screen object was hit.
-        return GameActions.ballBounceHorizantally;
-    } else {
-        return undefined;
+        } while (true);
     }
+
+    return undefined;
 };
 
 /**
@@ -150,3 +125,11 @@ export const changeAngle = (ball: ScreenObject, paddle: ScreenObject): number =>
     const returnValue = BounceAngleIncreaseConstant * (0.5 - v) * -1;
     return returnValue;
 };
+
+export function getNextY(angle: number, distance: number, currentY: number) {
+    return Math.sin(angle * DegreeToRadian * -1) * distance + currentY;
+}
+
+export function getNextX(angle: number, distance: number, currentX: number) {
+    return Math.cos(angle * DegreeToRadian * -1) * distance + currentX;
+}

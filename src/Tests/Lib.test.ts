@@ -117,18 +117,23 @@ describe("Lib tests", () => {
         expect(result2).toBe(false);
     });
 
-    it("return vertical when the ball bounces off the left side of a shape", ()  => {
+    it("return vertical when the ball bounces off the left side of a shape", () => {
         // Arrange
         const ball = {
-            left: 50,
-            top: 50,
-            width: 10
+            previousState: {
+                left: 39,
+                top: 125,
+                width: 10,
+                height: 10,
+            },
+            angle: 360
         } as Ball;
 
         const shape = {
             left: 50,
             top: 100,
             width: 100,
+            height : 50
         } as ScreenObject;
 
         // Act
@@ -138,39 +143,23 @@ describe("Lib tests", () => {
         expect(result).toBe(GameActions.ballBounceVertically);
     });
 
-    it("return vertical when the ball bounces off the right side of a shape", ()  => {
+    it("return horizantal when the ball bounces off the top side of a shape", () => {
         // Arrange
         const ball = {
-            left: 150,
-            top: 50,
-            width: 10
+            previousState: {
+                left: 80,
+                top: 89,
+                width: 10,
+                height: 10,
+            },
+            angle: 270
         } as Ball;
 
         const shape = {
             left: 50,
             top: 100,
             width: 100,
-        } as ScreenObject;
-
-        // Act
-        const result = getBounceAction(ball, shape);
-
-        // Assert
-        expect(result).toBe(GameActions.ballBounceVertically);
-    });
-
-    it("return horizantal when the ball bounces off the top side of a shape", ()  => {
-        // Arrange
-        const ball = {
-            left: 75,
-            top: 101,
-            width: 10
-        } as Ball;
-
-        const shape = {
-            left: 50,
-            top: 100,
-            width: 100,
+            height : 50
         } as ScreenObject;
 
         // Act
@@ -180,49 +169,55 @@ describe("Lib tests", () => {
         expect(result).toBe(GameActions.ballBounceHorizantally);
     });
 
-    it("return horizantal when the ball bounces off the bottom side of a shape", ()  => {
+    it("return vertical when the ball bounces off the right side of a shape", () => {
         // Arrange
-        const ball: ScreenObject = {
-            left: 75,
-            top: 120,
-            width: 10,
-            height: 10
-        };
+        const ball = {
+            previousState: {
+                left: 51,
+                top: 125,
+                width: 10,
+                height: 10,
+            },
+            angle: 180
+        } as Ball;
 
-        const shape: ScreenObject = {
+        const shape = {
             left: 50,
             top: 100,
             width: 100,
-            height: 20
-        };
-
-        // Act
-        const result = getBounceAction(ball, shape);
-
-        // Assert
-        expect(result).toBe(GameActions.ballBounceHorizantally);
-    });
-
-    it("return vertical when the ball bounces off the left side of a shape", ()  => {
-        // Arrange
-        const ball: ScreenObject = {
-            left: 40,
-            top: 110,
-            width: 10,
-            height: 10
-        };
-
-        const shape: ScreenObject = {
-            left: 50,
-            top: 100,
-            width: 100,
-            height: 20
-        };
+            height : 50
+        } as ScreenObject;
 
         // Act
         const result = getBounceAction(ball, shape);
 
         // Assert
         expect(result).toBe(GameActions.ballBounceVertically);
+    });
+
+    it("return horizantal when the ball bounces off the bottom side of a shape", () => {
+        // Arrange
+        const ball = {
+            previousState: {
+                left: 60,
+                top: 144,
+                width: 10,
+                height: 10,
+            },
+            angle: 90
+        } as Ball;
+
+        const shape = {
+            left: 50,
+            top: 100,
+            width: 100,
+            height : 50
+        } as ScreenObject;
+
+        // Act
+        const result = getBounceAction(ball, shape);
+
+        // Assert
+        expect(result).toBe(GameActions.ballBounceHorizantally);
     });
 });
