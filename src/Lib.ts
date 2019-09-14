@@ -84,11 +84,15 @@ const SubShapeHeight = 2;
  * @param {ScreenObject} shape. A shape object.
  * @returns {GameActions}. The bounce action or undefined if no bounce action could be determined.
  */
-export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically | undefined => {
+export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically => {
 
     if (ball.previousState) {
         let x = ball.previousState.left + (ball.previousState.width / 2);
         let y = ball.previousState.top + (ball.previousState.height / 2);
+
+        let loopCounter = 0;
+
+        let doLoop = true;
 
         do {
             if (x === shape.left && y >= shape.top && y <= shape.top + shape.width) {
@@ -105,10 +109,16 @@ export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ba
             x = getNextX(ball.angle, 1, x);
             y = getNextY(ball.angle, 1, y);
 
-        } while (true);
+            loopCounter++;
+            doLoop = loopCounter <= 50;
+
+        } while (doLoop);
+
+        // Something messed up. Return a value so the ball bounces (weirdly.)
+        return GameActions.ballBounceHorizantally;
     }
 
-    return undefined;
+    return GameActions.ballBounceHorizantally;
 };
 
 /**
