@@ -1,10 +1,10 @@
 import "jest";
 import { NumberOfBlockColumns, NumberOfBlockRows } from "../Constants";
+import { Ball } from "../Definitions/Ball";
+import { Block } from "../Definitions/Block";
+import { ScreenObject } from "../Definitions/ScreenObject";
 import { angleRandomizer, getBounceAction, getInitialBlocks, overlaps } from "../Lib";
-import { Ball } from "../State/Ball";
-import { Block } from "../State/Block";
 import { GameActions } from "../State/GameActions";
-import { ScreenObject } from "../State/ScreenObject";
 
 describe("Lib tests", () => {
 

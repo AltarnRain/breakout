@@ -1,10 +1,10 @@
 import React, { CSSProperties } from "react";
 import { GameTick } from "./Constants";
+import { Ball } from "./Definitions/Ball";
+import { GameObject } from "./Definitions/GameObject";
 import { getGameDimensions } from "./GameDimensions";
 import { getBounceAction, overlaps } from "./Lib";
-import { Ball } from "./State/Ball";
 import { GameActions } from "./State/GameActions";
-import { GameObject } from "./State/GameObject";
 import { appState, appStore } from "./Store";
 import { Walls } from "./WallConstants";
 

@@ -1,6 +1,6 @@
-import { Ball } from "./Ball";
-import { Block } from "./Block";
-import { Paddle } from "./Paddle";
+import { Ball } from "../Definitions/Ball";
+import { Block } from "../Definitions/Block";
+import { Paddle } from "../Definitions/Paddle";
 
 /**
  * Describes the application state

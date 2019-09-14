@@ -1,7 +1,7 @@
 import { getGameDimensions } from "../GameDimensions";
 import { getInitialBlocks } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
-import { Block } from "../State/Block";
+import { Block } from "../Definitions/Block";
 import { GameActions } from "../State/GameActions";
 
 const gameDimensions = getGameDimensions();

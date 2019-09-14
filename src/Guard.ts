@@ -1,4 +1,4 @@
-import { Paddle } from "./State/Paddle";
+import { Paddle } from "./Definitions/Paddle";
 
 /**
  * A constats that contains type guards.

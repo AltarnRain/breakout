@@ -3,7 +3,7 @@ import { PaddleHeightFactor, PaddlePositionFactor, PaddleWithFactor } from "../C
 import { getGameDimensions } from "../GameDimensions";
 import ActionPayload from "../State/ActionPayLoad";
 import { GameActions } from "../State/GameActions";
-import { Paddle } from "../State/Paddle";
+import { Paddle } from "../Definitions/Paddle";
 
 const gameDimensions = getGameDimensions();
 

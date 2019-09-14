@@ -1,11 +1,11 @@
 import { BallResizeFactor, DegreeToRadian, InitialBallVelocity } from "../Constants";
+import { Ball } from "../Definitions/Ball";
+import { ScreenObject } from "../Definitions/ScreenObject";
 import { getGameDimensions } from "../GameDimensions";
 import { Guard } from "../Guard";
 import { angleRandomizer, changeAngle } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
-import { Ball } from "../State/Ball";
 import { GameActions } from "../State/GameActions";
-import { ScreenObject } from "../State/ScreenObject";
 
 const gameDimensions = getGameDimensions();
 
