@@ -1,9 +1,8 @@
-import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, NumberOfBlockColumns, NumberOfBlockRows, DegreeToRadian } from "./Constants";
+import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, DegreeToRadian, NumberOfBlockColumns, NumberOfBlockRows } from "./Constants";
+import { Ball } from "./Definitions/Ball";
 import { Block } from "./Definitions/Block";
 import { ScreenObject } from "./Definitions/ScreenObject";
 import { GameActions } from "./State/GameActions";
-import { Ball } from "./Definitions/Ball";
-
 
 /**
  * Returns the initial block setup.

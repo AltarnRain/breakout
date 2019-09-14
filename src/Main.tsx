@@ -108,8 +108,6 @@ export class Main extends React.Component {
                 appStore().dispatch({ type: GameActions.ballBounceVertically, payload: Walls.rightWall });
             }
 
-
-
             this.forceUpdate();
             appStore().dispatch({ type: GameActions.Tick, payload: diff });
             this.tickStart = tick;
