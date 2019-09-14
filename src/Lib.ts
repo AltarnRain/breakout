@@ -76,7 +76,6 @@ export const angleRandomizer = (): number => {
     }
 };
 
-const SubShapeHeight = 2;
 /**
  * Determine the right action to dispatch when the ball bounces off an object.
  * @param {Ball} ball. Ball object.
