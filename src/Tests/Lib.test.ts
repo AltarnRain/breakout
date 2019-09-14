@@ -25,27 +25,6 @@ describe("Lib tests", () => {
         expect(typeof (result)).toBe("number");
     });
 
-    it("returns the verticle bounce action", () => {
-
-        const ball = {
-            left: 50,
-            top: 39,
-            width: 10,
-        } as Ball;
-
-        const block = {
-            left: 30,
-            top: 50,
-            width: 20
-        } as Block;
-
-        // Act
-        const result = getBounceAction(ball, block);
-
-        // Assert
-        expect(result).toBe(GameActions.ballBounceVertically);
-    });
-
     it("returns true when a shape overlaps.", () => {
 
         // Shape

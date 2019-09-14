@@ -25,7 +25,7 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Scre
                 left: (gameDimensions.size / 2) - (gameDimensions.size * BallResizeFactor / 2),
                 top: (gameDimensions.size / 2) - (gameDimensions.size * BallResizeFactor / 2),
                 velocity: InitialBallVelocity,
-                lastObject: {}
+                lastObject: {},
             };
         }
 
@@ -33,7 +33,7 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Scre
             const x = Math.cos(state.angle * DegreeToRadian * -1) * state.velocity + state.left;
             const y = Math.sin(state.angle * DegreeToRadian * -1) * state.velocity + state.top;
 
-            return { ...state, left: x, top: y };
+            return { ...state, left: x, top: y, previousState: state };
         }
 
         case GameActions.ballBounceHorizantally:
@@ -62,7 +62,7 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Scre
                     }
                 }
 
-                return { ...state, angle, lastObject: action.payload };
+                return { ...state, angle, lastObject: action.payload, previousState: state };
             }
 
             return state;
