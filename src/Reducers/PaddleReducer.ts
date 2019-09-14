@@ -1,9 +1,9 @@
 
 import { PaddleHeightFactor, PaddlePositionFactor, PaddleWithFactor } from "../Constants";
+import { Paddle } from "../Definitions/Paddle";
 import { getGameDimensions } from "../GameDimensions";
 import ActionPayload from "../State/ActionPayLoad";
 import { GameActions } from "../State/GameActions";
-import { Paddle } from "../Definitions/Paddle";
 
 const gameDimensions = getGameDimensions();
 
@@ -35,12 +35,12 @@ export function paddleReducer(state: Paddle = { isPaddle: true } as Paddle, acti
             // Prevent the paddle from being drawn outside the playfield.
             if (typeof (action.payload) !== "undefined") {
                 let x;
-                if (action.payload <= 0) {
+                if (action.payload - state.width / 2 <= 0) {
                     x = 0;
-                } else if (action.payload >= (gameDimensions.size - state.width)) {
+                } else if (action.payload - state.width / 2 >= (gameDimensions.size - state.width)) {
                     x = gameDimensions.size - state.width;
                 } else {
-                    x = action.payload;
+                    x = action.payload - (state.width / 2);
                 }
 
                 if (state.left === x) {

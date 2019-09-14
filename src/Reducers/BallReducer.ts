@@ -1,4 +1,4 @@
-import { BallResizeFactor, DegreeToRadian, InitialBallVelocity } from "../Constants";
+import { BallResizeFactor, InitialBallVelocity } from "../Constants";
 import { Ball } from "../Definitions/Ball";
 import { ScreenObject } from "../Definitions/ScreenObject";
 import { getGameDimensions } from "../GameDimensions";
