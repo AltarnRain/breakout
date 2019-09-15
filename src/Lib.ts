@@ -109,18 +109,19 @@ export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ba
     const goingUp = directions.some((d) => d === "up");
     const goingDown = directions.some((d) => d === "down");
 
-    if (goingRight && cx < left && withinVerticalBounds) {
-        // Left
-        return GameActions.ballBounceVertically;
-    } else if (goingLeft && cx > right && withinVerticalBounds) {
-        // Right
-        return GameActions.ballBounceVertically;
+    // Most times the top or bottom of a ScreenObject will be hit so check those first.
+    if (goingUp && cy > bottom && withinHorizantalBounds) {
+        return GameActions.ballBounceHorizantally;
+        // bottom
     } else if (goingDown && cy < top && withinHorizantalBounds) {
         // Top
         return GameActions.ballBounceHorizantally;
-    } else if (goingUp && cy > bottom && withinHorizantalBounds) {
-        return GameActions.ballBounceHorizantally;
-        // bottom
+    } else if (goingLeft && cx > right && withinVerticalBounds) {
+        // Right
+        return GameActions.ballBounceVertically;
+    } else if (goingRight && cx < left && withinVerticalBounds) {
+        // Left
+        return GameActions.ballBounceVertically;
     }
 
     // tslint:disable-next-line: no-console
@@ -158,25 +159,25 @@ export function getDirectionFromAngle(angle: number): Direction[] {
     // Value has to be an array with a size of 1 or two.
     const returnValue: Direction[] = [];
 
-    const x = Math.floor(getNextX(angle, 10, 0));
-    const y = Math.floor(getNextY(angle, 10, 0));
+    const x = getNextX(angle, 10, 0);
+    const y = getNextY(angle, 10, 0);
 
-    if (x > 5) {
+    if (x > 0) {
         // Ball travels to the right
         returnValue.push("right");
     }
 
-    if (x < -5) {
+    if (x < 0) {
         // Ball travels to the left.
         returnValue.push("left");
     }
 
-    if (y > 5) {
+    if (y >0) {
         // Ball travels down.
         returnValue.push("down");
     }
 
-    if (y < -5) {
+    if (y < 0) {
         returnValue.push("up");
     }
 
