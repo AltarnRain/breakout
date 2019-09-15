@@ -4,6 +4,7 @@ import { Ball } from "./Definitions/Ball";
 import { GameObject } from "./Definitions/GameObject";
 import { getGameDimensions } from "./GameDimensions";
 import { getBounceAction, overlaps } from "./Lib";
+import { State } from "./State";
 import { GameActions } from "./State/GameActions";
 import { appState, appStore } from "./Store";
 import { Walls } from "./WallConstants";
@@ -13,7 +14,7 @@ const gameDimensions = getGameDimensions();
 /**
  * Main game component.
  */
-export class Main extends React.Component {
+export class Main extends React.Component<{}, State> {
 
     /**
      * Stores a reference to the animation that draws the game.
@@ -33,7 +34,9 @@ export class Main extends React.Component {
 
         this.onMouseMove = this.onMouseMove.bind(this);
         this.tick = this.tick.bind(this);
-        this.onKeyUp = this.onKeyUp.bind(this);
+        this.onPlayAgain = this.onPlayAgain.bind(this);
+
+        this.state = { gameLost: false };
     }
 
     /**
@@ -45,6 +48,13 @@ export class Main extends React.Component {
             const x = e.clientX - gameDimensions.left;
             appStore().dispatch({ type: GameActions.paddleMove, payload: x });
         }
+    }
+
+    private onPlayAgain(): void {
+        // Reset game state.
+        this.setState({gameLost: false});
+        appStore().dispatch({type: GameActions.initialize});
+        this.tickHandler = this.tickHandler = window.requestAnimationFrame(this.tick);
     }
 
     /**
@@ -72,7 +82,7 @@ export class Main extends React.Component {
                 appStore().dispatch({ type: action, payload: paddle });
             }
         } else if (blocks) {
-            const hitBlock = blocks.find((b) => overlaps(b, ball));
+            const hitBlock = blocks.find((block) => overlaps(ball, block));
 
             if (hitBlock) {
                 appStore().dispatch({ type: GameActions.hitBlock, payload: hitBlock });
@@ -94,8 +104,11 @@ export class Main extends React.Component {
 
             } else if (ball.top + ball.width >= gameDimensions.size) {
                 // Hit bottom wall.
-
-                appStore().dispatch({ type: GameActions.ballBounceHorizantally, payload: Walls.bottomWall });
+                this.setState({ gameLost: true });
+                if (typeof (this.tickHandler) !== "undefined") {
+                    window.cancelAnimationFrame(this.tickHandler);
+                    return;
+                }
 
             } else if (ball.left + ball.width >= gameDimensions.size) {
                 // Hit the right wall
@@ -108,7 +121,7 @@ export class Main extends React.Component {
 
         // Redraw at 60 fps.
         if (diff > GameTick) {
-            this.forceUpdate();
+            this.setState({ ball: appState().ball, blocks: appState().blocks, paddle: appState().paddle });
             this.tickStart = tick;
         }
 
@@ -119,31 +132,11 @@ export class Main extends React.Component {
      * Called when the component mounted.
      */
     public componentDidMount(): void {
-        this.tickHandler = window.requestAnimationFrame(this.tick);
+        this.setState({gameLost: false});
+        appStore().dispatch({type: GameActions.initialize});
+        this.tickHandler = this.tickHandler = window.requestAnimationFrame(this.tick);
 
         window.addEventListener("mousemove", this.onMouseMove);
-        window.addEventListener("keyup", this.onKeyUp);
-    }
-
-    private onKeyUp(e: KeyboardEvent): void {
-        switch (e.keyCode) {
-            case 37:
-                appStore().dispatch({ type: GameActions.ballBounceVertically, payload: {} });
-                break;
-            // return "left";
-            case 38:
-                appStore().dispatch({ type: GameActions.ballBounceHorizantally, payload: {} });
-                break;
-            // return "up";
-            case 39:
-                appStore().dispatch({ type: GameActions.ballBounceVertically, payload: {} });
-                break;
-            // return "right";
-            case 40:
-                appStore().dispatch({ type: GameActions.ballBounceHorizantally, payload: {} });
-                break;
-            // return "down";
-        }
     }
 
     /**
@@ -153,6 +146,8 @@ export class Main extends React.Component {
         if (this.tickHandler) {
             window.cancelAnimationFrame(this.tickHandler);
         }
+
+        window.removeEventListener("mousemove", this.onMouseMove);
     }
 
     /**
@@ -168,7 +163,9 @@ export class Main extends React.Component {
             width: gameDimensions.size,
             height: gameDimensions.size,
             borderColor: "white",
-            borderStyle: "solid"
+            borderStyle: "solid",
+            display: "flex",
+            justifyContent: "center"
         };
     }
 
@@ -204,20 +201,25 @@ export class Main extends React.Component {
      * Renders the component.
      */
     public render(): React.ReactNode {
-        const blocks = appState().blocks ? appState().blocks : undefined;
-        const paddle = appState().paddle ? appState().paddle : undefined;
-        const ball = appState().ball ? appState().ball : undefined;
-
         return (
             <div style={this.gameFieldStyle()}>
                 {
-                    blocks ? blocks.map((b, index) => <div key={index} style={this.positionStyle(b)} />) : null
+                    this.state.blocks ? this.state.blocks.map((b, index) => <div key={index} style={this.positionStyle(b)} />) : null
                 }
                 {
-                    paddle ? <div style={this.positionStyle(paddle)} /> : null
+                    this.state.paddle ? <div style={this.positionStyle(this.state.paddle)} /> : null
                 }
                 {
-                    ball ? <div style={this.ballStyle(ball)} /> : null
+                    this.state.ball ? <div style={this.ballStyle(this.state.ball)} /> : null
+                }
+                {
+                    this.state.gameLost ?
+                        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                            <p style={{ alignSelf: "center", color: "white" }}>Game over</p>
+                            <button onClick={this.onPlayAgain} style={{ alignSelf: "center" }}>Play again</button>
+                        </div>
+                        :
+                        null
                 }
             </div>
         );

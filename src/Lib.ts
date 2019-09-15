@@ -1,7 +1,6 @@
 import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, DegreeToRadian, NumberOfBlockColumns, NumberOfBlockRows } from "./Constants";
 import { Ball } from "./Definitions/Ball";
 import { Block } from "./Definitions/Block";
-import { Paddle } from "./Definitions/Paddle";
 import { ScreenObject } from "./Definitions/ScreenObject";
 import { GameActions } from "./State/GameActions";
 
@@ -85,45 +84,39 @@ export const angleRandomizer = (): number => {
  */
 export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically | undefined => {
 
-    if (ball.previousState) {
-        let x = ball.previousState.left + (ball.previousState.width / 2);
-        let y = ball.previousState.top + (ball.previousState.height / 2);
+    const left = shape.left;
+    const right = shape.left + shape.width;
+    const top = shape.top;
+    const bottom = shape.top + shape.height;
 
-        const left = Math.floor(shape.left);
-        const top = Math.floor(shape.top);
-        const right = Math.floor(shape.left + shape.width);
-        const bottom = Math.floor(shape.top + shape.height);
+    const cx = ball.left + (ball.width / 2);
+    const cy = ball.top + (ball.height / 2);
 
-        let loopCounter = 0;
+    const x1 = ball.left;
+    const x2 = ball.left + ball.width;
 
-        let doLoop = true;
+    const y1 = ball.top;
+    const y2 = ball.top + ball.height;
 
-        if ((shape as Paddle).isPaddle) {
-            return GameActions.ballBounceHorizantally;
-        }
+    const withinVerticalBounds = (x1 > left || x2 < right);
+    const withinHorizantalBounds = (y1 > top || y2 < bottom);
 
-        do {
-            if (x === left && y >= top && y <= right) {
-                // Hit lift side
-                return GameActions.ballBounceVertically;
-            } else if (y === top && x >= left && x <= right) {
-                return GameActions.ballBounceHorizantally;
-            } else if (x === right && y >= top && y <= bottom) {
-                return GameActions.ballBounceVertically;
-            } else if (y === bottom && x >= left && x <= right) {
-                return GameActions.ballBounceHorizantally;
-            }
-
-            x = Math.floor(getNextX(ball.angle, 1, x));
-            y = Math.floor(getNextY(ball.angle, 1, y));
-
-            loopCounter++;
-            doLoop = loopCounter <= 50;
-
-        } while (doLoop);
-
+    if (cx < left && withinVerticalBounds) {
+        // Left
+        return GameActions.ballBounceVertically;
+    } else if (cx > right && withinVerticalBounds) {
+        // Top
+        return GameActions.ballBounceVertically;
+    } else if (cy < top && withinHorizantalBounds) {
+        // right
         return GameActions.ballBounceHorizantally;
+    } else if (cy > bottom && withinHorizantalBounds) {
+        return GameActions.ballBounceHorizantally;
+        // bottom
     }
+
+    // tslint:disable-next-line: no-console
+    console.log("Hit detection failed.");
 
     return undefined;
 };

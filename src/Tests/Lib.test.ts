@@ -120,12 +120,10 @@ describe("Lib tests", () => {
     it("return vertical when the ball bounces off the left side of a shape", () => {
         // Arrange
         const ball = {
-            previousState: {
-                left: 39,
-                top: 125,
-                width: 10,
-                height: 10,
-            },
+            left: 39,
+            top: 125,
+            width: 10,
+            height: 10,
             angle: 360
         } as Ball;
 
@@ -133,7 +131,7 @@ describe("Lib tests", () => {
             left: 50,
             top: 100,
             width: 100,
-            height : 50
+            height: 50
         } as ScreenObject;
 
         // Act
@@ -146,12 +144,10 @@ describe("Lib tests", () => {
     it("return horizantal when the ball bounces off the top side of a shape", () => {
         // Arrange
         const ball = {
-            previousState: {
-                left: 80,
-                top: 89,
-                width: 10,
-                height: 10,
-            },
+            left: 80,
+            top: 89,
+            width: 10,
+            height: 10,
             angle: 270
         } as Ball;
 
@@ -159,7 +155,7 @@ describe("Lib tests", () => {
             left: 50,
             top: 100,
             width: 100,
-            height : 50
+            height: 50
         } as ScreenObject;
 
         // Act
@@ -172,12 +168,10 @@ describe("Lib tests", () => {
     it("return vertical when the ball bounces off the right side of a shape", () => {
         // Arrange
         const ball = {
-            previousState: {
-                left: 51,
-                top: 125,
-                width: 10,
-                height: 10,
-            },
+            left: 149,
+            top: 125,
+            width: 10,
+            height: 10,
             angle: 180
         } as Ball;
 
@@ -185,7 +179,7 @@ describe("Lib tests", () => {
             left: 50,
             top: 100,
             width: 100,
-            height : 50
+            height: 50
         } as ScreenObject;
 
         // Act
@@ -198,12 +192,10 @@ describe("Lib tests", () => {
     it("return horizantal when the ball bounces off the bottom side of a shape", () => {
         // Arrange
         const ball = {
-            previousState: {
-                left: 60,
-                top: 144,
-                width: 10,
-                height: 10,
-            },
+            left: 60,
+            top: 149,
+            width: 10,
+            height: 10,
             angle: 90
         } as Ball;
 
@@ -211,7 +203,7 @@ describe("Lib tests", () => {
             left: 50,
             top: 100,
             width: 100,
-            height : 50
+            height: 50
         } as ScreenObject;
 
         // Act

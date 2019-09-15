@@ -16,6 +16,4 @@ export interface Ball extends GameObject {
      * Stores a reference to the last object the ball hit. Used to prevent a double bounce on the same object.
      */
     lastObject: any;
-
-    previousState?: Ball;
 }

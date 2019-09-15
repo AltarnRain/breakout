@@ -33,7 +33,7 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Scre
             const x = getNextX(state.angle, state.velocity, state.left);
             const y = getNextY(state.angle, state.velocity, state.top);
 
-            return { ...state, left: x, top: y, previousState: state };
+            return { ...state, left: x, top: y };
         }
 
         case GameActions.ballBounceHorizantally:
@@ -62,7 +62,7 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Scre
                     }
                 }
 
-                return { ...state, angle, lastObject: action.payload, previousState: state };
+                return { ...state, angle, lastObject: action.payload };
             }
 
             return state;
