@@ -117,7 +117,7 @@ export class Main extends React.Component<{}, State> {
             }
         }
 
-        appStore().dispatch({ type: GameActions.Tick, payload: diff });
+        appStore().dispatch({ type: GameActions.tick, payload: diff });
 
         // Redraw at 60 fps.
         if (diff > GameTick) {

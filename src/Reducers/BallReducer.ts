@@ -29,7 +29,7 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Scre
             };
         }
 
-        case GameActions.Tick: {
+        case GameActions.tick: {
             const x = getNextX(state.angle, state.velocity, state.left);
             const y = getNextY(state.angle, state.velocity, state.top);
 

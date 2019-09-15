@@ -30,7 +30,7 @@ describe("ball reducer tests", () => {
         ball.angle = 90;
 
         // Act
-        const newBall = ballReducer(ball, {type: GameActions.Tick});
+        const newBall = ballReducer(ball, {type: GameActions.tick});
 
         // Assert
         expect(ball.left).toBe(newBall.left);
@@ -47,7 +47,7 @@ describe("ball reducer tests", () => {
         } as Ball;
 
         // Act
-        const newBall = ballReducer(ball, {type: GameActions.Tick});
+        const newBall = ballReducer(ball, {type: GameActions.tick});
 
         // Assert
         expect(ball.left).toBeGreaterThan(newBall.left);
