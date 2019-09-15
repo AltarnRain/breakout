@@ -1,6 +1,7 @@
 import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, DegreeToRadian, NumberOfBlockColumns, NumberOfBlockRows } from "./Constants";
 import { Ball } from "./Definitions/Ball";
 import { Block } from "./Definitions/Block";
+import { Paddle } from "./Definitions/Paddle";
 import { ScreenObject } from "./Definitions/ScreenObject";
 import { GameActions } from "./State/GameActions";
 
@@ -41,15 +42,15 @@ export const getInitialBlocks = (): Block[] => {
  */
 export const overlaps = (shape1: ScreenObject, shape2: ScreenObject) => {
 
-    const left1 = shape1.left;
-    const right1 = shape1.left + shape1.width;
-    const top1 = shape1.top;
-    const bottom1 = shape1.top + shape1.height;
+    const left1 = Math.ceil(shape1.left);
+    const right1 = Math.floor(shape1.left + shape1.width);
+    const top1 = Math.ceil(shape1.top);
+    const bottom1 = Math.floor(shape1.top + shape1.height);
 
-    const left2 = shape2.left;
-    const right2 = shape2.left + shape2.width;
-    const top2 = shape2.top;
-    const bottom2 = shape2.top + shape2.height;
+    const left2 = Math.ceil(shape2.left);
+    const right2 = Math.floor(shape2.left + shape2.width);
+    const top2 = Math.ceil(shape2.top);
+    const bottom2 = Math.floor(shape2.top + shape2.height);
 
     if (bottom1 < top2 || top1 > bottom2) {
         return false;
@@ -82,41 +83,49 @@ export const angleRandomizer = (): number => {
  * @param {ScreenObject} shape. A shape object.
  * @returns {GameActions}. The bounce action or undefined if no bounce action could be determined.
  */
-export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically => {
+export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically | undefined => {
 
     if (ball.previousState) {
         let x = ball.previousState.left + (ball.previousState.width / 2);
         let y = ball.previousState.top + (ball.previousState.height / 2);
 
+        const left = Math.floor(shape.left);
+        const top = Math.floor(shape.top);
+        const right = Math.floor(shape.left + shape.width);
+        const bottom = Math.floor(shape.top + shape.height);
+
         let loopCounter = 0;
 
         let doLoop = true;
 
+        if ((shape as Paddle).isPaddle) {
+            return GameActions.ballBounceHorizantally;
+        }
+
         do {
-            if (x === shape.left && y >= shape.top && y <= shape.top + shape.width) {
+            if (x === left && y >= top && y <= right) {
                 // Hit lift side
                 return GameActions.ballBounceVertically;
-            } else if (y === shape.top && x >= shape.left && x <= shape.left + shape.width) {
+            } else if (y === top && x >= left && x <= right) {
                 return GameActions.ballBounceHorizantally;
-            } else if (x === shape.left + shape.width && y >= shape.top && y <= shape.top + shape.width) {
+            } else if (x === right && y >= top && y <= bottom) {
                 return GameActions.ballBounceVertically;
-            } else if (y === shape.top + shape.height && x >= shape.left && x <= shape.left + shape.width) {
+            } else if (y === bottom && x >= left && x <= right) {
                 return GameActions.ballBounceHorizantally;
             }
 
-            x = getNextX(ball.angle, 1, x);
-            y = getNextY(ball.angle, 1, y);
+            x = Math.floor(getNextX(ball.angle, 1, x));
+            y = Math.floor(getNextY(ball.angle, 1, y));
 
             loopCounter++;
             doLoop = loopCounter <= 50;
 
         } while (doLoop);
 
-        // Something messed up. Return a value so the ball bounces (weirdly.)
         return GameActions.ballBounceHorizantally;
     }
 
-    return GameActions.ballBounceHorizantally;
+    return undefined;
 };
 
 /**

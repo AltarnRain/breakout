@@ -33,6 +33,7 @@ export class Main extends React.Component {
 
         this.onMouseMove = this.onMouseMove.bind(this);
         this.tick = this.tick.bind(this);
+        this.onKeyUp = this.onKeyUp.bind(this);
     }
 
     /**
@@ -58,38 +59,32 @@ export class Main extends React.Component {
 
         const diff = tick - this.tickStart;
 
-        // Redraw at 60 fps.
-        if (diff > GameTick) {
+        const ball = appState().ball;
+        const blocks = appState().blocks;
+        const paddle = appState().paddle;
 
-            const ball = appState().ball;
-            const blocks = appState().blocks;
-            const paddle = appState().paddle;
+        const paddleHit = overlaps(ball, paddle);
 
-            const paddleHit = overlaps(paddle, ball);
+        if (paddleHit) {
+            const action = getBounceAction(ball, paddle);
 
-            if (paddleHit) {
-                const action = getBounceAction(ball, paddle);
+            if (typeof (action) !== "undefined") {
+                appStore().dispatch({ type: action, payload: paddle });
+            }
+        } else if (blocks) {
+            const hitBlock = blocks.find((b) => overlaps(b, ball));
+
+            if (hitBlock) {
+                appStore().dispatch({ type: GameActions.hitBlock, payload: hitBlock });
+
+                const action = getBounceAction(ball, hitBlock);
 
                 if (typeof (action) !== "undefined") {
-                    appStore().dispatch({ type: action, payload: paddle });
+                    appStore().dispatch({ type: action, payload: hitBlock });
                 }
-            } else if (blocks) {
-                const hitBlock = blocks.find((b) => overlaps(b, ball));
-
-                if (hitBlock) {
-                    appStore().dispatch({ type: GameActions.hitBlock, payload: hitBlock });
-
-                    const action = getBounceAction(ball, hitBlock);
-
-                    if (typeof (action) !== "undefined") {
-                        appStore().dispatch({ type: action, payload: hitBlock });
-                    }
-                }
-            }
-
-            // The ball's top and left are inside the game field.
-            // Use the game dimension object to store a wall hit.
-            if (ball.top <= 0) {
+            } else if (ball.top <= 0) {
+                // The ball's top and left are inside the game field.
+                // Use the game dimension object to store a wall hit.
                 // Hit the top  wall
                 appStore().dispatch({ type: GameActions.ballBounceHorizantally, payload: Walls.topWall });
 
@@ -107,12 +102,14 @@ export class Main extends React.Component {
 
                 appStore().dispatch({ type: GameActions.ballBounceVertically, payload: Walls.rightWall });
             }
+        }
 
+        appStore().dispatch({ type: GameActions.Tick, payload: diff });
+
+        // Redraw at 60 fps.
+        if (diff > GameTick) {
             this.forceUpdate();
-            appStore().dispatch({ type: GameActions.Tick, payload: diff });
             this.tickStart = tick;
-        } else {
-            appStore().dispatch({ type: GameActions.Tick, payload: diff });
         }
 
         this.tickHandler = window.requestAnimationFrame(this.tick);
@@ -125,6 +122,28 @@ export class Main extends React.Component {
         this.tickHandler = window.requestAnimationFrame(this.tick);
 
         window.addEventListener("mousemove", this.onMouseMove);
+        window.addEventListener("keyup", this.onKeyUp);
+    }
+
+    private onKeyUp(e: KeyboardEvent): void {
+        switch (e.keyCode) {
+            case 37:
+                appStore().dispatch({ type: GameActions.ballBounceVertically, payload: {} });
+                break;
+            // return "left";
+            case 38:
+                appStore().dispatch({ type: GameActions.ballBounceHorizantally, payload: {} });
+                break;
+            // return "up";
+            case 39:
+                appStore().dispatch({ type: GameActions.ballBounceVertically, payload: {} });
+                break;
+            // return "right";
+            case 40:
+                appStore().dispatch({ type: GameActions.ballBounceHorizantally, payload: {} });
+                break;
+            // return "down";
+        }
     }
 
     /**
