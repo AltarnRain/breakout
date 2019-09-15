@@ -1,9 +1,8 @@
 import "jest";
 import { NumberOfBlockColumns, NumberOfBlockRows } from "../Constants";
 import { Ball } from "../Definitions/Ball";
-import { Block } from "../Definitions/Block";
 import { ScreenObject } from "../Definitions/ScreenObject";
-import { angleRandomizer, getBounceAction, getInitialBlocks, overlaps } from "../Lib";
+import { angleRandomizer, getBounceAction, getDirectionFromAngle, getInitialBlocks, overlaps } from "../Lib";
 import { GameActions } from "../State/GameActions";
 
 describe("Lib tests", () => {
@@ -211,5 +210,75 @@ describe("Lib tests", () => {
 
         // Assert
         expect(result).toBe(GameActions.ballBounceHorizantally);
+    });
+
+    it ("gets up from an angle of 90", () => {
+        // Act
+        const result = getDirectionFromAngle(90);
+
+        // Assert
+        expect(result.length).toBe(1);
+        expect(result[0]).toBe("up");
+    });
+
+    it ("gets up and right from an angle of 45", () => {
+        // Act
+        const result = getDirectionFromAngle(45);
+
+        // Assert
+        expect(result.length).toBe(2);
+        expect(result.some((r) => r === "up")).toBe(true);
+        expect(result.some((r) => r === "right")).toBe(true);
+    });
+
+    it ("gets right from an angle of 0 and 360", () => {
+        // Act
+        const result1 = getDirectionFromAngle(0);
+        const result2 = getDirectionFromAngle(360);
+
+        // Assert
+        expect(result1.length).toBe(1);
+        expect(result1[0]).toBe("right");
+
+        expect(result2.length).toBe(1);
+        expect(result2[0]).toBe("right");
+    });
+
+    it ("gets down and right from an angle of 315", () => {
+        // Act
+        const result = getDirectionFromAngle(315);
+
+        // Assert
+        expect(result.length).toBe(2);
+        expect(result.some((r) => r === "down")).toBe(true);
+        expect(result.some((r) => r === "right")).toBe(true);
+    });
+
+    it ("gets down from an angle of 270", () => {
+        // Act
+        const result = getDirectionFromAngle(270);
+
+        // Assert
+        expect(result.length).toBe(1);
+        expect(result[0]).toBe("down");
+    });
+
+    it ("gets left and down from an angle of 225", () => {
+        // Act
+        const result = getDirectionFromAngle(225);
+
+        // Assert
+        expect(result.length).toBe(2);
+        expect(result.some((r) => r === "down")).toBe(true);
+        expect(result.some((r) => r === "left")).toBe(true);
+    });
+
+    it ("gets left from an angle of 180", () => {
+        // Act
+        const result = getDirectionFromAngle(180);
+
+        // Assert
+        expect(result.length).toBe(1);
+        expect(result[0]).toBe("left");
     });
 });

@@ -1,6 +1,7 @@
 import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, DegreeToRadian, NumberOfBlockColumns, NumberOfBlockRows } from "./Constants";
 import { Ball } from "./Definitions/Ball";
 import { Block } from "./Definitions/Block";
+import { Direction } from "./Definitions/Direction";
 import { ScreenObject } from "./Definitions/ScreenObject";
 import { GameActions } from "./State/GameActions";
 
@@ -142,4 +143,36 @@ export function getNextY(angle: number, distance: number, currentY: number) {
 
 export function getNextX(angle: number, distance: number, currentX: number) {
     return Math.cos(angle * DegreeToRadian * -1) * distance + currentX;
+}
+
+export function getDirectionFromAngle(angle: number): Direction[] {
+
+    // A ball can travel at two directions at most so the return
+    // Value has to be an array with a size of 1 or two.
+    const returnValue: Direction[] = [];
+
+    const x = Math.floor(getNextX(angle, 10, 0));
+    const y = Math.floor(getNextY(angle, 10, 0));
+
+    if (x > 5) {
+        // Ball travels to the right
+        returnValue.push("right");
+    }
+
+    if (x < -5) {
+        // Ball travels to the left.
+        returnValue.push("left");
+    }
+
+    if (y > 5) {
+        // Ball travels down.
+        returnValue.push("down");
+    }
+
+    if (y < -5) {
+        returnValue.push("up");
+    }
+
+    return returnValue;
+
 }
