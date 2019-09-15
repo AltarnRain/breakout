@@ -1,4 +1,5 @@
 import { combineReducers, createStore, ReducersMapObject, Store } from "redux";
+import { miscellaneousReducer } from "./MiscellaneousReducer";
 import { ballReducer } from "./Reducers/BallReducer";
 import { blockReducer } from "./Reducers/BlockReducer";
 import { paddleReducer } from "./Reducers/PaddleReducer";
@@ -9,6 +10,7 @@ const reducers: ReducersMapObject<AppState, ActionPayload<any>> = {
     blocks: blockReducer,
     paddle: paddleReducer,
     ball: ballReducer,
+    miscellaneous: miscellaneousReducer
 };
 
 const allReducers = combineReducers(reducers);

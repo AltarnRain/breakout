@@ -1,5 +1,6 @@
 import { Ball } from "../Definitions/Ball";
 import { Block } from "../Definitions/Block";
+import { Miscellaneous } from "../Definitions/Miscellaneous";
 import { Paddle } from "../Definitions/Paddle";
 
 /**
@@ -21,4 +22,9 @@ export interface AppState {
      * Stores the state of the ball.
      */
     ball: Ball;
+
+    /**
+     * Miscellaneous
+     */
+    miscellaneous: Miscellaneous;
 }

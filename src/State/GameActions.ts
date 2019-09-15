@@ -5,5 +5,7 @@ export enum GameActions {
     Tick,
     ballBounceHorizantally,
     ballBounceVertically,
-    gameLost
+    gameLost,
+    paused,
+    nextLevel
 }
