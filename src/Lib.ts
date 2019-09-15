@@ -102,16 +102,23 @@ export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ba
     const withinVerticalBounds = (x1 > left || x2 < right);
     const withinHorizantalBounds = (y1 > top || y2 < bottom);
 
-    if (cx < left && withinVerticalBounds) {
+    const directions = getDirectionFromAngle(ball.angle);
+
+    const goingLeft = directions.some((d) => d === "left");
+    const goingRight = directions.some((d) => d === "right");
+    const goingUp = directions.some((d) => d === "up");
+    const goingDown = directions.some((d) => d === "down");
+
+    if (goingRight && cx < left && withinVerticalBounds) {
         // Left
         return GameActions.ballBounceVertically;
-    } else if (cx > right && withinVerticalBounds) {
-        // Top
+    } else if (goingLeft && cx > right && withinVerticalBounds) {
+        // Right
         return GameActions.ballBounceVertically;
-    } else if (cy < top && withinHorizantalBounds) {
-        // right
+    } else if (goingDown && cy < top && withinHorizantalBounds) {
+        // Top
         return GameActions.ballBounceHorizantally;
-    } else if (cy > bottom && withinHorizantalBounds) {
+    } else if (goingUp && cy > bottom && withinHorizantalBounds) {
         return GameActions.ballBounceHorizantally;
         // bottom
     }

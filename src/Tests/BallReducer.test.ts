@@ -1,7 +1,7 @@
 import "jest";
-import { ballReducer } from "../Reducers/BallReducer";
-import { Paddle } from "../Definitions/Paddle";
 import { Ball } from "../Definitions/Ball";
+import { Paddle } from "../Definitions/Paddle";
+import { ballReducer } from "../Reducers/BallReducer";
 import { GameActions } from "../State/GameActions";
 
 describe("ball reducer tests", () => {
