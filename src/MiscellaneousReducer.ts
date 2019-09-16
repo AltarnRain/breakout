@@ -9,7 +9,7 @@ export function miscellaneousReducer(state: Miscellaneous = {} as Miscellaneous,
     switch (action.type) {
         case GameActions.initialize:
             return { gameState: "running", level: 1, score: 0 };
-        case GameActions.paused:
+        case GameActions.pressSpace:
             if (state.gameState !== "ended") {
                 if (state.gameState === "running") {
                     return { ...state, gameState: "paused" };

@@ -83,7 +83,7 @@ export const angleRandomizer = (): number => {
  * @param {ScreenObject} shape. A shape object.
  * @returns {GameActions}. The bounce action or undefined if no bounce action could be determined.
  */
-export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically | undefined => {
+export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically => {
 
     const left = shape.left;
     const right = shape.left + shape.width;
@@ -125,9 +125,8 @@ export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ba
     }
 
     // tslint:disable-next-line: no-console
-    console.log("Hit detection failed.");
-
-    return undefined;
+    console.log("Failed hit detection");
+    return GameActions.ballBounceHorizantally;
 };
 
 /**
@@ -172,7 +171,7 @@ export function getDirectionFromAngle(angle: number): Direction[] {
         returnValue.push("left");
     }
 
-    if (y >0) {
+    if (y > 0) {
         // Ball travels down.
         returnValue.push("down");
     }

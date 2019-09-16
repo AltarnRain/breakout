@@ -2,10 +2,10 @@ export enum GameActions {
     initialize,
     hitBlock,
     paddleMove,
-    Tick,
+    tick,
     ballBounceHorizantally,
     ballBounceVertically,
     gameLost,
-    paused,
-    nextLevel
+    nextLevel,
+    pressSpace
 }

@@ -1,5 +1,6 @@
 import { Ball } from "./Definitions/Ball";
 import { Block } from "./Definitions/Block";
+import { Miscellaneous } from "./Definitions/Miscellaneous";
 import { Paddle } from "./Definitions/Paddle";
 
 /**
@@ -21,5 +22,5 @@ export interface State {
      */
     ball?: Ball;
 
-    gameLost: boolean;
+    miscellaneous?: Miscellaneous;
 }

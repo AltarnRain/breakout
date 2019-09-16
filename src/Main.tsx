@@ -27,6 +27,11 @@ export class Main extends React.Component<{}, State> {
     private tickStart?: number;
 
     /**
+     * Refux subscription
+     */
+    private subscription?: () => void;
+
+    /**
      * Initializes the Main component.
      */
     constructor(props: object) {
@@ -35,8 +40,9 @@ export class Main extends React.Component<{}, State> {
         this.onMouseMove = this.onMouseMove.bind(this);
         this.tick = this.tick.bind(this);
         this.onPlayAgain = this.onPlayAgain.bind(this);
+        this.onKeyUp = this.onKeyUp.bind(this);
 
-        this.state = { gameLost: false };
+        this.state = {};
     }
 
     /**
@@ -50,10 +56,21 @@ export class Main extends React.Component<{}, State> {
         }
     }
 
+    private onKeyUp(e: KeyboardEvent): void {
+        switch (e.keyCode) {
+            case 20:
+                appStore().dispatch({ type: GameActions.pressSpace });
+                break;
+        }
+    }
+
+    /**
+     * Handles a play again click.
+     */
     private onPlayAgain(): void {
         // Reset game state.
-        this.setState({gameLost: false});
-        appStore().dispatch({type: GameActions.initialize});
+
+        appStore().dispatch({ type: GameActions.initialize });
         this.tickHandler = this.tickHandler = window.requestAnimationFrame(this.tick);
     }
 
@@ -76,14 +93,11 @@ export class Main extends React.Component<{}, State> {
         const paddleHit = overlaps(ball, paddle);
 
         if (paddleHit) {
-            const action = getBounceAction(ball, paddle);
-
-            if (typeof (action) !== "undefined") {
-                appStore().dispatch({ type: action, payload: paddle });
-            }
+            const paddleBounceAction = getBounceAction(ball, paddle);
+            appStore().dispatch({ type: paddleBounceAction, payload: paddle });
         } else if (blocks) {
-            const hitBlock = blocks.find((block) => overlaps(ball, block));
 
+            const hitBlock = blocks.find((b) => overlaps(ball, b));
             if (hitBlock) {
                 appStore().dispatch({ type: GameActions.hitBlock, payload: hitBlock });
 
@@ -92,6 +106,7 @@ export class Main extends React.Component<{}, State> {
                 if (typeof (action) !== "undefined") {
                     appStore().dispatch({ type: action, payload: hitBlock });
                 }
+
             } else if (ball.top <= 0) {
                 // The ball's top and left are inside the game field.
                 // Use the game dimension object to store a wall hit.
@@ -104,12 +119,7 @@ export class Main extends React.Component<{}, State> {
 
             } else if (ball.top + ball.width >= gameDimensions.size) {
                 // Hit bottom wall.
-                this.setState({ gameLost: true });
-                if (typeof (this.tickHandler) !== "undefined") {
-                    window.cancelAnimationFrame(this.tickHandler);
-                    return;
-                }
-
+                appStore().dispatch({ type: GameActions.gameLost });
             } else if (ball.left + ball.width >= gameDimensions.size) {
                 // Hit the right wall
 
@@ -132,11 +142,28 @@ export class Main extends React.Component<{}, State> {
      * Called when the component mounted.
      */
     public componentDidMount(): void {
-        this.setState({gameLost: false});
-        appStore().dispatch({type: GameActions.initialize});
+
+        appStore().dispatch({ type: GameActions.initialize });
         this.tickHandler = this.tickHandler = window.requestAnimationFrame(this.tick);
 
         window.addEventListener("mousemove", this.onMouseMove);
+        window.addEventListener("keyup", this.onKeyUp);
+
+        this.subscription = appStore().subscribe(() => {
+            const applicationState = appState();
+
+            if (applicationState.miscellaneous !== this.state.miscellaneous) {
+                this.setState({ miscellaneous: applicationState.miscellaneous });
+            }
+
+            if (applicationState.miscellaneous.gameState === "paused") {
+                if (this.tickHandler !== undefined) {
+                    window.cancelAnimationFrame(this.tickHandler);
+                }
+            } else if (applicationState.miscellaneous.gameState === "running") {
+                this.tickHandler = window.requestAnimationFrame(this.tick);
+            }
+        });
     }
 
     /**
@@ -148,6 +175,12 @@ export class Main extends React.Component<{}, State> {
         }
 
         window.removeEventListener("mousemove", this.onMouseMove);
+        window.removeEventListener("keyup", this.onKeyUp);
+
+        if (this.subscription) {
+            this.subscription();
+            delete this.subscription;
+        }
     }
 
     /**
@@ -213,13 +246,12 @@ export class Main extends React.Component<{}, State> {
                     this.state.ball ? <div style={this.ballStyle(this.state.ball)} /> : null
                 }
                 {
-                    this.state.gameLost ?
+                    this.state.miscellaneous && this.state.miscellaneous.gameState === "ended" ?
                         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                             <p style={{ alignSelf: "center", color: "white" }}>Game over</p>
                             <button onClick={this.onPlayAgain} style={{ alignSelf: "center" }}>Play again</button>
                         </div>
-                        :
-                        null
+                        : null
                 }
             </div>
         );
