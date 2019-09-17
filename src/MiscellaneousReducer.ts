@@ -9,17 +9,8 @@ export function miscellaneousReducer(state: Miscellaneous = {} as Miscellaneous,
     switch (action.type) {
         case GameActions.initialize:
             return { gameState: "running", level: 1, score: 0 };
-        case GameActions.pressSpace:
-            if (state.gameState !== "ended") {
-                if (state.gameState === "running") {
-                    return { ...state, gameState: "paused" };
-                } else {
-                    return { ...state, gameState: "running" };
-                }
-            }
-
-            break;
-
+        case GameActions.gameLost:
+            return { ...state, gameState: "ended" };
         case GameActions.nextLevel:
             return { ...state, level: state.level + 1 };
         case GameActions.hitBlock:
@@ -27,6 +18,4 @@ export function miscellaneousReducer(state: Miscellaneous = {} as Miscellaneous,
         default:
             return state;
     }
-
-    return state;
 }

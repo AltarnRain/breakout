@@ -40,7 +40,6 @@ export class Main extends React.Component<{}, State> {
         this.onMouseMove = this.onMouseMove.bind(this);
         this.tick = this.tick.bind(this);
         this.onPlayAgain = this.onPlayAgain.bind(this);
-        this.onKeyUp = this.onKeyUp.bind(this);
 
         this.state = {};
     }
@@ -53,14 +52,6 @@ export class Main extends React.Component<{}, State> {
         if (e) {
             const x = e.clientX - gameDimensions.left;
             appStore().dispatch({ type: GameActions.paddleMove, payload: x });
-        }
-    }
-
-    private onKeyUp(e: KeyboardEvent): void {
-        switch (e.keyCode) {
-            case 20:
-                appStore().dispatch({ type: GameActions.pressSpace });
-                break;
         }
     }
 
@@ -147,21 +138,16 @@ export class Main extends React.Component<{}, State> {
         this.tickHandler = this.tickHandler = window.requestAnimationFrame(this.tick);
 
         window.addEventListener("mousemove", this.onMouseMove);
-        window.addEventListener("keyup", this.onKeyUp);
 
         this.subscription = appStore().subscribe(() => {
             const applicationState = appState();
 
-            if (applicationState.miscellaneous !== this.state.miscellaneous) {
-                this.setState({ miscellaneous: applicationState.miscellaneous });
-            }
-
-            if (applicationState.miscellaneous.gameState === "paused") {
-                if (this.tickHandler !== undefined) {
+            if (applicationState.miscellaneous.gameState === "ended") {
+                if (this.tickHandler) {
                     window.cancelAnimationFrame(this.tickHandler);
                 }
-            } else if (applicationState.miscellaneous.gameState === "running") {
-                this.tickHandler = window.requestAnimationFrame(this.tick);
+
+                this.setState({miscellaneous: applicationState.miscellaneous});
             }
         });
     }
@@ -175,7 +161,6 @@ export class Main extends React.Component<{}, State> {
         }
 
         window.removeEventListener("mousemove", this.onMouseMove);
-        window.removeEventListener("keyup", this.onKeyUp);
 
         if (this.subscription) {
             this.subscription();

@@ -7,5 +7,4 @@ export enum GameActions {
     ballBounceVertically,
     gameLost,
     nextLevel,
-    pressSpace
 }

@@ -6,7 +6,7 @@ export interface Miscellaneous {
     /**
      * The state of the game.
      */
-    gameState: "running" | "paused" | "ended";
+    gameState: "running" | "ended";
 
     /**
      * The current score.
