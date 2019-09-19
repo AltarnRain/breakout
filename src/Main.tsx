@@ -8,6 +8,7 @@ import { State } from "./State";
 import { GameActions } from "./State/GameActions";
 import { appState, appStore } from "./Store";
 import { Walls } from "./WallConstants";
+import { whileStatement } from "@babel/types";
 
 const gameDimensions = getGameDimensions();
 
@@ -147,7 +148,7 @@ export class Main extends React.Component<{}, State> {
             const applicationState = appState();
 
             if (applicationState.gameState !== this.state.gameState) {
-                this.setState({gameState: applicationState.gameState});
+                this.setState({ gameState: applicationState.gameState });
 
                 if (applicationState.gameState.gameMode === "ended") {
                     if (this.tickHandler) {
@@ -193,6 +194,20 @@ export class Main extends React.Component<{}, State> {
         };
     }
 
+    private gameScorebarStyle(): CSSProperties {
+        return {
+            position: "absolute",
+            left: gameDimensions.left,
+            width: gameDimensions.size,
+            top: gameDimensions.top - 22,
+            height: 25,
+            borderColor: "white",
+            borderStyle: "solid",
+            display: "flex",
+            flexDirection: "row",
+        };
+    }
+
     /**
      * Returns css properties for positioning a shape.
      * @param {ScreenObject} shape. A shape object.
@@ -224,8 +239,12 @@ export class Main extends React.Component<{}, State> {
     /**
      * Renders the component.
      */
-    public render(): React.ReactNode {
-        return (
+    public render(): React.ReactNode[] {
+        return [
+            <div style={this.gameScorebarStyle()}>
+                <div style={{color : "white", justifyContent: "center", marginLeft: "10px"}}>Level: {this.state.gameState.level}</div>>
+                <div style={{color : "white", justifyContent: "center"}}>Score: {this.state.gameState.score}</div>>
+            </div>,
             <div style={this.gameFieldStyle()}>
                 {
                     this.state.blocks ? this.state.blocks.map((b, index) => <div key={index} style={this.positionStyle(b)} />) : null
@@ -245,7 +264,7 @@ export class Main extends React.Component<{}, State> {
                         : null
                 }
             </div>
-        );
+        ];
     }
 }
 
