@@ -1,6 +1,6 @@
 import { Ball } from "../Definitions/Ball";
 import { Block } from "../Definitions/Block";
-import { Miscellaneous } from "../Definitions/Miscellaneous";
+import { GameState } from "../Definitions/GameState";
 import { Paddle } from "../Definitions/Paddle";
 
 /**
@@ -26,5 +26,5 @@ export interface AppState {
     /**
      * Miscellaneous
      */
-    miscellaneous: Miscellaneous;
+    gameState: GameState;
 }

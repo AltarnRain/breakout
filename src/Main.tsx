@@ -41,7 +41,7 @@ export class Main extends React.Component<{}, State> {
         this.tick = this.tick.bind(this);
         this.onPlayAgain = this.onPlayAgain.bind(this);
 
-        this.state = {};
+        this.state = { gameState: { gameMode: "running", level: 1, score: 0 } };
     }
 
     /**
@@ -73,6 +73,10 @@ export class Main extends React.Component<{}, State> {
 
         if (!this.tickStart) {
             this.tickStart = tick;
+        }
+
+        if (appState().gameState.gameMode === "ended") {
+            return;
         }
 
         const diff = tick - this.tickStart;
@@ -108,13 +112,13 @@ export class Main extends React.Component<{}, State> {
                 // Hit the left wall
                 appStore().dispatch({ type: GameActions.ballBounceVertically, payload: Walls.leftWall });
 
-            } else if (ball.top + ball.width >= gameDimensions.size) {
-                // Hit bottom wall.
-                appStore().dispatch({ type: GameActions.gameLost });
             } else if (ball.left + ball.width >= gameDimensions.size) {
                 // Hit the right wall
 
                 appStore().dispatch({ type: GameActions.ballBounceVertically, payload: Walls.rightWall });
+            } else if (ball.top + ball.width >= gameDimensions.size) {
+                // Hit bottom wall.
+                appStore().dispatch({ type: GameActions.gameLost });
             }
         }
 
@@ -142,12 +146,14 @@ export class Main extends React.Component<{}, State> {
         this.subscription = appStore().subscribe(() => {
             const applicationState = appState();
 
-            if (applicationState.miscellaneous.gameState === "ended") {
-                if (this.tickHandler) {
-                    window.cancelAnimationFrame(this.tickHandler);
-                }
+            if (applicationState.gameState !== this.state.gameState) {
+                this.setState({gameState: applicationState.gameState});
 
-                this.setState({miscellaneous: applicationState.miscellaneous});
+                if (applicationState.gameState.gameMode === "ended") {
+                    if (this.tickHandler) {
+                        window.cancelAnimationFrame(this.tickHandler);
+                    }
+                }
             }
         });
     }
@@ -231,7 +237,7 @@ export class Main extends React.Component<{}, State> {
                     this.state.ball ? <div style={this.ballStyle(this.state.ball)} /> : null
                 }
                 {
-                    this.state.miscellaneous && this.state.miscellaneous.gameState === "ended" ?
+                    this.state.gameState.gameMode === "ended" ?
                         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                             <p style={{ alignSelf: "center", color: "white" }}>Game over</p>
                             <button onClick={this.onPlayAgain} style={{ alignSelf: "center" }}>Play again</button>
