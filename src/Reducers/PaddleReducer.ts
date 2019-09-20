@@ -34,7 +34,9 @@ export function paddleReducer(state: Paddle = { isPaddle: true } as Paddle, acti
 
             // Prevent the paddle from being drawn outside the playfield.
             if (typeof (action.payload) !== "undefined") {
+
                 let x;
+
                 if (action.payload - state.width / 2 <= 0) {
                     x = 0;
                 } else if (action.payload - state.width / 2 >= (gameDimensions.size - state.width)) {

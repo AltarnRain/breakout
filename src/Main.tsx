@@ -8,7 +8,6 @@ import { State } from "./State";
 import { GameActions } from "./State/GameActions";
 import { appState, appStore } from "./Store";
 import { Walls } from "./WallConstants";
-import { whileStatement } from "@babel/types";
 
 const gameDimensions = getGameDimensions();
 

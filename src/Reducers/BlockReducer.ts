@@ -7,9 +7,6 @@ import { GameActions } from "../State/GameActions";
 const gameDimensions = getGameDimensions();
 export function blockReducer(state: Block[] = [], action: ActionPayload<Block>): Block[] {
     switch (action.type) {
-        case GameActions.hitBlock:
-            return state.filter((b) => b !== action.payload);
-
         case GameActions.initialize:
 
             const newState = getInitialBlocks();
@@ -22,6 +19,8 @@ export function blockReducer(state: Block[] = [], action: ActionPayload<Block>):
             });
 
             return newState;
+        case GameActions.hitBlock:
+            return state.filter((b) => b !== action.payload);
         default:
             return state;
     }
