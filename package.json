@@ -36,5 +36,6 @@
   },
   "devDependencies": {
     "tslint": "^5.19.0"
-  }
+  },
+  "homepage": "https://altarnrain.github.io/breakout"
 }
