@@ -1,4 +1,4 @@
-import { BallResizeFactor, InitialBallVelocity } from "../Constants";
+import { BallResizeFactor, BallSpeedIncreasePerBlock, BallSpeedIncreasePerLevel, InitialBallVelocity } from "../Constants";
 import { Ball } from "../Definitions/Ball";
 import { ScreenObject } from "../Definitions/ScreenObject";
 import { getGameDimensions } from "../GameDimensions";
@@ -70,7 +70,10 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Scre
 
         case GameActions.hitBlock:
             // Increase the ball speed for each hit block
-            return { ...state, velocity: state.velocity * 1.01 };
+            return { ...state, velocity: state.velocity * BallSpeedIncreasePerBlock };
+        case GameActions.nextLevel:
+            // Increase ball speed for each level.
+            return { ...state, velocity: state.velocity + BallSpeedIncreasePerLevel };
         default:
             return state;
     }
