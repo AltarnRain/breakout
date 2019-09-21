@@ -11,7 +11,7 @@ export interface AppState {
     /**
      * Stores the state of the game blocks
      */
-    blocks?: Block[];
+    blocks: Block[];
 
     /**
      * Stores the state of the paddle
