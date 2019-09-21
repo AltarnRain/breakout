@@ -75,7 +75,7 @@ export class Main extends React.Component<{}, State> {
             this.tickStart = tick;
         }
 
-        if (appState().gameState.gameMode === "ended") {
+        if (this.state.gameState.gameMode === "ended") {
             return;
         }
 
@@ -86,6 +86,10 @@ export class Main extends React.Component<{}, State> {
             const ball = appState().ball;
             const blocks = appState().blocks;
             const paddle = appState().paddle;
+
+            if (blocks.length === 0) {
+                appStore().dispatch({ type: GameActions.nextLevel});
+            }
 
             const paddleHit = overlaps(ball, paddle);
 
@@ -199,8 +203,8 @@ export class Main extends React.Component<{}, State> {
             position: "absolute",
             left: gameDimensions.left,
             width: gameDimensions.size,
-            top: gameDimensions.top - 22,
-            height: 25,
+            top: gameDimensions.top - 25,
+            height: 22,
             borderColor: "white",
             borderStyle: "solid",
             display: "flex",
@@ -242,8 +246,8 @@ export class Main extends React.Component<{}, State> {
     public render(): React.ReactNode[] {
         return [
             <div style={this.gameScorebarStyle()}>
-                <div style={{ color: "white", justifyContent: "center", marginLeft: "10px" }}>Level: {this.state.gameState.level}</div>>
-                <div style={{ color: "white", justifyContent: "center" }}>Score: {this.state.gameState.score}</div>>
+                <div key={1} style={{ color: "white", justifyContent: "center", marginLeft: "10px" }}>Level: {this.state.gameState.level}</div>>
+                <div key={2} style={{ color: "white", justifyContent: "center" }}>Score: {this.state.gameState.score}</div>>
             </div>,
             <div style={this.gameFieldStyle()}>
                 {

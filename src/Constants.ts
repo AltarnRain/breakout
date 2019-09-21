@@ -12,7 +12,7 @@ export const GameTick = 1000 / 60;
 /**
  * Constants for the initial ball velocity.
  */
-export const InitialBallVelocity = 6;
+export const InitialBallVelocity = 10;
 
 /**
  * Constants used in a calculation to randomize the ball's initial angle.
@@ -58,3 +58,13 @@ export const PaddleHeightFactor = 10;
  * Used to calculate the paddle's top coordinate relative to the game field height.
  */
 export const PaddlePositionFactor = 0.9;
+
+/**
+ * Speed increase factor for each hit block
+ */
+export const BallSpeedIncreasePerBlock = 1.02;
+
+/**
+ * Speed increase factor for each level.
+ */
+export const BallSpeedIncreasePerLevel = 0.5;

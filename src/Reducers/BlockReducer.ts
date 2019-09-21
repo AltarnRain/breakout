@@ -8,6 +8,7 @@ const gameDimensions = getGameDimensions();
 export function blockReducer(state: Block[] = [], action: ActionPayload<Block>): Block[] {
     switch (action.type) {
         case GameActions.initialize:
+        case GameActions.nextLevel:
 
             const newState = getInitialBlocks();
 
