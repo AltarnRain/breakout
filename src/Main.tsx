@@ -81,51 +81,51 @@ export class Main extends React.Component<{}, State> {
 
         const diff = tick - this.tickStart;
 
-        const ball = appState().ball;
-        const blocks = appState().blocks;
-        const paddle = appState().paddle;
-
-        const paddleHit = overlaps(ball, paddle);
-
-        if (paddleHit) {
-            const paddleBounceAction = getBounceAction(ball, paddle);
-            appStore().dispatch({ type: paddleBounceAction, payload: paddle });
-        } else if (blocks) {
-
-            const hitBlock = blocks.find((b) => overlaps(ball, b));
-            if (hitBlock) {
-                appStore().dispatch({ type: GameActions.hitBlock, payload: hitBlock });
-
-                const action = getBounceAction(ball, hitBlock);
-
-                if (typeof (action) !== "undefined") {
-                    appStore().dispatch({ type: action, payload: hitBlock });
-                }
-
-            } else if (ball.top <= 0) {
-                // The ball's top and left are inside the game field.
-                // Use the game dimension object to store a wall hit.
-                // Hit the top  wall
-                appStore().dispatch({ type: GameActions.ballBounceHorizantally, payload: Walls.topWall });
-
-            } else if (ball.left <= 0) {
-                // Hit the left wall
-                appStore().dispatch({ type: GameActions.ballBounceVertically, payload: Walls.leftWall });
-
-            } else if (ball.left + ball.width >= gameDimensions.size) {
-                // Hit the right wall
-
-                appStore().dispatch({ type: GameActions.ballBounceVertically, payload: Walls.rightWall });
-            } else if (ball.top + ball.width >= gameDimensions.size) {
-                // Hit bottom wall.
-                appStore().dispatch({ type: GameActions.gameLost });
-            }
-        }
-
-        appStore().dispatch({ type: GameActions.tick, payload: diff });
-
         // Redraw at 60 fps.
         if (diff > GameTick) {
+            const ball = appState().ball;
+            const blocks = appState().blocks;
+            const paddle = appState().paddle;
+
+            const paddleHit = overlaps(ball, paddle);
+
+            if (paddleHit) {
+                const paddleBounceAction = getBounceAction(ball, paddle);
+                appStore().dispatch({ type: paddleBounceAction, payload: paddle });
+            } else if (blocks) {
+
+                const hitBlock = blocks.find((b) => overlaps(ball, b));
+                if (hitBlock) {
+                    appStore().dispatch({ type: GameActions.hitBlock, payload: hitBlock });
+
+                    const action = getBounceAction(ball, hitBlock);
+
+                    if (typeof (action) !== "undefined") {
+                        appStore().dispatch({ type: action, payload: hitBlock });
+                    }
+
+                } else if (ball.top <= 0) {
+                    // The ball's top and left are inside the game field.
+                    // Use the game dimension object to store a wall hit.
+                    // Hit the top  wall
+                    appStore().dispatch({ type: GameActions.ballBounceHorizantally, payload: Walls.topWall });
+
+                } else if (ball.left <= 0) {
+                    // Hit the left wall
+                    appStore().dispatch({ type: GameActions.ballBounceVertically, payload: Walls.leftWall });
+
+                } else if (ball.left + ball.width >= gameDimensions.size) {
+                    // Hit the right wall
+
+                    appStore().dispatch({ type: GameActions.ballBounceVertically, payload: Walls.rightWall });
+                } else if (ball.top + ball.width >= gameDimensions.size) {
+                    // Hit bottom wall.
+                    appStore().dispatch({ type: GameActions.gameLost });
+                }
+            }
+
+            appStore().dispatch({ type: GameActions.tick });
+
             this.setState({ ball: appState().ball, blocks: appState().blocks, paddle: appState().paddle });
             this.tickStart = tick;
         }
@@ -155,6 +155,7 @@ export class Main extends React.Component<{}, State> {
                     }
                 }
             }
+
         });
     }
 
@@ -241,8 +242,8 @@ export class Main extends React.Component<{}, State> {
     public render(): React.ReactNode[] {
         return [
             <div style={this.gameScorebarStyle()}>
-                <div style={{color : "white", justifyContent: "center", marginLeft: "10px"}}>Level: {this.state.gameState.level}</div>>
-                <div style={{color : "white", justifyContent: "center"}}>Score: {this.state.gameState.score}</div>>
+                <div style={{ color: "white", justifyContent: "center", marginLeft: "10px" }}>Level: {this.state.gameState.level}</div>>
+                <div style={{ color: "white", justifyContent: "center" }}>Score: {this.state.gameState.score}</div>>
             </div>,
             <div style={this.gameFieldStyle()}>
                 {
