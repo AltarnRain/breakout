@@ -4,7 +4,7 @@ import { Ball } from "./Definitions/Ball";
 import { GameObject } from "./Definitions/GameObject";
 import { getGameDimensions } from "./GameDimensions";
 import { getBounceAction, overlaps } from "./Lib";
-import { State } from "./State";
+import { AppState } from "./State/AppState";
 import { GameActions } from "./State/GameActions";
 import { appState, appStore } from "./Store";
 import { Walls } from "./WallConstants";
@@ -14,7 +14,7 @@ const gameDimensions = getGameDimensions();
 /**
  * Main game component.
  */
-export class Main extends React.Component<{}, State> {
+export class Main extends React.Component<{}, AppState> {
 
     /**
      * Stores a reference to the animation that draws the game.
@@ -41,7 +41,8 @@ export class Main extends React.Component<{}, State> {
         this.tick = this.tick.bind(this);
         this.onPlayAgain = this.onPlayAgain.bind(this);
 
-        this.state = { gameState: { gameMode: "running", level: 1, score: 0 } };
+        // Sync the redux state with the component state.
+        this.state = appState();
     }
 
     /**
@@ -88,7 +89,7 @@ export class Main extends React.Component<{}, State> {
             const paddle = appState().paddle;
 
             if (blocks.length === 0) {
-                appStore().dispatch({ type: GameActions.nextLevel});
+                appStore().dispatch({ type: GameActions.nextLevel });
             }
 
             const paddleHit = overlaps(ball, paddle);
@@ -130,7 +131,7 @@ export class Main extends React.Component<{}, State> {
 
             appStore().dispatch({ type: GameActions.tick });
 
-            this.setState({ ball: appState().ball, blocks: appState().blocks, paddle: appState().paddle });
+            this.syncStateWithRedux();
             this.tickStart = tick;
         }
 
@@ -241,6 +242,35 @@ export class Main extends React.Component<{}, State> {
     }
 
     /**
+     * Syncs this components state with the redux state.
+     */
+    private syncStateWithRedux(): void {
+        const applicationState = appState();
+
+        // Start with an empty 'state' object.
+        // This component's state is the same definitation as the application state in redux
+        const state: AppState = {} as AppState;
+
+        Object.keys(applicationState).forEach((key: string) => {
+
+            // Get the objects using the key values from the application state.
+            const componentStateProperty = this.state[key];
+            const applicationStatProperty = applicationState[key];
+
+            // Check if the objects have the same reference, if not expand the state object
+            if (componentStateProperty !== applicationStatProperty) {
+                state[key] = applicationStatProperty;
+            }
+        });
+
+        // The state object has keys meaning it was expected. SetState and let React figure out
+        // the rest.
+        if (Object.keys(state).length > 0) {
+            this.setState(state);
+        }
+    }
+
+    /**
      * Renders the component.
      */
     public render(): React.ReactNode[] {
@@ -249,23 +279,25 @@ export class Main extends React.Component<{}, State> {
                 <div key={1} style={{ color: "white", justifyContent: "center", marginLeft: "10px" }}>Level: {this.state.gameState.level}</div>>
                 <div key={2} style={{ color: "white", justifyContent: "center" }}>Score: {this.state.gameState.score}</div>>
             </div>,
-            <div style={this.gameFieldStyle()}>
+            <div>
                 {
-                    this.state.blocks ? this.state.blocks.map((b, index) => <div key={index} style={this.positionStyle(b)} />) : null
-                }
-                {
-                    this.state.paddle ? <div style={this.positionStyle(this.state.paddle)} /> : null
-                }
-                {
-                    this.state.ball ? <div style={this.ballStyle(this.state.ball)} /> : null
-                }
-                {
-                    this.state.gameState.gameMode === "ended" ?
-                        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                            <p style={{ alignSelf: "center", color: "white" }}>Game over</p>
-                            <button onClick={this.onPlayAgain} style={{ alignSelf: "center" }}>Play again</button>
-                        </div>
-                        : null
+                    this.state.blocks && this.state.paddle && this.state.ball ?
+                        <div style={this.gameFieldStyle()}>
+                            {
+                                this.state.blocks.map((b, index) => <div key={index} style={this.positionStyle(b)} />)
+                            }
+                            <div style={this.positionStyle(this.state.paddle)} />
+                            <div style={this.ballStyle(this.state.ball)} />
+                            {
+                                this.state.gameState.gameMode === "ended" ?
+                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                                        <p style={{ alignSelf: "center", color: "white" }}>Game over</p>
+                                        <button onClick={this.onPlayAgain} style={{ alignSelf: "center" }}>Play again</button>
+                                    </div>
+                                    : null
+                            }
+
+                        </div> : null
                 }
             </div>
         ];

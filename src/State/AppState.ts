@@ -27,4 +27,9 @@ export interface AppState {
      * Miscellaneous
      */
     gameState: GameState;
+
+    /**
+     * Indexer
+     */
+    [key: string]: any;
 }
