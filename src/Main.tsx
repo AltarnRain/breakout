@@ -273,34 +273,37 @@ export class Main extends React.Component<{}, AppState> {
     /**
      * Renders the component.
      */
-    public render(): React.ReactNode[] {
-        return [
-            <div style={this.gameScorebarStyle()}>
-                <div key={1} style={{ color: "white", justifyContent: "center", marginLeft: "10px" }}>Level: {this.state.gameState.level}</div>>
-                <div key={2} style={{ color: "white", justifyContent: "center" }}>Score: {this.state.gameState.score}</div>>
-            </div>,
+    public render(): React.ReactNode {
+        return (
             <div>
-                {
-                    this.state.blocks && this.state.paddle && this.state.ball ?
-                        <div style={this.gameFieldStyle()}>
-                            {
-                                this.state.blocks.map((b, index) => <div key={index} style={this.positionStyle(b)} />)
-                            }
-                            <div style={this.positionStyle(this.state.paddle)} />
-                            <div style={this.ballStyle(this.state.ball)} />
-                            {
-                                this.state.gameState.gameMode === "ended" ?
-                                    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                                        <p style={{ alignSelf: "center", color: "white" }}>Game over</p>
-                                        <button onClick={this.onPlayAgain} style={{ alignSelf: "center" }}>Play again</button>
-                                    </div>
-                                    : null
-                            }
 
-                        </div> : null
-                }
+                <div style={this.gameScorebarStyle()}>
+                    <div key={1} style={{ color: "white", justifyContent: "center", marginLeft: "10px" }}>Level: {this.state.gameState.level}</div>>
+                <div key={2} style={{ color: "white", justifyContent: "center" }}>Score: {this.state.gameState.score}</div>>
             </div>
-        ];
+                <div>
+                    {
+                        this.state.blocks && this.state.paddle && this.state.ball ?
+                            <div style={this.gameFieldStyle()}>
+                                {
+                                    this.state.blocks.map((b, index) => <div key={index} style={this.positionStyle(b)} />)
+                                }
+                                <div style={this.positionStyle(this.state.paddle)} />
+                                <div style={this.ballStyle(this.state.ball)} />
+                                {
+                                    this.state.gameState.gameMode === "ended" ?
+                                        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                                            <p style={{ alignSelf: "center", color: "white" }}>Game over</p>
+                                            <button onClick={this.onPlayAgain} style={{ alignSelf: "center" }}>Play again</button>
+                                        </div>
+                                        : null
+                                }
+
+                            </div> : null
+                    }
+                </div>
+            </div>
+        );
     }
 }
 

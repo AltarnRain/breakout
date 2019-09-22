@@ -86,22 +86,19 @@ export const angleRandomizer = (): number => {
  */
 export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically => {
 
-    const left = shape.left;
-    const right = shape.left + shape.width;
-    const top = shape.top;
-    const bottom = shape.top + shape.height;
+    const shapeLeft = shape.left;
+    const shapeRight = shape.left + shape.width;
+    const shapeTop = shape.top;
+    const shapeBottom = shape.top + shape.height;
 
-    const cx = ball.left + (ball.width / 2);
-    const cy = ball.top + (ball.height / 2);
+    const ballLeft = ball.left;
+    const ballRight = ball.left + ball.width;
 
-    const x1 = ball.left;
-    const x2 = ball.left + ball.width;
+    const ballTop = ball.top;
+    const ballBottom = ball.top + ball.height;
 
-    const y1 = ball.top;
-    const y2 = ball.top + ball.height;
-
-    const withinVerticalBounds = (x1 > left || x2 < right);
-    const withinHorizantalBounds = (y1 > top || y2 < bottom);
+    const withinVerticalBounds = (ballRight > shapeLeft && ballLeft < shapeRight);
+    const withinHorizantalBounds = (ballBottom > shapeTop && ballTop < shapeBottom);
 
     const directions = getDirectionFromAngle(ball.angle);
 
@@ -111,16 +108,16 @@ export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ba
     const goingDown = directions.some((d) => d === "down");
 
     // Most times the top or bottom of a ScreenObject will be hit so check those first.
-    if (goingUp && cy > bottom && withinHorizantalBounds) {
+    if (goingUp && ballTop < shapeBottom && withinVerticalBounds) {
         return GameActions.ballBounceHorizantally;
         // bottom
-    } else if (goingDown && cy < top && withinHorizantalBounds) {
+    } else if (goingDown && ballBottom > shapeTop && withinVerticalBounds) {
         // Top
         return GameActions.ballBounceHorizantally;
-    } else if (goingLeft && cx > right && withinVerticalBounds) {
+    } else if (goingLeft && ballRight > shapeRight && withinHorizantalBounds) {
         // Right
         return GameActions.ballBounceVertically;
-    } else if (goingRight && cx < left && withinVerticalBounds) {
+    } else if (goingRight && ballLeft < shapeLeft && withinHorizantalBounds) {
         // Left
         return GameActions.ballBounceVertically;
     }

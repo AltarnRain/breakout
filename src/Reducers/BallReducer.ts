@@ -48,7 +48,6 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Scre
                     // If the baddle is hit we want the ball's angle to increase if it hit
                     // the edges.
                     if (Guard.isPaddle(action.payload)) {
-
                         // calculate where the ball hit relative to the shape from the left size.
                         angleChange = changeAngle(state, action.payload);
                     }
