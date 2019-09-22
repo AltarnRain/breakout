@@ -181,5 +181,30 @@ export function getDirectionFromAngle(angle: number): Direction[] {
     }
 
     return returnValue;
+}
 
+/**
+ * Compares the key value of the referenceObject to the sourceObject.
+ * @param {any} sourceObject. Can be any object.
+ * @param {any} referenceObject. Can be any object.
+ */
+export function getUpdatedOjbect(sourceObject: any, referenceObject: any): any {
+    const newObject: any = {};
+    Object.keys(sourceObject).forEach((key: string) => {
+
+        // Get the objects using the key values from the application state.
+        const referenceObjectKeyValue = referenceObject[key];
+        const sourceObjectKeyValue = sourceObject[key];
+
+        // Check if the objects have the same reference, if not expand the state object
+        if (referenceObjectKeyValue !== sourceObjectKeyValue) {
+            newObject[key] = sourceObjectKeyValue;
+        }
+    });
+
+    if (Object.keys(newObject).length > 0) {
+        return newObject;
+    } else {
+        return undefined;
+    }
 }
