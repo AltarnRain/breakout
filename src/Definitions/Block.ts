@@ -12,4 +12,9 @@ export interface Block extends GameObject {
      * The y coordinate used internally to identify this block.
      */
     y: number;
+
+    /**
+     * True if the block is hit.
+     */
+    hit: boolean;
 }

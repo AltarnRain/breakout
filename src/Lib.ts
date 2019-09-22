@@ -24,7 +24,8 @@ export const getInitialBlocks = (): Block[] => {
                 left: 0,
                 top: 0,
                 height: 0,
-                width: 0
+                width: 0,
+                hit: false
             };
 
             index++;

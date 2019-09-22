@@ -99,7 +99,7 @@ export class Main extends React.Component<{}, AppState> {
                 appStore().dispatch({ type: paddleBounceAction, payload: paddle });
             } else if (blocks) {
 
-                const hitBlock = blocks.find((b) => overlaps(ball, b));
+                const hitBlock = blocks.find((b) => overlaps(ball, b) && b.hit === false);
                 if (hitBlock) {
                     appStore().dispatch({ type: GameActions.hitBlock, payload: hitBlock });
 
