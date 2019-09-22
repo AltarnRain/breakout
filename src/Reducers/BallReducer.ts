@@ -38,7 +38,6 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Scre
 
         case GameActions.ballBounceHorizantally:
         case GameActions.ballBounceVertically: {
-
             if (action.payload && action.payload !== state.lastObject) {
                 let angle = state.angle;
                 let angleChange = 1;
