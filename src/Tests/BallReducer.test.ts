@@ -5,10 +5,10 @@ import { ballReducer } from "../Reducers/BallReducer";
 import { GameActions } from "../State/GameActions";
 
 describe("ball reducer tests", () => {
-    it("can return the initial state of the ball", () => {
+    it("can reset the state of the ball", () => {
 
         // Act
-        const initialState = ballReducer(undefined, { type: GameActions.initialize });
+        const initialState = ballReducer(undefined, { type: GameActions.reset });
 
         // Assert
         expect(initialState).toBeDefined();

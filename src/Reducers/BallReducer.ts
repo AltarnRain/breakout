@@ -12,21 +12,11 @@ const gameDimensions = getGameDimensions();
 /**
  * Handles ball actions.
  */
-export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<ScreenObject>): Ball {
+export const ballReducer = (state: Ball = getNewState(), action: ActionPayload<ScreenObject>): Ball => {
 
     switch (action.type) {
-        case GameActions.initialize: {
-            const angle = 90 + angleRandomizer();
-            return {
-                angle,
-                color: "yellow",
-                height: gameDimensions.size * BallResizeFactor,
-                width: gameDimensions.size * BallResizeFactor,
-                left: (gameDimensions.size / 2) - (gameDimensions.size * BallResizeFactor / 2),
-                top: (gameDimensions.size / 2) - (gameDimensions.size * BallResizeFactor / 2),
-                velocity: InitialBallVelocity,
-                lastObject: {},
-            };
+        case GameActions.reset: {
+            return getNewState();
         }
 
         case GameActions.tick: {
@@ -72,7 +62,32 @@ export function ballReducer(state: Ball = {} as Ball, action: ActionPayload<Scre
         case GameActions.nextLevel:
             // Increase ball speed for each level.
             return { ...state, velocity: state.velocity + BallSpeedIncreasePerLevel };
+        case GameActions.resize:
+            // Recalculate the width and height of the ball when the screen dimensions change.
+            return { ...state, height: getBallSize(), width: getBallSize() };
         default:
             return state;
     }
-}
+};
+
+const getBallSize = (): number => {
+    return gameDimensions.size * BallResizeFactor;
+};
+
+const getBallPosition = (): number => {
+    return gameDimensions.size / 2 - gameDimensions.size * BallResizeFactor / 2;
+};
+
+const getNewState = (): Ball => {
+    const angle = 90 + angleRandomizer();
+    return {
+        angle,
+        color: "yellow",
+        height: getBallSize(),
+        width: getBallSize(),
+        left: getBallPosition(),
+        top: getBallPosition(),
+        velocity: InitialBallVelocity,
+        lastObject: {},
+    };
+};

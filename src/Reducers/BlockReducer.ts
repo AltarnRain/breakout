@@ -5,20 +5,11 @@ import ActionPayload from "../State/ActionPayLoad";
 import { GameActions } from "../State/GameActions";
 
 const gameDimensions = getGameDimensions();
-export function blockReducer(state: Block[] = [], action: ActionPayload<Block>): Block[] {
+export const blockReducer = (state: Block[] = getNewState(), action: ActionPayload<Block>): Block[] => {
     switch (action.type) {
-        case GameActions.initialize:
+        case GameActions.reset:
         case GameActions.nextLevel:
-            const initialState = getInitialBlocks();
-
-            initialState.forEach((b) => {
-                b.height = gameDimensions.blockHeight;
-                b.width = gameDimensions.blockWidth;
-                b.left = b.x * gameDimensions.blockWidth;
-                b.top = b.y * gameDimensions.blockHeight;
-            });
-
-            return initialState;
+            return getNewState();
 
         case GameActions.hitBlock:
             if (action.payload) {
@@ -71,7 +62,30 @@ export function blockReducer(state: Block[] = [], action: ActionPayload<Block>):
                 return state;
             }
 
+        case GameActions.resize:
+            const resizedBlocks: Block[] = [];
+
+            state.forEach((b) => {
+                const resizedBlock = {...b, width: gameDimensions.blockWidth, height: gameDimensions.blockHeight};
+                resizedBlocks.push(resizedBlock);
+            });
+
+            return resizedBlocks;
+
         default:
             return state;
     }
-}
+};
+
+const getNewState = (): Block[] => {
+
+    const initialState = getInitialBlocks();
+    initialState.forEach((b) => {
+        b.height = gameDimensions.blockHeight;
+        b.width = gameDimensions.blockWidth;
+        b.left = b.x * gameDimensions.blockWidth;
+        b.top = b.y * gameDimensions.blockHeight;
+    });
+
+    return initialState;
+};

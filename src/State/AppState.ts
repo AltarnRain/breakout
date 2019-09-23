@@ -2,6 +2,7 @@ import { Ball } from "../Definitions/Ball";
 import { Block } from "../Definitions/Block";
 import { GameState } from "../Definitions/GameState";
 import { Paddle } from "../Definitions/Paddle";
+import { GameDimensions } from "./GameDimensions";
 
 /**
  * Describes the application state
@@ -27,6 +28,11 @@ export interface AppState {
      * Miscellaneous
      */
     gameState: GameState;
+
+    /**
+     * The game dimensions.
+     */
+    gameDimensions: GameDimensions;
 
     /**
      * Indexer

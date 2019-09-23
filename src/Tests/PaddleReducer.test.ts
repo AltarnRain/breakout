@@ -2,12 +2,11 @@ import "jest";
 import { Paddle } from "../Definitions/Paddle";
 import { paddleReducer } from "../Reducers/PaddleReducer";
 import { GameActions } from "../State/GameActions";
-import { getGameDimensions } from "../GameDimensions";
 
 describe("PaddleReducer tests", () => {
-    it("initializes", () => {
+    it("resets", () => {
         // Act
-        const paddle = paddleReducer(undefined, { type: GameActions.initialize });
+        const paddle = paddleReducer(undefined, { type: GameActions.reset });
 
         // Arrange
         expect(paddle).toBeDefined();

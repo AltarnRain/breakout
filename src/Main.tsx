@@ -40,9 +40,55 @@ export class Main extends React.Component<{}, AppState> {
         this.onMouseMove = this.onMouseMove.bind(this);
         this.tick = this.tick.bind(this);
         this.onPlayAgain = this.onPlayAgain.bind(this);
+        this.onResize = this.onResize.bind(this);
 
         // Sync the redux state with the component state.
         this.state = appState();
+    }
+
+    /**
+     * Called when the component mounted.
+     */
+    public componentDidMount(): void {
+        this.tickHandler = this.tickHandler = window.requestAnimationFrame(this.tick);
+
+        window.addEventListener("mousemove", this.onMouseMove);
+        window.addEventListener("resize", this.onResize);
+
+        this.subscription = appStore().subscribe(() => {
+            const applicationState = appState();
+
+            if (applicationState.gameState !== this.state.gameState) {
+                this.setState({ gameState: applicationState.gameState });
+
+                if (applicationState.gameState.gameMode === "ended") {
+                    if (this.tickHandler) {
+                        window.cancelAnimationFrame(this.tickHandler);
+                    }
+                }
+            }
+
+            if (applicationState.gameDimensions !== this.state.gameDimensions) {
+                this.setState(applicationState.gameDimensions);
+            }
+        });
+    }
+
+    /**
+     * Called before the component unmounts.
+     */
+    public componentWillUnmount(): void {
+        if (this.tickHandler) {
+            window.cancelAnimationFrame(this.tickHandler);
+        }
+
+        window.removeEventListener("mousemove", this.onMouseMove);
+        window.removeEventListener("resize", this.onResize);
+
+        if (this.subscription) {
+            this.subscription();
+            delete this.subscription;
+        }
     }
 
     /**
@@ -57,12 +103,18 @@ export class Main extends React.Component<{}, AppState> {
     }
 
     /**
+     * handles a screen resize event.
+     */
+    private onResize(): void {
+        appStore().dispatch({ type: GameActions.resize });
+    }
+
+    /**
      * Handles a play again click.
      */
     private onPlayAgain(): void {
         // Reset game state.
-
-        appStore().dispatch({ type: GameActions.initialize });
+        appStore().dispatch({ type: GameActions.reset });
         this.tickHandler = this.tickHandler = window.requestAnimationFrame(this.tick);
     }
 
@@ -139,48 +191,6 @@ export class Main extends React.Component<{}, AppState> {
     }
 
     /**
-     * Called when the component mounted.
-     */
-    public componentDidMount(): void {
-
-        appStore().dispatch({ type: GameActions.initialize });
-        this.tickHandler = this.tickHandler = window.requestAnimationFrame(this.tick);
-
-        window.addEventListener("mousemove", this.onMouseMove);
-
-        this.subscription = appStore().subscribe(() => {
-            const applicationState = appState();
-
-            if (applicationState.gameState !== this.state.gameState) {
-                this.setState({ gameState: applicationState.gameState });
-
-                if (applicationState.gameState.gameMode === "ended") {
-                    if (this.tickHandler) {
-                        window.cancelAnimationFrame(this.tickHandler);
-                    }
-                }
-            }
-
-        });
-    }
-
-    /**
-     * Called before the component unmounts.
-     */
-    public componentWillUnmount(): void {
-        if (this.tickHandler) {
-            window.cancelAnimationFrame(this.tickHandler);
-        }
-
-        window.removeEventListener("mousemove", this.onMouseMove);
-
-        if (this.subscription) {
-            this.subscription();
-            delete this.subscription;
-        }
-    }
-
-    /**
      * Returns the styling for the game field.
      * @returns {CSSProperties}. CSSProperties for the gamefield.
      */
@@ -202,9 +212,9 @@ export class Main extends React.Component<{}, AppState> {
     private gameScorebarStyle(): CSSProperties {
         return {
             position: "absolute",
-            left: gameDimensions.left,
-            width: gameDimensions.size,
-            top: gameDimensions.top - 25,
+            left: this.state.gameDimensions.left,
+            width: this.state.gameDimensions.size,
+            top: this.state.gameDimensions.top - 25,
             height: 22,
             borderColor: "white",
             borderStyle: "solid",

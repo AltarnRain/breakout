@@ -12,23 +12,11 @@ const gameDimensions = getGameDimensions();
  * @param {Paddle} state. The paddle state.
  * @param {ActionPayload<number> }action. An action to be performed on the paddle. Number is the 'left' coordinate of the paddle.
  */
-export function paddleReducer(state: Paddle = { isPaddle: true } as Paddle, action: ActionPayload<number>): Paddle {
+export const paddleReducer = (state: Paddle = getNewState(), action: ActionPayload<number>): Paddle => {
     switch (action.type) {
-        case GameActions.initialize:
+        case GameActions.reset:
 
-            const height = gameDimensions.size / PaddleWithFactor;
-            const width = gameDimensions.size / PaddleHeightFactor;
-            const left = (gameDimensions.size / 2) - (width / 2);
-            const top = gameDimensions.size * PaddlePositionFactor;
-
-            return {
-                color: "white",
-                width,
-                top,
-                left,
-                height,
-                isPaddle: true
-            };
+            return getNewState();
 
         case GameActions.paddleMove:
 
@@ -55,7 +43,36 @@ export function paddleReducer(state: Paddle = { isPaddle: true } as Paddle, acti
                 return state;
             }
 
+        case GameActions.resize:
+            return { ...state, width: getPaddleWidth(), height: getPaddleHeight() };
         default:
             return state;
     }
-}
+};
+
+const getNewState = (): Paddle => {
+    return {
+        color: "white",
+        width: getPaddleWidth(),
+        height: getPaddleHeight(),
+        top: getPaddleTop(),
+        left: getPaddleCenterLeft(),
+        isPaddle: true
+    };
+};
+
+const getPaddleCenterLeft = (): number => {
+    return (gameDimensions.size / 2) - (getPaddleWidth() / 2);
+};
+
+const getPaddleTop = (): number => {
+    return gameDimensions.size * PaddlePositionFactor;
+};
+
+const getPaddleWidth = (): number => {
+    return gameDimensions.size / PaddleHeightFactor;
+};
+
+const getPaddleHeight = (): number => {
+    return gameDimensions.size / PaddleWithFactor;
+};

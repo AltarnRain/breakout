@@ -5,10 +5,10 @@ import { GameActions } from "../State/GameActions";
 /**
  * Miscellaneous reducer.
  */
-export function gameStateReducer(state: GameState = {} as GameState, action: Action<GameActions>): GameState {
+export const gameStateReducer = (state: GameState = getNewState(), action: Action<GameActions>): GameState  => {
     switch (action.type) {
-        case GameActions.initialize:
-            return { gameMode: "running", level: 1, score: 0 };
+        case GameActions.reset:
+            return getNewState();
         case GameActions.gameLost:
             return { ...state, gameMode: "ended" };
         case GameActions.nextLevel:
@@ -18,4 +18,8 @@ export function gameStateReducer(state: GameState = {} as GameState, action: Act
         default:
             return state;
     }
-}
+};
+
+const getNewState = (): GameState => {
+    return { gameMode: "running", level: 1, score: 0 };
+};

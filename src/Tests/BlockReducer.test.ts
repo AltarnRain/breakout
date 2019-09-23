@@ -11,7 +11,7 @@ describe("Block reduder tests", () => {
         const expectedState = getInitialBlocks();
 
         // Act
-        const blocks = blockReducer(undefined, { type: GameActions.initialize });
+        const blocks = blockReducer(undefined, { type: GameActions.reset });
 
         // Assert
         expect(blocks.length).toBe(expectedState.length);

@@ -1,7 +1,8 @@
 import { combineReducers, createStore, ReducersMapObject, Store } from "redux";
-import { gameStateReducer } from "./Reducers/GameStateReducer";
 import { ballReducer } from "./Reducers/BallReducer";
 import { blockReducer } from "./Reducers/BlockReducer";
+import { gameDimensionReducer } from "./Reducers/GameDimensionsReducer";
+import { gameStateReducer } from "./Reducers/GameStateReducer";
 import { paddleReducer } from "./Reducers/PaddleReducer";
 import ActionPayload from "./State/ActionPayLoad";
 import { AppState } from "./State/AppState";
@@ -10,7 +11,8 @@ const reducers: ReducersMapObject<AppState, ActionPayload<any>> = {
     blocks: blockReducer,
     paddle: paddleReducer,
     ball: ballReducer,
-    gameState: gameStateReducer
+    gameState: gameStateReducer,
+    gameDimensions: gameDimensionReducer,
 };
 
 const allReducers = combineReducers(reducers);
@@ -21,14 +23,14 @@ const store = createStore<AppState, ActionPayload<any>, AppState, AppState>(allR
  * Returns the store
  * @returns {Store}. The redux store.
  */
-export function appStore(): Store<AppState, ActionPayload<any>> {
+export const appStore = (): Store<AppState, ActionPayload<any>> => {
     return store;
-}
+};
 
 /**
  * Returns the State
  * @returns {AppState}. The application state.
  */
-export function appState(): AppState {
+export const appState = (): AppState => {
     return appStore().getState();
-}
+};

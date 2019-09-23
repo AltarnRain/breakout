@@ -7,7 +7,7 @@ import { GameDimensions } from "./State/GameDimensions";
 
 let gameDimensions: GameDimensions;
 
-export function getGameDimensions(): GameDimensions {
+export const getGameDimensions = (): GameDimensions => {
     if (!gameDimensions) {
         let size = 0;
 
@@ -26,4 +26,4 @@ export function getGameDimensions(): GameDimensions {
     }
 
     return gameDimensions;
-}
+};

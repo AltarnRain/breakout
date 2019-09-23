@@ -4,9 +4,9 @@ import { gameStateReducer } from "../Reducers/GameStateReducer";
 import { GameActions } from "../State/GameActions";
 
 describe("game reducer tests", () => {
-    it("initializes", () => {
+    it("resets", () => {
         // Act
-        const result = gameStateReducer(undefined, { type: GameActions.initialize});
+        const result = gameStateReducer(undefined, { type: GameActions.reset});
 
         // Assert
         expect(result).toBeDefined();
@@ -16,7 +16,7 @@ describe("game reducer tests", () => {
 
     it ("sets the game mode to ended", () => {
         // Arrange
-        const state = gameStateReducer(undefined, { type: GameActions.initialize});
+        const state = gameStateReducer(undefined, { type: GameActions.reset});
 
         // Act
         const result = gameStateReducer(state, { type: GameActions.gameLost});
