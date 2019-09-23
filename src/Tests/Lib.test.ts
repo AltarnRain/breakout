@@ -2,14 +2,14 @@ import "jest";
 import { NumberOfBlockColumns, NumberOfBlockRows } from "../Constants";
 import { Ball } from "../Definitions/Ball";
 import { ScreenObject } from "../Definitions/ScreenObject";
-import { angleRandomizer, getBounceAction, getDirectionFromAngle, getInitialBlocks, overlaps } from "../Lib";
+import { angleRandomizer, getBlocks, getBounceAction, getDirectionFromAngle, overlaps } from "../Lib";
 import { GameActions } from "../State/GameActions";
 
 describe("Lib tests", () => {
 
     it("returns the initial block array based on defined constants", () => {
         // Act
-        const result = getInitialBlocks();
+        const result = getBlocks(1, 1);
 
         // Assert
         expect(result).toBeDefined();
@@ -212,7 +212,7 @@ describe("Lib tests", () => {
         expect(result).toBe(GameActions.ballBounceHorizantally);
     });
 
-    it ("gets up and right from an angle of 45", () => {
+    it("gets up and right from an angle of 45", () => {
         // Act
         const result = getDirectionFromAngle(45);
 
@@ -222,7 +222,7 @@ describe("Lib tests", () => {
         expect(result.some((r) => r === "right")).toBe(true);
     });
 
-    it ("gets down and right from an angle of 315", () => {
+    it("gets down and right from an angle of 315", () => {
         // Act
         const result = getDirectionFromAngle(315);
 
@@ -232,7 +232,7 @@ describe("Lib tests", () => {
         expect(result.some((r) => r === "right")).toBe(true);
     });
 
-    it ("gets left and down from an angle of 225", () => {
+    it("gets left and down from an angle of 225", () => {
         // Act
         const result = getDirectionFromAngle(225);
 

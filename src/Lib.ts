@@ -1,4 +1,4 @@
-import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, DegreeToRadian, NumberOfBlockColumns, NumberOfBlockRows } from "./Constants";
+import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, DegreeToRadian } from "./Constants";
 import { Ball } from "./Definitions/Ball";
 import { Block } from "./Definitions/Block";
 import { Direction } from "./Definitions/Direction";
@@ -9,14 +9,14 @@ import { GameActions } from "./State/GameActions";
  * Returns the initial block setup.
  * @returns {Block[]}.
  */
-export const getInitialBlocks = (): Block[] => {
+export const getBlocks = (numberOfBlockRows: number, numberOfBlockColumns: number): Block[] => {
 
     const blocks: Block[] = [];
 
     let index = 0;
-    for (let r = 0; r < NumberOfBlockRows; r++) {
+    for (let r = 0; r < numberOfBlockRows; r++) {
         index++;
-        for (let c = 0; c < NumberOfBlockColumns; c++) {
+        for (let c = 0; c < numberOfBlockColumns; c++) {
             const block: Block = {
                 color: index % 2 === 0 ? "red" : "blue",
                 x: c,

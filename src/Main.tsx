@@ -129,7 +129,7 @@ export class Main extends React.Component<{}, AppState> {
         // Redraw at 60 fps.
         if (diff > GameTick) {
             const ball = appState().ball;
-            const blocks = appState().blocks;
+            const blocks = appState().blocks.remainingBlocks;
             const paddle = appState().paddle;
 
             if (blocks.length === 0) {
@@ -287,7 +287,7 @@ export class Main extends React.Component<{}, AppState> {
                         this.state.blocks && this.state.paddle && this.state.ball ?
                             <div style={this.gameFieldStyle()}>
                                 {
-                                    this.state.blocks.map((b, index) => <div key={index} style={this.positionStyle(b)} />)
+                                    this.state.blocks.remainingBlocks.map((b, index) => <div key={index} style={this.positionStyle(b)} />)
                                 }
                                 <div style={this.positionStyle(this.state.paddle)} />
                                 <div style={this.ballStyle(this.state.ball)} />

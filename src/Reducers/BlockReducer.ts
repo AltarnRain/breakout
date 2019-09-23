@@ -1,30 +1,46 @@
+import { NumberOfBlockColumns, NumberOfBlockRows } from "../Constants";
 import { Block } from "../Definitions/Block";
+import { Blocks } from "../Definitions/Blocks";
 import { getGameDimensions } from "../GameDimensions";
-import { getInitialBlocks } from "../Lib";
+import { getBlocks } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
 import { GameActions } from "../State/GameActions";
 
-export const blockReducer = (state: Block[] = getNewState(), action: ActionPayload<Block>): Block[] => {
+export const blockReducer = (state: Blocks = getNewState(NumberOfBlockRows, NumberOfBlockColumns), action: ActionPayload<Block>): Blocks => {
     switch (action.type) {
         case GameActions.reset:
+            return getNewState(NumberOfBlockRows, NumberOfBlockRows);
         case GameActions.nextLevel:
-            return getNewState();
+
+            const nextLevel = state.level++;
+
+            if (nextLevel <= 5) {
+
+                const nextLevelState = { ...state };
+                nextLevelState.level++;
+
+                nextLevelState.remainingBlocks = { ...getBlocks(NumberOfBlockRows + nextLevelState.level, NumberOfBlockColumns + nextLevelState.level) };
+
+                return nextLevelState;
+            } else {
+                return getNewState(NumberOfBlockRows + 5, NumberOfBlockColumns + 5);
+            }
 
         case GameActions.hitBlock:
             if (action.payload) {
-                const hitBlockState = [...state];
-                const hitBlockIndex = state.indexOf(action.payload);
+                const hitBlockState = [...state.remainingBlocks];
+                const hitBlockIndex = state.remainingBlocks.indexOf(action.payload);
 
                 hitBlockState[hitBlockIndex].hit = true;
 
-                return hitBlockState;
+                return { ...state, remainingBlocks: hitBlockState };
             }
 
             return state;
 
         case GameActions.tick:
 
-            const hitBlocks = state.map((b, index) => {
+            const hitBlocks = state.remainingBlocks.map((b, index) => {
                 if (b.hit === true) {
                     return { block: b, index };
                 } else {
@@ -36,7 +52,7 @@ export const blockReducer = (state: Block[] = getNewState(), action: ActionPaylo
 
                 const tickGameDimensions = getGameDimensions();
 
-                const tickBlockState = [...state];
+                const tickBlockState = [...state.remainingBlocks];
 
                 const factor = tickGameDimensions.blockHeight * 0.1;
                 const halfFactor = factor / 2;
@@ -58,7 +74,8 @@ export const blockReducer = (state: Block[] = getNewState(), action: ActionPaylo
                     }
                 });
 
-                return tickBlockState;
+                return { ...state, remainingBlocks: tickBlockState };
+
             } else {
                 return state;
             }
@@ -68,10 +85,10 @@ export const blockReducer = (state: Block[] = getNewState(), action: ActionPaylo
     }
 };
 
-const getNewState = (): Block[] => {
+const getNewState = (numberOfBlockRows: number, numberOfBlockColumns: number): Blocks => {
     const gameDimensions = getGameDimensions();
 
-    const initialState = getInitialBlocks();
+    const initialState = getBlocks(numberOfBlockRows, numberOfBlockColumns);
 
     initialState.forEach((b) => {
         b.width = gameDimensions.blockWidth;
@@ -80,5 +97,5 @@ const getNewState = (): Block[] => {
         b.top = b.y * gameDimensions.blockHeight;
     });
 
-    return initialState;
+    return { remainingBlocks: initialState, level: 1 };
 };

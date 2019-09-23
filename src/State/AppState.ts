@@ -1,8 +1,7 @@
 import { Ball } from "../Definitions/Ball";
-import { Block } from "../Definitions/Block";
+import { Blocks } from "../Definitions/Blocks";
 import { GameState } from "../Definitions/GameState";
 import { Paddle } from "../Definitions/Paddle";
-import { GameDimensions } from "./GameDimensions";
 
 /**
  * Describes the application state
@@ -12,7 +11,7 @@ export interface AppState {
     /**
      * Stores the state of the game blocks
      */
-    blocks: Block[];
+    blocks: Blocks;
 
     /**
      * Stores the state of the paddle
