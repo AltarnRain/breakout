@@ -1,4 +1,5 @@
 import "jest";
+import { NumberOfBlockColumns, NumberOfBlockRows } from "../Constants";
 import { Blocks } from "../Definitions/Blocks";
 import { getBlocks } from "../Lib";
 import { blockReducer } from "../Reducers/BlockReducer";
@@ -6,15 +7,19 @@ import { GameActions } from "../State/GameActions";
 
 describe("Block reduder tests", () => {
 
-    it("initializes the blocks", () => {
+    it("gets the blocks", () => {
         // Arrange
-        const expectedState = getBlocks(1, 1);
+        const expectedState: Blocks = {
+            remainingBlocks: getBlocks(1, 1),
+            level: 2
+        };
 
         // Act
-        const blocks = blockReducer(undefined, { type: GameActions.reset });
+        const blocks = blockReducer(expectedState, { type: GameActions.reset });
 
         // Assert
-        expect(blocks.remainingBlocks).toBe(expectedState.length);
+        expect(blocks.remainingBlocks.length).toBe(NumberOfBlockRows * NumberOfBlockColumns);
+        expect(blocks.level).toBe(1);
     });
 
     it("marks a block as hit when it is hit", () => {
@@ -49,10 +54,10 @@ describe("Block reduder tests", () => {
             remainingBlocks: [
                 {
                     color: "white",
-                    height: 0,
+                    height: 10,
                     left: 0,
                     top: 0,
-                    width: 0,
+                    width: 10,
                     x: 0,
                     y: 0,
                     hit: true

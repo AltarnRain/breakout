@@ -2,14 +2,14 @@ import "jest";
 import { NumberOfBlockColumns, NumberOfBlockRows } from "../Constants";
 import { Ball } from "../Definitions/Ball";
 import { ScreenObject } from "../Definitions/ScreenObject";
-import { angleRandomizer, getBlocks, getBounceAction, getDirectionFromAngle, overlaps } from "../Lib";
+import { angleRandomizer, getBlocks, getBounceAction, getDirectionFromAngle, getHitSide, overlaps } from "../Lib";
 import { GameActions } from "../State/GameActions";
 
 describe("Lib tests", () => {
 
     it("returns the initial block array based on defined constants", () => {
         // Act
-        const result = getBlocks(1, 1);
+        const result = getBlocks(NumberOfBlockRows, NumberOfBlockColumns);
 
         // Assert
         expect(result).toBeDefined();
@@ -116,100 +116,100 @@ describe("Lib tests", () => {
         expect(result2).toBe(false);
     });
 
-    it("return vertical when the ball bounces off the left side of a shape", () => {
+    it("return left when the ball approaches from left side of a shape", () => {
         // Arrange
+        const shape = {
+            left: 100,
+            top: 100,
+            width: 100,
+            height: 50
+        } as ScreenObject;
+
         const ball = {
-            left: 39,
-            top: 125,
-            width: 10,
-            height: 10,
+            left: shape.left + shape.width,
+            top: shape.top + shape.height / 2,
+            width: 1,
+            height: 1,
             angle: 360
         } as Ball;
 
+        // Act
+        const result = getHitSide(ball, shape);
+
+        // Assert
+        expect(result).toBe("left");
+    });
+
+    it("return top when the ball approaches the top side of a shape", () => {
+        // Arrange
         const shape = {
-            left: 50,
+            left: 100,
             top: 100,
             width: 100,
             height: 50
         } as ScreenObject;
 
-        // Act
-        const result = getBounceAction(ball, shape);
-
-        // Assert
-        expect(result).toBe(GameActions.ballBounceVertically);
-    });
-
-    it("return horizantal when the ball bounces off the top side of a shape", () => {
-        // Arrange
         const ball = {
-            left: 80,
-            top: 89,
-            width: 10,
-            height: 10,
+            left: shape.left + shape.width / 2,
+            top: shape.top,
+            width: 1,
+            height: 1,
             angle: 270
         } as Ball;
 
+        // Act
+        const result = getHitSide(ball, shape);
+
+        // Assert
+        expect(result).toBe("top");
+    });
+
+    it("return right when the ball approaches from right side of a shape", () => {
+        // Arrange
         const shape = {
-            left: 50,
+            left: 100,
             top: 100,
             width: 100,
             height: 50
         } as ScreenObject;
 
-        // Act
-        const result = getBounceAction(ball, shape);
-
-        // Assert
-        expect(result).toBe(GameActions.ballBounceHorizantally);
-    });
-
-    it("return vertical when the ball bounces off the right side of a shape", () => {
-        // Arrange
         const ball = {
-            left: 149,
-            top: 125,
-            width: 10,
-            height: 10,
+            left: shape.left + shape.width,
+            top: shape.top + shape.height / 2,
+            width: 1,
+            height: 1,
             angle: 180
         } as Ball;
 
+        // Act
+        const result = getHitSide(ball, shape);
+
+        // Assert
+        expect(result).toBe("right");
+    });
+
+    it("return bottom when the ball approaches from the bottom side shape", () => {
+        // Arrange
         const shape = {
-            left: 50,
+            left: 100,
             top: 100,
             width: 100,
             height: 50
         } as ScreenObject;
 
-        // Act
-        const result = getBounceAction(ball, shape);
-
-        // Assert
-        expect(result).toBe(GameActions.ballBounceVertically);
-    });
-
-    it("return horizantal when the ball bounces off the bottom side of a shape", () => {
-        // Arrange
         const ball = {
-            left: 60,
-            top: 149,
-            width: 10,
-            height: 10,
+            left: shape.left + shape.width / 2,
+            top: shape.top + shape.height,
+            width: 1,
+            height: 1,
             angle: 90
         } as Ball;
 
-        const shape = {
-            left: 50,
-            top: 100,
-            width: 100,
-            height: 50
-        } as ScreenObject;
-
         // Act
-        const result = getBounceAction(ball, shape);
+        const result = getHitSide(ball, shape);
 
         // Assert
-        expect(result).toBe(GameActions.ballBounceHorizantally);
+        expect(result).toBe("bottom");
     });
 
     it("gets up and right from an angle of 45", () => {

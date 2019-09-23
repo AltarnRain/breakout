@@ -9,7 +9,7 @@ import { GameActions } from "../State/GameActions";
 export const blockReducer = (state: Blocks = getNewState(NumberOfBlockRows, NumberOfBlockColumns), action: ActionPayload<Block>): Blocks => {
     switch (action.type) {
         case GameActions.reset:
-            return getNewState(NumberOfBlockRows, NumberOfBlockRows);
+            return getNewState(NumberOfBlockRows, NumberOfBlockColumns);
         case GameActions.nextLevel:
 
             const nextLevel = state.level++;

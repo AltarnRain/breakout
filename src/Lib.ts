@@ -1,7 +1,7 @@
 import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, DegreeToRadian } from "./Constants";
 import { Ball } from "./Definitions/Ball";
 import { Block } from "./Definitions/Block";
-import { Direction } from "./Definitions/Direction";
+import { Direction, hitSide as HitSide } from "./Definitions/Types";
 import { ScreenObject } from "./Definitions/ScreenObject";
 import { GameActions } from "./State/GameActions";
 
@@ -78,13 +78,29 @@ export const angleRandomizer = (): number => {
     }
 };
 
+export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically | undefined => {
+    const hitSide = getHitSide(ball, shape);
+
+    if (hitSide) {
+        if (hitSide === "left" || hitSide == "right") {
+            return GameActions.ballBounceVertically;
+        } else if (hitSide === "top" || hitSide === "bottom") {
+            return GameActions.ballBounceHorizantally;
+        }
+    } else {
+        // tslint:disable-next-line: no-console
+        console.log("Failed hit detection");
+        return GameActions.ballBounceHorizantally;
+    }
+};
+
 /**
  * Determine the right action to dispatch when the ball bounces off an object.
  * @param {Ball} ball. Ball object.
  * @param {ScreenObject} shape. A shape object.
  * @returns {GameActions}. The bounce action or undefined if no bounce action could be determined.
  */
-export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically => {
+export const getHitSide = (ball: Ball, shape: ScreenObject): HitSide => {
 
     const shapeLeft = shape.left;
     const shapeRight = shape.left + shape.width;
@@ -97,8 +113,8 @@ export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ba
     const ballTop = ball.top;
     const ballBottom = ball.top + ball.height;
 
-    const withinVerticalBounds = (ballRight > shapeLeft && ballLeft < shapeRight);
-    const withinHorizantalBounds = (ballBottom > shapeTop && ballTop < shapeBottom);
+    const withinVerticalBounds = (ballBottom > shapeTop && ballTop < shapeBottom);
+    const withinHorizantalBounds = (ballRight > shapeLeft && ballLeft < shapeRight);
 
     const directions = getDirectionFromAngle(ball.angle);
 
@@ -108,23 +124,21 @@ export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ba
     const goingDown = directions.some((d) => d === "down");
 
     // Most times the top or bottom of a ScreenObject will be hit so check those first.
-    if (goingUp && ballTop < shapeBottom && withinVerticalBounds) {
-        return GameActions.ballBounceHorizantally;
+    if (goingUp && withinHorizantalBounds) {
+        return "bottom";
         // bottom
-    } else if (goingDown && ballBottom > shapeTop && withinVerticalBounds) {
+    } else if (goingDown && withinHorizantalBounds) {
         // Top
-        return GameActions.ballBounceHorizantally;
-    } else if (goingLeft && ballRight > shapeRight && withinHorizantalBounds) {
+        return "top";
+    } else if (goingLeft && withinVerticalBounds) {
         // Right
-        return GameActions.ballBounceVertically;
-    } else if (goingRight && ballLeft < shapeLeft && withinHorizantalBounds) {
+        return "right";
+    } else if (goingRight && withinVerticalBounds) {
         // Left
-        return GameActions.ballBounceVertically;
+        return "left";
+    } else {
+        return undefined;
     }
-
-    // tslint:disable-next-line: no-console
-    console.log("Failed hit detection");
-    return GameActions.ballBounceHorizantally;
 };
 
 /**
