@@ -12,7 +12,7 @@ export const GameTick = 1000 / 60;
 /**
  * Constants for the initial ball velocity.
  */
-export const InitialBallVelocity = 10;
+export const InitialBallVelocity = 0;
 
 /**
  * Constants used in a calculation to randomize the ball's initial angle.

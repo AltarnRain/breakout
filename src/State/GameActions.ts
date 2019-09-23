@@ -38,9 +38,4 @@ export enum GameActions {
      * Dispatched when all the blocks are cleared.
      */
     nextLevel,
-
-    /**
-     * Dispatched when the window changes size.
-     */
-    resize
 }

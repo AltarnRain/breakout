@@ -43,8 +43,6 @@ export const paddleReducer = (state: Paddle = getNewState(), action: ActionPaylo
                 return state;
             }
 
-        case GameActions.resize:
-            return { ...state, width: getPaddleWidth(), height: getPaddleHeight() };
         default:
             return state;
     }

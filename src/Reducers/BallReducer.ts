@@ -62,9 +62,6 @@ export const ballReducer = (state: Ball = getNewState(), action: ActionPayload<S
         case GameActions.nextLevel:
             // Increase ball speed for each level.
             return { ...state, velocity: state.velocity + BallSpeedIncreasePerLevel };
-        case GameActions.resize:
-            // Recalculate the width and height of the ball when the screen dimensions change.
-            return { ...state, height: getBallSize(), width: getBallSize() };
         default:
             return state;
     }

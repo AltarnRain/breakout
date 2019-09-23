@@ -30,11 +30,6 @@ export interface AppState {
     gameState: GameState;
 
     /**
-     * The game dimensions.
-     */
-    gameDimensions: GameDimensions;
-
-    /**
      * Indexer
      */
     [key: string]: any;

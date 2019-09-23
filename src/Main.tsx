@@ -40,7 +40,6 @@ export class Main extends React.Component<{}, AppState> {
         this.onMouseMove = this.onMouseMove.bind(this);
         this.tick = this.tick.bind(this);
         this.onPlayAgain = this.onPlayAgain.bind(this);
-        this.onResize = this.onResize.bind(this);
 
         // Sync the redux state with the component state.
         this.state = appState();
@@ -53,7 +52,6 @@ export class Main extends React.Component<{}, AppState> {
         this.tickHandler = this.tickHandler = window.requestAnimationFrame(this.tick);
 
         window.addEventListener("mousemove", this.onMouseMove);
-        window.addEventListener("resize", this.onResize);
 
         this.subscription = appStore().subscribe(() => {
             const applicationState = appState();
@@ -70,6 +68,8 @@ export class Main extends React.Component<{}, AppState> {
 
             if (applicationState.gameDimensions !== this.state.gameDimensions) {
                 this.setState(applicationState.gameDimensions);
+
+                this.syncStateWithRedux();
             }
         });
     }
@@ -83,7 +83,6 @@ export class Main extends React.Component<{}, AppState> {
         }
 
         window.removeEventListener("mousemove", this.onMouseMove);
-        window.removeEventListener("resize", this.onResize);
 
         if (this.subscription) {
             this.subscription();
@@ -100,13 +99,6 @@ export class Main extends React.Component<{}, AppState> {
             const x = e.clientX - gameDimensions.left;
             appStore().dispatch({ type: GameActions.paddleMove, payload: x });
         }
-    }
-
-    /**
-     * handles a screen resize event.
-     */
-    private onResize(): void {
-        appStore().dispatch({ type: GameActions.resize });
     }
 
     /**
@@ -198,10 +190,10 @@ export class Main extends React.Component<{}, AppState> {
 
         return {
             position: "absolute",
-            left: gameDimensions.left,
-            top: gameDimensions.top,
-            width: gameDimensions.size,
-            height: gameDimensions.size,
+            left: getGameDimensions().left,
+            top: getGameDimensions().top,
+            width: getGameDimensions().size,
+            height: getGameDimensions().size,
             borderColor: "white",
             borderStyle: "solid",
             display: "flex",
@@ -212,9 +204,9 @@ export class Main extends React.Component<{}, AppState> {
     private gameScorebarStyle(): CSSProperties {
         return {
             position: "absolute",
-            left: this.state.gameDimensions.left,
-            width: this.state.gameDimensions.size,
-            top: this.state.gameDimensions.top - 25,
+            left: getGameDimensions().left,
+            width: getGameDimensions().size,
+            top: getGameDimensions().top - 25,
             height: 22,
             borderColor: "white",
             borderStyle: "solid",
@@ -286,7 +278,6 @@ export class Main extends React.Component<{}, AppState> {
     public render(): React.ReactNode {
         return (
             <div>
-
                 <div style={this.gameScorebarStyle()}>
                     <div key={1} style={{ color: "white", justifyContent: "center", marginLeft: "10px" }}>Level: {this.state.gameState.level}</div>>
                 <div key={2} style={{ color: "white", justifyContent: "center" }}>Score: {this.state.gameState.score}</div>>

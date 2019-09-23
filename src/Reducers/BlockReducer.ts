@@ -4,7 +4,6 @@ import { getInitialBlocks } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
 import { GameActions } from "../State/GameActions";
 
-const gameDimensions = getGameDimensions();
 export const blockReducer = (state: Block[] = getNewState(), action: ActionPayload<Block>): Block[] => {
     switch (action.type) {
         case GameActions.reset:
@@ -35,9 +34,11 @@ export const blockReducer = (state: Block[] = getNewState(), action: ActionPaylo
 
             if (hitBlocks.length > 0) {
 
+                const tickGameDimensions = getGameDimensions();
+
                 const tickBlockState = [...state];
 
-                const factor = gameDimensions.blockHeight * 0.1;
+                const factor = tickGameDimensions.blockHeight * 0.1;
                 const halfFactor = factor / 2;
                 hitBlocks.forEach((b) => {
                     if (b) {
@@ -62,27 +63,19 @@ export const blockReducer = (state: Block[] = getNewState(), action: ActionPaylo
                 return state;
             }
 
-        case GameActions.resize:
-            const resizedBlocks: Block[] = [];
-
-            state.forEach((b) => {
-                const resizedBlock = {...b, width: gameDimensions.blockWidth, height: gameDimensions.blockHeight};
-                resizedBlocks.push(resizedBlock);
-            });
-
-            return resizedBlocks;
-
         default:
             return state;
     }
 };
 
 const getNewState = (): Block[] => {
+    const gameDimensions = getGameDimensions();
 
     const initialState = getInitialBlocks();
+
     initialState.forEach((b) => {
-        b.height = gameDimensions.blockHeight;
         b.width = gameDimensions.blockWidth;
+        b.height = gameDimensions.blockHeight;
         b.left = b.x * gameDimensions.blockWidth;
         b.top = b.y * gameDimensions.blockHeight;
     });
