@@ -142,15 +142,15 @@ export const changeAngle = (ball: ScreenObject, paddle: ScreenObject): number =>
     return returnValue;
 };
 
-export function getNextY(angle: number, distance: number, currentY: number) {
+export const getNextY = (angle: number, distance: number, currentY: number) => {
     return Math.sin(angle * DegreeToRadian * -1) * distance + currentY;
-}
+};
 
-export function getNextX(angle: number, distance: number, currentX: number) {
+export const getNextX = (angle: number, distance: number, currentX: number) => {
     return Math.cos(angle * DegreeToRadian * -1) * distance + currentX;
-}
+};
 
-export function getDirectionFromAngle(angle: number): Direction[] {
+export const getDirectionFromAngle = (angle: number): Direction[] => {
 
     // A ball can travel at two directions at most so the return
     // Value has to be an array with a size of 1 or two.
@@ -179,14 +179,14 @@ export function getDirectionFromAngle(angle: number): Direction[] {
     }
 
     return returnValue;
-}
+};
 
 /**
  * Compares the key value of the referenceObject to the sourceObject.
  * @param {any} sourceObject. Can be any object.
  * @param {any} referenceObject. Can be any object.
  */
-export function getUpdatedOjbect(sourceObject: any, referenceObject: any): any {
+export const getUpdatedOjbect = (sourceObject: any, referenceObject: any): any => {
     const newObject: any = {};
     Object.keys(sourceObject).forEach((key: string) => {
 
@@ -205,4 +205,4 @@ export function getUpdatedOjbect(sourceObject: any, referenceObject: any): any {
     } else {
         return undefined;
     }
-}
+};
