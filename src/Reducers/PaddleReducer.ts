@@ -43,6 +43,19 @@ export const paddleReducer = (state: Paddle = getNewState(), action: ActionPaylo
                 return state;
             }
 
+        case GameActions.nextLevel:
+            const nextLevelPaddle = { ...state };
+
+            // Redude the paddle size each level by 5%
+            nextLevelPaddle.width *= 0.95;
+
+            if (nextLevelPaddle.width < getPaddleWidth() / 2) {
+                // Paddle doesn't get smaller than half its size.
+                return state;
+            } else {
+                return nextLevelPaddle;
+            }
+
         default:
             return state;
     }
