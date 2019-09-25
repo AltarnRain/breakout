@@ -1,3 +1,8 @@
+/**
+ * This is a library module that contains functions user throughout the entire game.
+ */
+
+
 import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, DegreeToRadian } from "./Constants";
 import { Ball } from "./Definitions/Ball";
 import { Block } from "./Definitions/Block";
@@ -7,7 +12,9 @@ import { GameActions } from "./State/GameActions";
 
 /**
  * Returns the initial block setup.
- * @returns {Block[]}.
+ * @param {number} numberOfBlockRows. The amount of rows to add to the block array.
+ * @param {number} numberOfBlockColumns. The mount of columns to add to the block array.
+ * @returns {Block[]}. A 1d array that contains block objects.
  */
 export const getBlocks = (numberOfBlockRows: number, numberOfBlockColumns: number): Block[] => {
 
@@ -44,8 +51,9 @@ export const getBlocks = (numberOfBlockRows: number, numberOfBlockColumns: numbe
  * Checks if two shapes overlap
  * @param {ScreenObject} shape1. A Shape.
  * @param {ScreenObject} shape2. A Shape
+ * @returns {boolean}. True if the shapes overlap, false otherwise.
  */
-export const overlaps = (shape1: ScreenObject, shape2: ScreenObject) => {
+export const overlaps = (shape1: ScreenObject, shape2: ScreenObject): boolean => {
 
     const left1 = Math.ceil(shape1.left);
     const right1 = Math.floor(shape1.left + shape1.width);
@@ -82,6 +90,12 @@ export const angleRandomizer = (): number => {
     }
 };
 
+/**
+ * Gets the bounce action depending on the balls heading an screen object's position.
+ * @param {Ball} ball. A ball object.
+ * @param {Shape} shape. Any game object that derives from ScreenObject.
+ * @returns {GameActions.ballBounceHorizantally | GameActions.ballBounceVertically }. A ball can bounce vertically or horizantally.
+ */
 export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically => {
     const hitSide = getHitSide(ball, shape);
 
@@ -100,7 +114,7 @@ export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ba
  * Determine the right action to dispatch when the ball bounces off an object.
  * @param {Ball} ball. Ball object.
  * @param {ScreenObject} shape. A shape object.
- * @returns {GameActions}. The bounce action or undefined if no bounce action could be determined.
+ * @returns {HitSide}. The side where the ball would bounce based on its current position and the shape's position.
  */
 export const getHitSide = (ball: Ball, shape: ScreenObject): HitSide => {
 
@@ -147,6 +161,7 @@ export const getHitSide = (ball: Ball, shape: ScreenObject): HitSide => {
  * Changes the angle based on the position of impact.
  * @param {Ball} ball. A ball object
  * @param {Paddle} paddle. A paddle object
+ * @returns {number}. An angle that is slightly altered.
  */
 export const changeAngle = (ball: ScreenObject, paddle: ScreenObject): number => {
     const p = Math.abs(ball.left - paddle.left);
@@ -158,14 +173,33 @@ export const changeAngle = (ball: ScreenObject, paddle: ScreenObject): number =>
     return returnValue;
 };
 
+/**
+ * Get next Y (position)
+ * @param {number} angle. The angle of an object.
+ * @param {number} distance. The distance the object will travel.
+ * @param {number} currentY. The current Y coordinate of the object.
+ * @returns {number}. The next Y position based on the object's angle and 'speed'.
+ */
 export const getNextY = (angle: number, distance: number, currentY: number) => {
     return Math.sin(angle * DegreeToRadian * -1) * distance + currentY;
 };
 
+/**
+ * Get next X (position)
+ * @param {number} angle. The angle of an object.
+ * @param {number} distance. The distance the object will travel.
+ * @param {number} currentY. The current X coordinate of the object.
+ * @returns {number}. The next X position based on the object's angle and 'speed'.
+ */
 export const getNextX = (angle: number, distance: number, currentX: number) => {
     return Math.cos(angle * DegreeToRadian * -1) * distance + currentX;
 };
 
+/**
+ * Get the directions from an angle
+ * @param {number} angle. The angle of an object.
+ * @returns {Direction[]}. The directions the object is traveling in. e.g. Down-left, or Up-right.
+ */
 export const getDirectionFromAngle = (angle: number): Direction[] => {
 
     // A ball can travel at two directions at most so the return
@@ -199,8 +233,10 @@ export const getDirectionFromAngle = (angle: number): Direction[] => {
 
 /**
  * Compares the key value of the referenceObject to the sourceObject.
+ * This function is used to sync the Redux state to the Main object State.
  * @param {any} sourceObject. Can be any object.
  * @param {any} referenceObject. Can be any object.
+ * @returns {any}. Updated object.
  */
 export const getUpdatedOjbect = (sourceObject: any, referenceObject: any): any => {
     const newObject: any = {};

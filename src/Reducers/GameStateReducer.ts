@@ -3,7 +3,10 @@ import { GameState } from "../Definitions/GameState";
 import { GameActions } from "../State/GameActions";
 
 /**
- * Miscellaneous reducer.
+ * game state reducer. Keeps track of score, losing a game, etc.
+ * @param {GameState} state. The current game state
+ * @param {Action}. A reduc action. No payload.
+ * @returns {GameState}. The next game state.
  */
 export const gameStateReducer = (state: GameState = getNewState(), action: Action<GameActions>): GameState  => {
     switch (action.type) {
@@ -20,6 +23,10 @@ export const gameStateReducer = (state: GameState = getNewState(), action: Actio
     }
 };
 
+/**
+ * Creates a new GameState state
+ * @returns {GameState}. A new game state.
+ */
 const getNewState = (): GameState => {
     return { gameMode: "running", level: 1, score: 0 };
 };

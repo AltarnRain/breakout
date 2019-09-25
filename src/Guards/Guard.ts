@@ -1,7 +1,7 @@
-import { Paddle } from "./Paddle";
+import { Paddle } from "../Definitions/Paddle";
 
 /**
- * A constats that contains type guards.
+ * A constant that contains type guards.
  */
 export const Guard = {
 

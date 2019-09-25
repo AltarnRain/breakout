@@ -1,6 +1,5 @@
-
 /**
- * Miscenalious state. Used to keep track of non-game object state.
+ * GameState state. Used to keep track of non-game object state.
  */
 export interface GameState {
     /**

@@ -3,8 +3,14 @@ import { getGameDimensions } from "../GameDimensions";
 import { getBlocks } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
 import { GameActions } from "../State/GameActions";
-import { BlockState } from "./BlockState";
+import { BlockState } from "../Definitions/BlockState";
 
+/**
+ * The block reducer.
+ * @param {BlockState} state. The current block state.
+ * @param {ActionPayload} action. An action, payload optional.
+ * @returns {BlockState}. A 'new' block state.
+ */
 export const blockReducer = (state: BlockState = getNewState(), action: ActionPayload<Block>): BlockState => {
     switch (action.type) {
         case GameActions.reset:
@@ -72,6 +78,12 @@ export const blockReducer = (state: BlockState = getNewState(), action: ActionPa
     }
 };
 
+/**
+ * Gets a new state for the blocks.
+ * @param {number} rows. The number of rows the new state should have.
+ * @param {number} columns. The number of columns the new state should have. Also used to calculate the block size.
+ * @returns {BlockState}. A new block state.
+ */
 const getNewState = (rows: number = 5, columns: number = 12): BlockState => {
     const blocks = getBlocks(rows, columns);
 
@@ -97,14 +109,17 @@ const getNewState = (rows: number = 5, columns: number = 12): BlockState => {
 /**
  * Calculates the height of a block using the screen size and the number of rows.
  * @param {number} rows. Amount of rows.
+ * @returns {number}. The height of a block based on the amount of colums.
  */
 function calculateBlockHeight(columns: number): number {
+    // The simples way to draw rectangles is to half the width.
     return calculateBlockWidth(columns) / 2;
 }
 
 /**
  * Calculats the width of a block using the screensize.
  * @param {number} columns. Amount of colums.
+ * @returns {number}. The block width based on the amount of colums.
  */
 function calculateBlockWidth(columns: number): number {
     const size = getGameDimensions().size;

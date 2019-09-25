@@ -1,8 +1,8 @@
 import { BallResizeFactor, BallSpeedIncreasePerBlock, BallSpeedIncreasePerLevel, InitialBallVelocity } from "../Constants";
 import { Ball } from "../Definitions/Ball";
-import { Guard } from "../Definitions/Guard";
 import { ScreenObject } from "../Definitions/ScreenObject";
 import { getGameDimensions } from "../GameDimensions";
+import { Guard } from "../Guards/Guard";
 import { angleRandomizer, changeAngle, getNextX, getNextY } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
 import { GameActions } from "../State/GameActions";
@@ -11,6 +11,9 @@ const gameDimensions = getGameDimensions();
 
 /**
  * Handles ball actions.
+ * @param {ball} state. The current ball state.
+ * @param {ActionPayLoad}. An action, payload optional.
+ * @returns {Ball}. The ball state.
  */
 export const ballReducer = (state: Ball = getNewState(), action: ActionPayload<ScreenObject>): Ball => {
 
@@ -67,14 +70,26 @@ export const ballReducer = (state: Ball = getNewState(), action: ActionPayload<S
     }
 };
 
+/**
+ * Gets the ball size that fits the screen size.
+ * @returns {number}. The size of the ball.
+ */
 const getBallSize = (): number => {
     return gameDimensions.size * BallResizeFactor;
 };
 
+/**
+ * Calculate the ball position in the center of the game field.
+ * @returns {number}. The ball's X or Y coordinate.
+ */
 const getBallPosition = (): number => {
     return gameDimensions.size / 2 - gameDimensions.size * BallResizeFactor / 2;
 };
 
+/**
+ * Used to obtain a new state for the ball.
+ * @returns {Ball}. A new ball state.
+ */
 const getNewState = (): Ball => {
     const angle = 90 + angleRandomizer();
     return {

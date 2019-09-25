@@ -11,6 +11,7 @@ const gameDimensions = getGameDimensions();
  * Handles paddle actions
  * @param {Paddle} state. The paddle state.
  * @param {ActionPayload<number> }action. An action to be performed on the paddle. Number is the 'left' coordinate of the paddle.
+ * @returns {Paddle}. Paddle state.
  */
 export const paddleReducer = (state: Paddle = getNewState(), action: ActionPayload<number>): Paddle => {
     switch (action.type) {

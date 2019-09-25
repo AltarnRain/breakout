@@ -6,6 +6,9 @@ import { paddleReducer } from "../Reducers/PaddleReducer";
 import ActionPayload from "./ActionPayLoad";
 import { AppState } from "./AppState";
 
+/**
+ * All reducer that build the application state.
+ */
 const reducers: ReducersMapObject<AppState, ActionPayload<any>> = {
     blockState: blockReducer,
     paddle: paddleReducer,

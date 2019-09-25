@@ -3,7 +3,7 @@ import { GameFieldBorderColor, GameTick } from "./Constants";
 import { Ball } from "./Definitions/Ball";
 import { GameObject } from "./Definitions/GameObject";
 import { getGameDimensions } from "./GameDimensions";
-import { getBounceAction, overlaps } from "./Lib";
+import { getBounceAction, getUpdatedOjbect, overlaps } from "./Lib";
 import { AppState } from "./State/AppState";
 import { GameActions } from "./State/GameActions";
 import { appState, appStore } from "./State/Store";
@@ -67,12 +67,6 @@ export class Main extends React.Component<{}, AppState> {
                         window.cancelAnimationFrame(this.tickHandler);
                     }
                 }
-            }
-
-            if (applicationState.gameDimensions !== this.state.gameDimensions) {
-                this.setState(applicationState.gameDimensions);
-
-                this.syncStateWithRedux();
             }
         });
     }
@@ -185,12 +179,16 @@ export class Main extends React.Component<{}, AppState> {
 
             appStore().dispatch({ type: GameActions.tick });
 
-            this.syncStateWithRedux();
+            const updatedState = getUpdatedOjbect(appState(), this.state);
+            if (updatedState) {
+                this.setState(updatedState);
+            }
             this.tickStart = tick;
         }
 
         this.tickHandler = window.requestAnimationFrame(this.tick);
     }
+
 
     /**
      * Returns the styling for the game field.
@@ -211,6 +209,10 @@ export class Main extends React.Component<{}, AppState> {
         };
     }
 
+    /**
+     * Game score style
+     * @returns {CSSProperties}. A style that will draw a rectangle above the game field.
+     */
     private gameScorebarStyle(): CSSProperties {
         return {
             position: "absolute",
@@ -228,7 +230,7 @@ export class Main extends React.Component<{}, AppState> {
     /**
      * Returns css properties for positioning a shape.
      * @param {ScreenObject} shape. A shape object.
-     * @returns {CSSProperties}.
+     * @returns {CSSProperties}. CSS properties for a shape.
      */
     private positionStyle(shape: GameObject): CSSProperties {
         return {
@@ -251,35 +253,6 @@ export class Main extends React.Component<{}, AppState> {
         newPosition.borderRadius = "50%";
         newPosition.backgroundImage = ball.color;
         return newPosition;
-    }
-
-    /**
-     * Syncs this components state with the redux state.
-     */
-    private syncStateWithRedux(): void {
-        const applicationState = appState();
-
-        // Start with an empty 'state' object.
-        // This component's state is the same definitation as the application state in redux
-        const state: AppState = {} as AppState;
-
-        Object.keys(applicationState).forEach((key: string) => {
-
-            // Get the objects using the key values from the application state.
-            const componentStateProperty = this.state[key];
-            const applicationStatProperty = applicationState[key];
-
-            // Check if the objects have the same reference, if not expand the state object
-            if (componentStateProperty !== applicationStatProperty) {
-                state[key] = applicationStatProperty;
-            }
-        });
-
-        // The state object has keys meaning it was expected. SetState and let React figure out
-        // the rest.
-        if (Object.keys(state).length > 0) {
-            this.setState(state);
-        }
     }
 
     /**
