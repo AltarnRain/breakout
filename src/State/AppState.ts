@@ -24,6 +24,11 @@ export interface AppState {
     ball: Ball;
 
     /**
+     * Miscellaneous
+     */
+    gameState: GameState;
+
+    /**
      * Indexer
      */
     [key: string]: any;
