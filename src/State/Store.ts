@@ -7,7 +7,7 @@ import ActionPayload from "./ActionPayLoad";
 import { AppState } from "./AppState";
 
 const reducers: ReducersMapObject<AppState, ActionPayload<any>> = {
-    blocks: blockReducer,
+    blockState: blockReducer,
     paddle: paddleReducer,
     ball: ballReducer,
     gameState: gameStateReducer,

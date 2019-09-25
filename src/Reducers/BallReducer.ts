@@ -1,8 +1,8 @@
 import { BallResizeFactor, BallSpeedIncreasePerBlock, BallSpeedIncreasePerLevel, InitialBallVelocity } from "../Constants";
 import { Ball } from "../Definitions/Ball";
+import { Guard } from "../Definitions/Guard";
 import { ScreenObject } from "../Definitions/ScreenObject";
 import { getGameDimensions } from "../GameDimensions";
-import { Guard } from "../Definitions/Guard";
 import { angleRandomizer, changeAngle, getNextX, getNextY } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
 import { GameActions } from "../State/GameActions";

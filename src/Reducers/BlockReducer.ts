@@ -1,51 +1,47 @@
-import { NumberOfBlockColumns, NumberOfBlockRows } from "../Constants";
 import { Block } from "../Definitions/Block";
-import { BlockReducerActionPayload } from "../Definitions/BlockReducerActionPayload";
 import { getGameDimensions } from "../GameDimensions";
 import { getBlocks } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
 import { GameActions } from "../State/GameActions";
+import { BlockState } from "./BlockState";
 
-export const blockReducer = (state: Block[] = getNewState(NumberOfBlockRows, NumberOfBlockColumns), action: ActionPayload<BlockReducerActionPayload>): Block[] => {
+export const blockReducer = (state: BlockState = getNewState(5, 12), action: ActionPayload<Block>): BlockState => {
     switch (action.type) {
         case GameActions.reset:
-            return getNewState(NumberOfBlockRows, NumberOfBlockColumns);
+            return getNewState(12, 5);
         case GameActions.nextLevel:
 
-            if (action.payload && typeof action.payload.level === "number") {
-                if (action.payload.level < 5) {
-                    const nextLevelState = getNewState(NumberOfBlockRows + action.payload.level, NumberOfBlockColumns + action.payload.level);
-                    return nextLevelState;
-                } else {
-                    return getNewState(NumberOfBlockRows + 5, NumberOfBlockColumns + 5);
-                }
+            if (state.rows <= 10) {
+                // Increase the number of blocks until we hit 10 rows.
+                const nextLevelState = getNewState(state.rows + 1, state.columns + 1);
+                return nextLevelState;
+            } else {
+                return getNewState(state.rows, state.columns);
             }
 
         case GameActions.hitBlock:
-            if (action.payload && action.payload.hitBlock) {
-                const hitBlockState = [...state];
-                const hitBlockIndex = state.indexOf(action.payload.hitBlock);
+            if (action.payload && action.payload) {
+                const hitBlockState = [...state.blocks];
+                const hitBlockIndex = hitBlockState.indexOf(action.payload);
 
                 hitBlockState[hitBlockIndex].hit = true;
 
-                return hitBlockState;
+                return { ...state, blocks: hitBlockState };
             }
 
             return state;
 
         case GameActions.tick:
 
-            const hitBlocks = state.filter((b) => b.hit === true);
+            const hitBlocks = state.blocks.filter((b) => b.hit === true);
 
             if (hitBlocks.length > 0) {
 
-                const tickGameDimensions = getGameDimensions();
-
                 // Reduce a hit block by 10% of its original height
-                const heightReductionFactor = tickGameDimensions.blockHeight * 0.1;
-                const widthReductionFactor = tickGameDimensions.blockWidth * 0.1;
+                const widthReductionFactor = calculateBlockWidth(state.columns) * 0.1;
+                const heightReductionFactor = calculateBlockHeight(state.rows) * 0.1;
 
-                const tickBlockState = [...state];
+                const tickBlocks = [...state.blocks];
 
                 // Redcue size for a hit block
                 hitBlocks.forEach((block) => {
@@ -57,16 +53,16 @@ export const blockReducer = (state: Block[] = getNewState(NumberOfBlockRows, Num
                     block.top += heightReductionFactor / 2;
                     block.left += widthReductionFactor / 2;
 
-                    const hitBlockIndex = state.indexOf(block);
+                    const hitBlockIndex = tickBlocks.indexOf(block);
 
                     if (block.height <= 0 || block.width <= 0) {
                         // Block has reached size '0', time to remove it.
-
-                        tickBlockState.splice(hitBlockIndex, 1);
+                        tickBlocks.splice(hitBlockIndex, 1);
                     }
 
-                    return tickBlockState;
                 });
+
+                return { ...state, blocks: tickBlocks };
             } else {
                 return state;
             }
@@ -76,17 +72,41 @@ export const blockReducer = (state: Block[] = getNewState(NumberOfBlockRows, Num
     }
 };
 
-const getNewState = (numberOfBlockRows: number, numberOfBlockColumns: number): Block[] => {
-    const gameDimensions = getGameDimensions();
+const getNewState = (rows: number, columns: number): BlockState => {
+    const blocks = getBlocks(rows, columns);
 
-    const blocks = getBlocks(numberOfBlockRows, numberOfBlockColumns);
+    const width = calculateBlockWidth(columns);
+    const height = calculateBlockHeight(rows);
 
     blocks.forEach((b) => {
-        b.width = gameDimensions.blockWidth;
-        b.height = gameDimensions.blockHeight;
-        b.left = b.x * gameDimensions.blockWidth;
-        b.top = b.y * gameDimensions.blockHeight;
+        b.width = width;
+        b.height = height;
+        b.left = b.x * height;
+        b.top = b.y * width;
     });
 
-    return blocks;
+    return {
+        blocks,
+        columns,
+        rows,
+        height,
+        width
+    };
 };
+
+/**
+ * Calculates the height of a block using the screen size and the number of rows.
+ * @param {number} rows. Amount of rows.
+ */
+function calculateBlockHeight(rows: number): number {
+    // Rows * 2 because we want rectangles, not squares.
+    return getGameDimensions().size / (rows * 2);
+}
+
+/**
+ * Calculats the width of a block using the screensize.
+ * @param {number} columns. Amount of colums.
+ */
+function calculateBlockWidth(columns: number): number {
+    return getGameDimensions().size / columns;
+}

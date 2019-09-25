@@ -30,16 +30,6 @@ export const BallResizeFactor = 0.02;
 export const BounceAngleIncreaseConstant = 40;
 
 /**
- * The number of blocks from top to bottom
- */
-export const NumberOfBlockRows = 5;
-
-/**
- * The number of blocks from left to right.
- */
-export const NumberOfBlockColumns = 12;
-
-/**
  * Constant to used to calculate the size of the playing field.
  */
 export const WindowResizeConstant = 0.9;

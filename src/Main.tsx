@@ -139,7 +139,7 @@ export class Main extends React.Component<{}, AppState> {
         // Redraw at 60 fps.
         if (diff > GameTick) {
             const ball = appState().ball;
-            const blocks = appState().blocks;
+            const blocks = appState().blockState.blocks;
             const paddle = appState().paddle;
 
             if (blocks.length === 0) {
@@ -155,7 +155,7 @@ export class Main extends React.Component<{}, AppState> {
 
                 const hitBlock = blocks.find((b) => overlaps(ball, b) && b.hit === false);
                 if (hitBlock) {
-                    appStore().dispatch({ type: GameActions.hitBlock, payload: { hitBlock }});
+                    appStore().dispatch({ type: GameActions.hitBlock, payload: hitBlock });
 
                     const action = getBounceAction(ball, hitBlock);
 
@@ -294,10 +294,10 @@ export class Main extends React.Component<{}, AppState> {
             </div>
                 <div>
                     {
-                        this.state.blocks && this.state.paddle && this.state.ball ?
+                        this.state.blockState && this.state.paddle && this.state.ball ?
                             <div style={this.gameFieldStyle()}>
                                 {
-                                    this.state.blocks.map((b, index) => <div key={index} style={this.positionStyle(b)} />)
+                                    this.state.blockState.blocks.map((b, index) => <div key={index} style={this.positionStyle(b)} />)
                                 }
                                 <div style={this.positionStyle(this.state.paddle)} />
                                 <div style={this.ballStyle(this.state.ball)} />

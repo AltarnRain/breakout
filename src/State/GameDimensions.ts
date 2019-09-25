@@ -14,12 +14,4 @@ export interface GameDimensions {
      * The game field is a square. Size stores the height and width of the play field.
      */
     size: number;
-    /**
-     * Calculated height of a block based on the game field dimensions.
-     */
-    blockHeight: number;
-    /**
-     * Calculated width of a block based on the game field dimensions.
-     */
-    blockWidth: number;
 }
