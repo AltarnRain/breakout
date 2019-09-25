@@ -1,5 +1,5 @@
 import { Ball } from "../Definitions/Ball";
-import { Blocks } from "../Definitions/Blocks";
+import { Block } from "../Definitions/Block";
 import { GameState } from "../Definitions/GameState";
 import { Paddle } from "../Definitions/Paddle";
 
@@ -11,7 +11,7 @@ export interface AppState {
     /**
      * Stores the state of the game blocks
      */
-    blocks: Blocks;
+    blocks: Block[];
 
     /**
      * Stores the state of the paddle
