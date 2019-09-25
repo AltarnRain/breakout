@@ -12,13 +12,18 @@ import { GameActions } from "./State/GameActions";
 export const getBlocks = (numberOfBlockRows: number, numberOfBlockColumns: number): Block[] => {
 
     const blocks: Block[] = [];
-
-    let index = 0;
     for (let r = 0; r < numberOfBlockRows; r++) {
-        index++;
         for (let c = 0; c < numberOfBlockColumns; c++) {
+
+            const red = Math.ceil(Math.random() * 70);
+            const green = Math.ceil(Math.random() * 200);
+
+            let trans = Math.random();
+            if (trans < 0.5) {
+                trans = 1;
+            }
             const block: Block = {
-                color: index % 2 === 0 ? "red" : "blue",
+                color: `rgba(${red}, ${green}, 120, ${trans})`,
                 x: c,
                 y: r,
                 left: 0,
@@ -28,7 +33,6 @@ export const getBlocks = (numberOfBlockRows: number, numberOfBlockColumns: numbe
                 hit: false
             };
 
-            index++;
             blocks.push(block);
         }
     }
