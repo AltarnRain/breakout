@@ -1,5 +1,5 @@
 
-import { PaddleHeightFactor, PaddlePositionFactor, PaddleWithFactor } from "../Constants";
+import { PaddleColor, PaddleHeightFactor, PaddlePositionFactor, PaddleWithFactor } from "../Constants";
 import { Paddle } from "../Definitions/Paddle";
 import { getGameDimensions } from "../GameDimensions";
 import ActionPayload from "../State/ActionPayLoad";
@@ -49,7 +49,7 @@ export const paddleReducer = (state: Paddle = getNewState(), action: ActionPaylo
             // Redude the paddle size each level by 5%
             nextLevelPaddle.width *= 0.95;
 
-            if (nextLevelPaddle.width < getPaddleWidth() / 2) {
+            if (nextLevelPaddle.width < gameDimensions.size / PaddleHeightFactor / 2) {
                 // Paddle doesn't get smaller than half its size.
                 return state;
             } else {
@@ -61,29 +61,17 @@ export const paddleReducer = (state: Paddle = getNewState(), action: ActionPaylo
     }
 };
 
+/**
+ * Generates a new state for the paddle
+ * @returns {Paddle}. A new state for the paddle
+ */
 const getNewState = (): Paddle => {
     return {
-        color: "white",
-        width: getPaddleWidth(),
-        height: getPaddleHeight(),
-        top: getPaddleTop(),
-        left: getPaddleCenterLeft(),
+        color: PaddleColor,
+        width: gameDimensions.size / PaddleHeightFactor,
+        height: gameDimensions.size / PaddleWithFactor,
+        top: gameDimensions.size * PaddlePositionFactor,
+        left: (gameDimensions.size / 2) - (gameDimensions.size / PaddleHeightFactor / 2),
         isPaddle: true
     };
-};
-
-const getPaddleCenterLeft = (): number => {
-    return (gameDimensions.size / 2) - (getPaddleWidth() / 2);
-};
-
-const getPaddleTop = (): number => {
-    return gameDimensions.size * PaddlePositionFactor;
-};
-
-const getPaddleWidth = (): number => {
-    return gameDimensions.size / PaddleHeightFactor;
-};
-
-const getPaddleHeight = (): number => {
-    return gameDimensions.size / PaddleWithFactor;
 };

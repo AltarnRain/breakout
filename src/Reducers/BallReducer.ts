@@ -79,7 +79,7 @@ const getNewState = (): Ball => {
     const angle = 90 + angleRandomizer();
     return {
         angle,
-        color: "yellow",
+        color: "radial-gradient(yellow, orange, brown)",
         height: getBallSize(),
         width: getBallSize(),
         left: getBallPosition(),

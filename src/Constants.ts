@@ -58,3 +58,13 @@ export const BallSpeedIncreasePerBlock = 1.02;
  * Speed increase factor for each level.
  */
 export const BallSpeedIncreasePerLevel = 0.5;
+
+/**
+ * Border color
+ */
+export const GameFieldBorderColor = "#2c1145";
+
+/**
+ * The paddle color
+ */
+export const PaddleColor = "#8b25ae";

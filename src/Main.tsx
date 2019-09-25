@@ -1,5 +1,5 @@
 import React, { CSSProperties } from "react";
-import { GameTick } from "./Constants";
+import { GameFieldBorderColor, GameTick } from "./Constants";
 import { Ball } from "./Definitions/Ball";
 import { GameObject } from "./Definitions/GameObject";
 import { getGameDimensions } from "./GameDimensions";
@@ -204,7 +204,7 @@ export class Main extends React.Component<{}, AppState> {
             top: getGameDimensions().top,
             width: getGameDimensions().size,
             height: getGameDimensions().size,
-            borderColor: "white",
+            borderColor: GameFieldBorderColor,
             borderStyle: "solid",
             display: "flex",
             justifyContent: "center"
@@ -218,7 +218,7 @@ export class Main extends React.Component<{}, AppState> {
             width: getGameDimensions().size,
             top: getGameDimensions().top - 25,
             height: 22,
-            borderColor: "white",
+            borderColor: GameFieldBorderColor,
             borderStyle: "solid",
             display: "flex",
             flexDirection: "row",
@@ -249,7 +249,7 @@ export class Main extends React.Component<{}, AppState> {
     private ballStyle(ball: Ball): CSSProperties {
         const newPosition = this.positionStyle(ball);
         newPosition.borderRadius = "50%";
-
+        newPosition.backgroundImage = ball.color;
         return newPosition;
     }
 
