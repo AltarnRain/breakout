@@ -1,8 +1,8 @@
 import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, DegreeToRadian } from "./Constants";
 import { Ball } from "./Definitions/Ball";
 import { Block } from "./Definitions/Block";
-import { Direction, hitSide as HitSide } from "./Definitions/Types";
 import { ScreenObject } from "./Definitions/ScreenObject";
+import { Direction, hitSide as HitSide } from "./Definitions/Types";
 import { GameActions } from "./State/GameActions";
 
 /**
@@ -78,15 +78,13 @@ export const angleRandomizer = (): number => {
     }
 };
 
-export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically | undefined => {
+export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically => {
     const hitSide = getHitSide(ball, shape);
 
-    if (hitSide) {
-        if (hitSide === "left" || hitSide == "right") {
-            return GameActions.ballBounceVertically;
-        } else if (hitSide === "top" || hitSide === "bottom") {
-            return GameActions.ballBounceHorizantally;
-        }
+    if (hitSide === "left" || hitSide === "right") {
+        return GameActions.ballBounceVertically;
+    } else if (hitSide === "top" || hitSide === "bottom") {
+        return GameActions.ballBounceHorizantally;
     } else {
         // tslint:disable-next-line: no-console
         console.log("Failed hit detection");

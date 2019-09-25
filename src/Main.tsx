@@ -6,7 +6,7 @@ import { getGameDimensions } from "./GameDimensions";
 import { getBounceAction, overlaps } from "./Lib";
 import { AppState } from "./State/AppState";
 import { GameActions } from "./State/GameActions";
-import { appState, appStore } from "./Store";
+import { appState, appStore } from "./State/Store";
 import { Walls } from "./WallConstants";
 
 const gameDimensions = getGameDimensions();
@@ -41,6 +41,8 @@ export class Main extends React.Component<{}, AppState> {
         this.tick = this.tick.bind(this);
         this.onPlayAgain = this.onPlayAgain.bind(this);
 
+        this.onKeyUp = this.onKeyUp.bind(this);
+
         // Sync the redux state with the component state.
         this.state = appState();
     }
@@ -52,6 +54,7 @@ export class Main extends React.Component<{}, AppState> {
         this.tickHandler = this.tickHandler = window.requestAnimationFrame(this.tick);
 
         window.addEventListener("mousemove", this.onMouseMove);
+        window.addEventListener("keyup", this.onKeyUp);
 
         this.subscription = appStore().subscribe(() => {
             const applicationState = appState();
@@ -83,10 +86,17 @@ export class Main extends React.Component<{}, AppState> {
         }
 
         window.removeEventListener("mousemove", this.onMouseMove);
+        window.removeEventListener("mousemove", this.onMouseMove);
 
         if (this.subscription) {
             this.subscription();
             delete this.subscription;
+        }
+    }
+
+    private onKeyUp(e: KeyboardEvent): void {
+        if (e.code === "KeyW") {
+            appStore().dispatch({type: GameActions.nextLevel});
         }
     }
 
@@ -143,7 +153,7 @@ export class Main extends React.Component<{}, AppState> {
                 appStore().dispatch({ type: paddleBounceAction, payload: paddle });
             } else if (blocks) {
 
-                const hitBlock = blocks.find((b) => overlaps(ball, b) && b.hit === false);
+                const hitBlock = blocks.find((b) => overlaps(ball, b) && b.hit === false); // 20190925: OI:  - 
                 if (hitBlock) {
                     appStore().dispatch({ type: GameActions.hitBlock, payload: hitBlock });
 

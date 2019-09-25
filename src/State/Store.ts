@@ -1,10 +1,10 @@
 import { combineReducers, createStore, ReducersMapObject, Store } from "redux";
-import { ballReducer } from "./Reducers/BallReducer";
-import { blockReducer } from "./Reducers/BlockReducer";
-import { gameStateReducer } from "./Reducers/GameStateReducer";
-import { paddleReducer } from "./Reducers/PaddleReducer";
-import ActionPayload from "./State/ActionPayLoad";
-import { AppState } from "./State/AppState";
+import { ballReducer } from "../Reducers/BallReducer";
+import { blockReducer } from "../Reducers/BlockReducer";
+import { gameStateReducer } from "../Reducers/GameStateReducer";
+import { paddleReducer } from "../Reducers/PaddleReducer";
+import ActionPayload from "./ActionPayLoad";
+import { AppState } from "./AppState";
 
 const reducers: ReducersMapObject<AppState, ActionPayload<any>> = {
     blocks: blockReducer,
