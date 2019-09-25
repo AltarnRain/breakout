@@ -5,10 +5,10 @@ import ActionPayload from "../State/ActionPayLoad";
 import { GameActions } from "../State/GameActions";
 import { BlockState } from "./BlockState";
 
-export const blockReducer = (state: BlockState = getNewState(5, 12), action: ActionPayload<Block>): BlockState => {
+export const blockReducer = (state: BlockState = getNewState(), action: ActionPayload<Block>): BlockState => {
     switch (action.type) {
         case GameActions.reset:
-            return getNewState(12, 5);
+            return getNewState();
         case GameActions.nextLevel:
 
             if (state.rows <= 10) {
@@ -72,17 +72,17 @@ export const blockReducer = (state: BlockState = getNewState(5, 12), action: Act
     }
 };
 
-const getNewState = (rows: number, columns: number): BlockState => {
+const getNewState = (rows: number = 5, columns: number = 12): BlockState => {
     const blocks = getBlocks(rows, columns);
 
     const width = calculateBlockWidth(columns);
-    const height = calculateBlockHeight(rows);
+    const height = calculateBlockHeight(columns);
 
     blocks.forEach((b) => {
         b.width = width;
         b.height = height;
-        b.left = b.x * height;
-        b.top = b.y * width;
+        b.left = b.x * width;
+        b.top = b.y * height;
     });
 
     return {
@@ -98,9 +98,8 @@ const getNewState = (rows: number, columns: number): BlockState => {
  * Calculates the height of a block using the screen size and the number of rows.
  * @param {number} rows. Amount of rows.
  */
-function calculateBlockHeight(rows: number): number {
-    // Rows * 2 because we want rectangles, not squares.
-    return getGameDimensions().size / (rows * 2);
+function calculateBlockHeight(columns: number): number {
+    return calculateBlockWidth(columns) / 2;
 }
 
 /**
@@ -108,5 +107,6 @@ function calculateBlockHeight(rows: number): number {
  * @param {number} columns. Amount of colums.
  */
 function calculateBlockWidth(columns: number): number {
-    return getGameDimensions().size / columns;
+    const size = getGameDimensions().size;
+    return size / columns;
 }
