@@ -5,7 +5,7 @@ export interface GameState {
     /**
      * The state of the game.
      */
-    gameMode: "running" | "ended";
+    gameMode: "running" | "ended" | "paused";
 
     /**
      * The current score.

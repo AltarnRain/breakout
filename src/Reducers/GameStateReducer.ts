@@ -8,7 +8,7 @@ import { GameActions } from "../State/GameActions";
  * @param {Action}. A reduc action. No payload.
  * @returns {GameState}. The next game state.
  */
-export const gameStateReducer = (state: GameState = getNewState(), action: Action<GameActions>): GameState  => {
+export const gameStateReducer = (state: GameState = getNewState(), action: Action<GameActions>): GameState => {
     switch (action.type) {
         case GameActions.reset:
             return getNewState();
@@ -18,6 +18,8 @@ export const gameStateReducer = (state: GameState = getNewState(), action: Actio
             return { ...state, level: state.level + 1 };
         case GameActions.hitBlock:
             return { ...state, score: state.score + 1 };
+        case GameActions.resume:
+            return { ...state, gameMode: "running" };
         default:
             return state;
     }
@@ -28,5 +30,5 @@ export const gameStateReducer = (state: GameState = getNewState(), action: Actio
  * @returns {GameState}. A new game state.
  */
 const getNewState = (): GameState => {
-    return { gameMode: "running", level: 1, score: 0 };
+    return { gameMode: "paused", level: 1, score: 0 };
 };

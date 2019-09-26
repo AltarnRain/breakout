@@ -32,7 +32,15 @@ export class Main extends React.Component<{}, AppState> {
      * Refux subscription
      */
     private subscription?: () => void;
+
+    /**
+     * The bounce sound.
+     */
     private bounceSound!: Howl;
+
+    /**
+     * The sound when the ball hits a block
+     */
     private hitBlockSound!: Howl;
 
     /**
@@ -42,6 +50,7 @@ export class Main extends React.Component<{}, AppState> {
         super(props);
 
         this.onMouseMove = this.onMouseMove.bind(this);
+        this.onMouseClick = this.onMouseClick.bind(this);
         this.tick = this.tick.bind(this);
         this.onPlayAgain = this.onPlayAgain.bind(this);
         this.onKeyUp = this.onKeyUp.bind(this);
@@ -57,6 +66,7 @@ export class Main extends React.Component<{}, AppState> {
         this.tickHandler = this.tickHandler = window.requestAnimationFrame(this.tick);
 
         window.addEventListener("mousemove", this.onMouseMove);
+        window.addEventListener("click", this.onMouseClick);
         window.addEventListener("keyup", this.onKeyUp);
 
         this.subscription = appStore().subscribe(() => {
@@ -86,7 +96,7 @@ export class Main extends React.Component<{}, AppState> {
         }
 
         window.removeEventListener("mousemove", this.onMouseMove);
-        window.removeEventListener("mousemove", this.onMouseMove);
+        window.removeEventListener("click", this.onMouseClick);
 
         if (this.subscription) {
             this.subscription();
@@ -111,6 +121,11 @@ export class Main extends React.Component<{}, AppState> {
         }
     }
 
+    private onMouseClick(): void {
+        appStore().dispatch({ type: GameActions.resume });
+        this.tickHandler = this.tickHandler = window.requestAnimationFrame(this.tick);
+    }
+
     /**
      * Handles a play again click.
      */
@@ -130,7 +145,7 @@ export class Main extends React.Component<{}, AppState> {
             this.tickStart = tick;
         }
 
-        if (this.state.gameState.gameMode === "ended") {
+        if (this.state.gameState.gameMode !== "running") {
             return;
         }
 
@@ -300,9 +315,12 @@ export class Main extends React.Component<{}, AppState> {
                                         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                                             <p style={{ alignSelf: "center", color: "white" }}>Game over</p>
                                             <button onClick={this.onPlayAgain} style={{ alignSelf: "center" }}>Play again</button>
-                                        </div>
-                                        : null
-                                }
+                                        </div> :
+                                        this.state.gameState.gameMode === "paused" ?
+                                            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                                                <p style={{ alignSelf: "center", color: "white" }}>Click the left mouse button to start the game</p>
+                                            </div> : null
+                        }
 
                             </div> : null
                     }
