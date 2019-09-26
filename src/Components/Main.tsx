@@ -1,13 +1,15 @@
+import { Howl } from "howler";
 import React, { CSSProperties } from "react";
-import { GameFieldBorderColor, GameTick } from "./Constants";
-import { Ball } from "./Definitions/Ball";
-import { GameObject } from "./Definitions/GameObject";
-import { getGameDimensions } from "./GameDimensions";
-import { getBounceAction, getUpdatedOjbect, overlaps } from "./Lib";
-import { AppState } from "./State/AppState";
-import { GameActions } from "./State/GameActions";
-import { appState, appStore } from "./State/Store";
-import { Walls } from "./WallConstants";
+import { Bounce, HitBlock } from "../Constants/Base64Audio";
+import { GameFieldBorderColor, GameTick } from "../Constants/Constants";
+import { Walls } from "../Constants/WallConstants";
+import { Ball } from "../Definitions/Ball";
+import { GameObject } from "../Definitions/GameObject";
+import { getGameDimensions } from "../GameDimensions";
+import { getBounceAction, getUpdatedOjbect, overlaps } from "../Lib";
+import { AppState } from "../State/AppState";
+import { GameActions } from "../State/GameActions";
+import { appState, appStore } from "../State/Store";
 
 const gameDimensions = getGameDimensions();
 
@@ -30,6 +32,8 @@ export class Main extends React.Component<{}, AppState> {
      * Refux subscription
      */
     private subscription?: () => void;
+    private bounceSound!: Howl;
+    private hitBlockSound!: Howl;
 
     /**
      * Initializes the Main component.
@@ -40,7 +44,6 @@ export class Main extends React.Component<{}, AppState> {
         this.onMouseMove = this.onMouseMove.bind(this);
         this.tick = this.tick.bind(this);
         this.onPlayAgain = this.onPlayAgain.bind(this);
-
         this.onKeyUp = this.onKeyUp.bind(this);
 
         // Sync the redux state with the component state.
@@ -69,6 +72,9 @@ export class Main extends React.Component<{}, AppState> {
                 }
             }
         });
+
+        this.bounceSound = new Howl({ src: ["data:audio/wav;base64," + Bounce] });
+        this.hitBlockSound = new Howl({ src: ["data:audio/wav;base64," + HitBlock] });
     }
 
     /**
@@ -90,7 +96,7 @@ export class Main extends React.Component<{}, AppState> {
 
     private onKeyUp(e: KeyboardEvent): void {
         if (e.code === "KeyW") {
-            appStore().dispatch({type: GameActions.nextLevel});
+            appStore().dispatch({ type: GameActions.nextLevel });
         }
     }
 
@@ -145,10 +151,15 @@ export class Main extends React.Component<{}, AppState> {
             if (paddleHit) {
                 const paddleBounceAction = getBounceAction(ball, paddle);
                 appStore().dispatch({ type: paddleBounceAction, payload: paddle });
+
+                this.playBounce();
+
             } else if (blocks) {
 
                 const hitBlock = blocks.find((b) => overlaps(ball, b) && b.hit === false);
                 if (hitBlock) {
+
+                    this.playHitBlock();
                     appStore().dispatch({ type: GameActions.hitBlock, payload: hitBlock });
 
                     const action = getBounceAction(ball, hitBlock);
@@ -162,15 +173,18 @@ export class Main extends React.Component<{}, AppState> {
                     // Use the game dimension object to store a wall hit.
                     // Hit the top  wall
                     appStore().dispatch({ type: GameActions.ballBounceHorizantally, payload: Walls.topWall });
+                    this.playBounce();
 
                 } else if (ball.left <= 0) {
                     // Hit the left wall
                     appStore().dispatch({ type: GameActions.ballBounceVertically, payload: Walls.leftWall });
+                    this.playBounce();
 
                 } else if (ball.left + ball.width >= gameDimensions.size) {
                     // Hit the right wall
 
                     appStore().dispatch({ type: GameActions.ballBounceVertically, payload: Walls.rightWall });
+                    this.playBounce();
                 } else if (ball.top + ball.width >= gameDimensions.size) {
                     // Hit bottom wall.
                     appStore().dispatch({ type: GameActions.gameLost });
@@ -188,7 +202,14 @@ export class Main extends React.Component<{}, AppState> {
 
         this.tickHandler = window.requestAnimationFrame(this.tick);
     }
+    private playHitBlock(): void {
+        this.hitBlockSound.play();
+    }
 
+    private playBounce(): void {
+
+        this.bounceSound.play();
+    }
 
     /**
      * Returns the styling for the game field.
@@ -261,11 +282,11 @@ export class Main extends React.Component<{}, AppState> {
     public render(): React.ReactNode {
         return (
             <div>
-                <div style={this.gameScorebarStyle()}>
+                <div style={this.gameScorebarStyle()} >
                     <div key={1} style={{ color: "white", justifyContent: "center", marginLeft: "10px" }}>Level: {this.state.gameState.level}</div>>
-                <div key={2} style={{ color: "white", justifyContent: "center" }}>Score: {this.state.gameState.score}</div>>
-            </div>
-                <div>
+                    <div key={2} style={{ color: "white", justifyContent: "center" }}>Score: {this.state.gameState.score}</div>>
+                </div>
+                <>
                     {
                         this.state.blockState && this.state.paddle && this.state.ball ?
                             <div style={this.gameFieldStyle()}>
@@ -285,7 +306,7 @@ export class Main extends React.Component<{}, AppState> {
 
                             </div> : null
                     }
-                </div>
+                </>
             </div>
         );
     }

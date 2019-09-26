@@ -2,7 +2,7 @@
  * Provides game dimensions.
  */
 
-import { WindowResizeConstant } from "./Constants";
+import { WindowResizeConstant } from "./Constants/Constants";
 import { GameDimensions } from "./State/GameDimensions";
 
 let gameDimensions: GameDimensions;

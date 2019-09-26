@@ -2,8 +2,7 @@
  * This is a library module that contains functions user throughout the entire game.
  */
 
-
-import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, DegreeToRadian } from "./Constants";
+import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, DegreeToRadian } from "./Constants/Constants";
 import { Ball } from "./Definitions/Ball";
 import { Block } from "./Definitions/Block";
 import { ScreenObject } from "./Definitions/ScreenObject";

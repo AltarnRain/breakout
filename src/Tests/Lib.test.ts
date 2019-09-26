@@ -1,19 +1,17 @@
 import "jest";
-import { NumberOfBlockColumns, NumberOfBlockRows } from "../Constants";
 import { Ball } from "../Definitions/Ball";
 import { ScreenObject } from "../Definitions/ScreenObject";
-import { angleRandomizer, getBlocks, getBounceAction, getDirectionFromAngle, getHitSide, overlaps } from "../Lib";
-import { GameActions } from "../State/GameActions";
+import { angleRandomizer, getBlocks, getDirectionFromAngle, getHitSide, overlaps } from "../Lib";
 
 describe("Lib tests", () => {
 
     it("returns the initial block array based on defined constants", () => {
         // Act
-        const result = getBlocks(NumberOfBlockRows, NumberOfBlockColumns);
+        const result = getBlocks(5, 12);
 
         // Assert
         expect(result).toBeDefined();
-        expect(result.length).toBe(NumberOfBlockRows * NumberOfBlockColumns);
+        expect(result.length).toBe(5 * 12);
     });
 
     it("returns a number to manipulate an angle", () => {
