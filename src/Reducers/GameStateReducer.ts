@@ -20,6 +20,8 @@ export const gameStateReducer = (state: GameState = getNewState(), action: Actio
             return { ...state, score: state.score + 1 };
         case GameActions.resume:
             return { ...state, gameMode: "running" };
+        case GameActions.pause:
+            return { ...state, gameMode: "paused" };
         default:
             return state;
     }

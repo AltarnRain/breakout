@@ -105,8 +105,14 @@ export class Main extends React.Component<{}, AppState> {
     }
 
     private onKeyUp(e: KeyboardEvent): void {
-        if (e.code === "KeyW") {
-            appStore().dispatch({ type: GameActions.nextLevel });
+        switch (e.code) {
+            case "KeyW":
+                appStore().dispatch({ type: GameActions.nextLevel });
+                break;
+            case "Space":
+                appStore().dispatch({ type: GameActions.pause });
+                break;
+
         }
     }
 
@@ -121,9 +127,14 @@ export class Main extends React.Component<{}, AppState> {
         }
     }
 
+    /**
+     * Event fires when the user clicks the mouse.
+     */
     private onMouseClick(): void {
-        appStore().dispatch({ type: GameActions.resume });
-        this.tickHandler = this.tickHandler = window.requestAnimationFrame(this.tick);
+        if (this.state.gameState.gameMode === "paused") {
+            appStore().dispatch({ type: GameActions.resume });
+            this.tickHandler = this.tickHandler = window.requestAnimationFrame(this.tick);
+        }
     }
 
     /**
@@ -318,9 +329,9 @@ export class Main extends React.Component<{}, AppState> {
                                         </div> :
                                         this.state.gameState.gameMode === "paused" ?
                                             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                                                <p style={{ alignSelf: "center", color: "white" }}>Click the left mouse button to start the game</p>
+                                                <p style={{ alignSelf: "center", color: "white" }}>Click the left mouse button to resume.</p>
                                             </div> : null
-                        }
+                                }
 
                             </div> : null
                     }

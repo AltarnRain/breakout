@@ -82,8 +82,16 @@ const getBallSize = (): number => {
  * Calculate the ball position in the center of the game field.
  * @returns {number}. The ball's X or Y coordinate.
  */
-const getBallPosition = (): number => {
+const getBallPositionX = (): number => {
     return gameDimensions.size / 2 - gameDimensions.size * BallResizeFactor / 2;
+};
+
+/**
+ * Calculate the ball position in the center of the game field.
+ * @returns {number}. The ball's X or Y coordinate.
+ */
+const getBallPositionY = (): number => {
+    return gameDimensions.size / 1.5 - gameDimensions.size * BallResizeFactor / 2;
 };
 
 /**
@@ -97,8 +105,8 @@ const getNewState = (): Ball => {
         color: "radial-gradient(yellow, orange, brown)",
         height: getBallSize(),
         width: getBallSize(),
-        left: getBallPosition(),
-        top: getBallPosition(),
+        left: getBallPositionX(),
+        top: getBallPositionY(),
         velocity: InitialBallVelocity,
         lastObject: {},
     };

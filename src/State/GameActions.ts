@@ -31,9 +31,9 @@ export enum GameActions {
      * Dispatched when all the blocks are cleared.
      */
     nextLevel,
-
     /**
      * Resume the game.
      */
-    resume
+    resume,
+    pause
 }
