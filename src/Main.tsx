@@ -1,15 +1,15 @@
 import { Howl } from "howler";
 import React, { CSSProperties } from "react";
-import { Bounce, HitBlock } from "../Constants/Base64Audio";
-import { GameFieldBorderColor, GameTick } from "../Constants/Constants";
-import { Walls } from "../Constants/WallConstants";
-import { GameObject } from "../Definitions/GameObject";
-import { getGameDimensions } from "../GameDimensions";
-import { getBounceAction, getUpdatedOjbect, overlaps } from "../Lib";
-import { AppState } from "../State/Definition/AppState";
-import { BallState } from "../State/Definition/BallState";
-import { GameActions } from "../State/GameActions";
-import { appState, appStore } from "../State/Store";
+import { Bounce, HitBlock } from "./Constants/Base64Audio";
+import { GameFieldBorderColor, GameTick } from "./Constants/Constants";
+import { Walls } from "./Constants/WallConstants";
+import { GameObject } from "./Definitions/GameObject";
+import { getGameDimensions } from "./GameDimensions";
+import { getBounceAction, getUpdatedOjbect, overlaps } from "./Lib";
+import { AppState } from "./State/Definition/AppState";
+import { BallState } from "./State/Definition/BallState";
+import { GameActions } from "./State/GameActions";
+import { appState, appStore } from "./State/Store";
 
 const gameDimensions = getGameDimensions();
 

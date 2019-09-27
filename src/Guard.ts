@@ -1,4 +1,4 @@
-import { PaddleState } from "../State/Definition/PaddleState";
+import { PaddleState } from "./State/Definition/PaddleState";
 
 /**
  * A constant that contains type guards.
