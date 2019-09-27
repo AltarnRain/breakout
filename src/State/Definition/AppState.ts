@@ -2,6 +2,7 @@ import { BallState } from "./BallState";
 import { BlockState } from "./BlockState";
 import { GameState } from "./GameState";
 import { PaddleState } from "./PaddleState";
+import { SoundState } from "./SoundState";
 
 /**
  * Describes the application state
@@ -27,6 +28,11 @@ export interface AppState {
      * Miscellaneous
      */
     gameState: GameState;
+
+    /**
+     * The sound state.
+     */
+    soundState: SoundState;
 
     /**
      * Indexer

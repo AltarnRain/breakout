@@ -3,6 +3,7 @@ import { ballReducer } from "../Reducers/BallReducer";
 import { blockReducer } from "../Reducers/BlockReducer";
 import { gameStateReducer } from "../Reducers/GameStateReducer";
 import { paddleReducer } from "../Reducers/PaddleReducer";
+import { soundReducer } from "../Reducers/SoundReducer";
 import ActionPayload from "./ActionPayLoad";
 import { AppState } from "./Definition/AppState";
 
@@ -14,6 +15,7 @@ const reducers: ReducersMapObject<AppState, ActionPayload<any>> = {
     paddle: paddleReducer,
     ball: ballReducer,
     gameState: gameStateReducer,
+    soundState: soundReducer,
 };
 
 const allReducers = combineReducers(reducers);
