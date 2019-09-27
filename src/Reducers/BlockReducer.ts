@@ -1,9 +1,9 @@
 import { Block } from "../Definitions/Block";
+import { BlockState } from "../Definitions/BlockState";
 import { getGameDimensions } from "../GameDimensions";
 import { getBlocks } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
 import { GameActions } from "../State/GameActions";
-import { BlockState } from "../Definitions/BlockState";
 
 /**
  * The block reducer.
@@ -52,14 +52,17 @@ export const blockReducer = (state: BlockState = getNewState(), action: ActionPa
                 // Redcue size for a hit block
                 hitBlocks.forEach((block) => {
 
-                    block.width -= widthReductionFactor;
-                    block.height -= heightReductionFactor;
+                    const smallerBlock = {...block};
+
+                    smallerBlock.width -= widthReductionFactor;
+                    smallerBlock.height -= heightReductionFactor;
 
                     // Add half of the mount of pixels to the top and left to make it appear as the block shrinks to its center.
-                    block.top += heightReductionFactor / 2;
-                    block.left += widthReductionFactor / 2;
+                    smallerBlock.top += heightReductionFactor / 2;
+                    smallerBlock.left += widthReductionFactor / 2;
 
                     const hitBlockIndex = tickBlocks.indexOf(block);
+                    tickBlocks[hitBlockIndex] = smallerBlock;
 
                     if (block.height <= 0 || block.width <= 0) {
                         // Block has reached size '0', time to remove it.

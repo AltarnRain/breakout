@@ -34,7 +34,7 @@ describe("Block reduder tests", () => {
                     hit: false,
                 }
             ],
-        } as BlockState ;
+        } as BlockState;
 
         // Act
         const newState = blockReducer(blockState, { type: GameActions.hitBlock, payload: blockState.blocks[0] }).blocks[0];
@@ -45,20 +45,24 @@ describe("Block reduder tests", () => {
 
     it("reduces the size of a hit block", () => {
         // Arrange
-        const blockState  = {
+        const blockState: BlockState = {
             blocks: [
                 {
                     color: "white",
-                    height: 10,
+                    height: 100,
+                    width: 100,
+                    hit: true,
                     left: 0,
                     top: 0,
-                    width: 10,
                     x: 0,
                     y: 0,
-                    hit: true
                 }
-            ]
-        } as BlockState;
+            ],
+            width: 100,
+            height: 100,
+            rows: 1,
+            columns: 1
+        };
 
         // Act
         const result = blockReducer(blockState, { type: GameActions.tick }).blocks[0];
@@ -70,7 +74,7 @@ describe("Block reduder tests", () => {
 
     it("removes a block once it reaces 0 size", () => {
         // Arrange
-        const block = {
+        const block: BlockState = {
             blocks: [
                 {
                     color: "white",
@@ -80,11 +84,14 @@ describe("Block reduder tests", () => {
                     width: 0,
                     x: 0,
                     y: 0,
-                    hit: true
-
+                    hit: true,
                 }
-            ]
-        } as BlockState;
+            ],
+            columns: 1,
+            rows: 1,
+            height: 10,
+            width: 10
+        };
 
         // Act
         const result = blockReducer(block, { type: GameActions.tick }).blocks[0];
