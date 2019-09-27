@@ -1,7 +1,7 @@
 import "jest";
-import { BlockState } from "../Definitions/BlockState";
 import { getBlocks } from "../Lib";
 import { blockReducer } from "../Reducers/BlockReducer";
+import { BlockState } from "../State/Definition/BlockState";
 import { GameActions } from "../State/GameActions";
 
 describe("Block reduder tests", () => {

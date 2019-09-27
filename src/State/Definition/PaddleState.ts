@@ -1,9 +1,9 @@
-import { GameObject } from "./GameObject";
+import { GameObject } from "../../Definitions/GameObject";
 
 /**
  * Defines the paddle
  */
-export interface Paddle extends GameObject {
+export interface PaddleState extends GameObject {
     /**
      * Typeguard boolean used to check if a passed shape is actually the paddle.
      */

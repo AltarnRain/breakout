@@ -4,7 +4,7 @@ import { blockReducer } from "../Reducers/BlockReducer";
 import { gameStateReducer } from "../Reducers/GameStateReducer";
 import { paddleReducer } from "../Reducers/PaddleReducer";
 import ActionPayload from "./ActionPayLoad";
-import { AppState } from "./AppState";
+import { AppState } from "./Definition/AppState";
 
 /**
  * All reducer that build the application state.

@@ -1,10 +1,10 @@
 import { BallResizeFactor, BallSpeedIncreasePerBlock, BallSpeedIncreasePerLevel, InitialBallVelocity } from "../Constants/Constants";
-import { Ball } from "../Definitions/Ball";
 import { ScreenObject } from "../Definitions/ScreenObject";
 import { getGameDimensions } from "../GameDimensions";
 import { Guard } from "../Guards/Guard";
 import { angleRandomizer, changeAngle, getNextX, getNextY } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
+import { BallState } from "../State/Definition/BallState";
 import { GameActions } from "../State/GameActions";
 
 const gameDimensions = getGameDimensions();
@@ -13,9 +13,9 @@ const gameDimensions = getGameDimensions();
  * Handles ball actions.
  * @param {ball} state. The current ball state.
  * @param {ActionPayLoad}. An action, payload optional.
- * @returns {Ball}. The ball state.
+ * @returns {BallState}. The ball state.
  */
-export const ballReducer = (state: Ball = getNewState(), action: ActionPayload<ScreenObject>): Ball => {
+export const ballReducer = (state: BallState = getNewState(), action: ActionPayload<ScreenObject>): BallState => {
 
     switch (action.type) {
         case GameActions.reset: {
@@ -96,9 +96,9 @@ const getBallPositionY = (): number => {
 
 /**
  * Used to obtain a new state for the ball.
- * @returns {Ball}. A new ball state.
+ * @returns {BallState}. A new ball state.
  */
-const getNewState = (): Ball => {
+const getNewState = (): BallState => {
     const angle = 90 + angleRandomizer();
     return {
         angle,

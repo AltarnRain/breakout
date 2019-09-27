@@ -1,7 +1,7 @@
-import { Ball } from "../Definitions/Ball";
-import { BlockState } from "../Definitions/BlockState";
-import { GameState } from "../Definitions/GameState";
-import { Paddle } from "../Definitions/Paddle";
+import { BallState } from "./BallState";
+import { BlockState } from "./BlockState";
+import { GameState } from "./GameState";
+import { PaddleState } from "./PaddleState";
 
 /**
  * Describes the application state
@@ -16,12 +16,12 @@ export interface AppState {
     /**
      * Stores the state of the paddle
      */
-    paddle: Paddle;
+    paddle: PaddleState;
 
     /**
      * Stores the state of the ball.
      */
-    ball: Ball;
+    ball: BallState;
 
     /**
      * Miscellaneous

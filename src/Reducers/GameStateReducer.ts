@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { GameState } from "../Definitions/GameState";
+import { GameState } from "../State/Definition/GameState";
 import { GameActions } from "../State/GameActions";
 
 /**

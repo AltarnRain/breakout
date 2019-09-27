@@ -1,8 +1,8 @@
 import { Block } from "../Definitions/Block";
-import { BlockState } from "../Definitions/BlockState";
 import { getGameDimensions } from "../GameDimensions";
 import { getBlocks } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
+import { BlockState } from "../State/Definition/BlockState";
 import { GameActions } from "../State/GameActions";
 
 /**

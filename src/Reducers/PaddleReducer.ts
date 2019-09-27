@@ -1,19 +1,19 @@
 
 import { PaddleColor, PaddleHeightFactor, PaddlePositionFactor, PaddleWithFactor } from "../Constants/Constants";
-import { Paddle } from "../Definitions/Paddle";
 import { getGameDimensions } from "../GameDimensions";
 import ActionPayload from "../State/ActionPayLoad";
+import { PaddleState } from "../State/Definition/PaddleState";
 import { GameActions } from "../State/GameActions";
 
 const gameDimensions = getGameDimensions();
 
 /**
  * Handles paddle actions
- * @param {Paddle} state. The paddle state.
+ * @param {PaddleState} state. The paddle state.
  * @param {ActionPayload<number> }action. An action to be performed on the paddle. Number is the 'left' coordinate of the paddle.
- * @returns {Paddle}. Paddle state.
+ * @returns {PaddleState}. Paddle state.
  */
-export const paddleReducer = (state: Paddle = getNewState(), action: ActionPayload<number>): Paddle => {
+export const paddleReducer = (state: PaddleState = getNewState(), action: ActionPayload<number>): PaddleState => {
     switch (action.type) {
         case GameActions.reset:
 
@@ -64,9 +64,9 @@ export const paddleReducer = (state: Paddle = getNewState(), action: ActionPaylo
 
 /**
  * Generates a new state for the paddle
- * @returns {Paddle}. A new state for the paddle
+ * @returns {PaddleState}. A new state for the paddle
  */
-const getNewState = (): Paddle => {
+const getNewState = (): PaddleState => {
     return {
         color: PaddleColor,
         width: gameDimensions.size / PaddleHeightFactor,

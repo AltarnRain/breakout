@@ -3,7 +3,7 @@
  */
 
 import { WindowResizeConstant } from "./Constants/Constants";
-import { GameDimensions } from "./State/GameDimensions";
+import { GameDimensions } from "./Definitions/GameDimensions";
 
 let gameDimensions: GameDimensions;
 

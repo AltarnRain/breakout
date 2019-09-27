@@ -35,5 +35,9 @@ export enum GameActions {
      * Resume the game.
      */
     resume,
+
+    /**
+     * An action that pauses the game
+     */
     pause
 }

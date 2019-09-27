@@ -3,10 +3,10 @@
  */
 
 import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, DegreeToRadian } from "./Constants/Constants";
-import { Ball } from "./Definitions/Ball";
 import { Block } from "./Definitions/Block";
 import { ScreenObject } from "./Definitions/ScreenObject";
 import { Direction, hitSide as HitSide } from "./Definitions/Types";
+import { BallState } from "./State/Definition/BallState";
 import { GameActions } from "./State/GameActions";
 
 /**
@@ -91,11 +91,11 @@ export const angleRandomizer = (): number => {
 
 /**
  * Gets the bounce action depending on the balls heading an screen object's position.
- * @param {Ball} ball. A ball object.
+ * @param {BallState} ball. A ball object.
  * @param {Shape} shape. Any game object that derives from ScreenObject.
  * @returns {GameActions.ballBounceHorizantally | GameActions.ballBounceVertically }. A ball can bounce vertically or horizantally.
  */
-export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically => {
+export const getBounceAction = (ball: BallState, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically => {
     const hitSide = getHitSide(ball, shape);
 
     if (hitSide === "left" || hitSide === "right") {
@@ -111,11 +111,11 @@ export const getBounceAction = (ball: Ball, shape: ScreenObject): GameActions.ba
 
 /**
  * Determine the right action to dispatch when the ball bounces off an object.
- * @param {Ball} ball. Ball object.
+ * @param {BallState} ball. Ball object.
  * @param {ScreenObject} shape. A shape object.
  * @returns {HitSide}. The side where the ball would bounce based on its current position and the shape's position.
  */
-export const getHitSide = (ball: Ball, shape: ScreenObject): HitSide => {
+export const getHitSide = (ball: BallState, shape: ScreenObject): HitSide => {
 
     const shapeLeft = shape.left;
     const shapeRight = shape.left + shape.width;
@@ -158,7 +158,7 @@ export const getHitSide = (ball: Ball, shape: ScreenObject): HitSide => {
 
 /**
  * Changes the angle based on the position of impact.
- * @param {Ball} ball. A ball object
+ * @param {BallState} ball. A ball object
  * @param {Paddle} paddle. A paddle object
  * @returns {number}. An angle that is slightly altered.
  */

@@ -1,7 +1,7 @@
 import "jest";
-import { Ball } from "../Definitions/Ball";
 import { ScreenObject } from "../Definitions/ScreenObject";
 import { angleRandomizer, getBlocks, getDirectionFromAngle, getHitSide, overlaps } from "../Lib";
+import { BallState } from "../State/Definition/BallState";
 
 describe("Lib tests", () => {
 
@@ -129,7 +129,7 @@ describe("Lib tests", () => {
             width: 1,
             height: 1,
             angle: 360
-        } as Ball;
+        } as BallState;
 
         // Act
         const result = getHitSide(ball, shape);
@@ -153,7 +153,7 @@ describe("Lib tests", () => {
             width: 1,
             height: 1,
             angle: 270
-        } as Ball;
+        } as BallState;
 
         // Act
         const result = getHitSide(ball, shape);
@@ -177,7 +177,7 @@ describe("Lib tests", () => {
             width: 1,
             height: 1,
             angle: 180
-        } as Ball;
+        } as BallState;
 
         // Act
         const result = getHitSide(ball, shape);
@@ -201,7 +201,7 @@ describe("Lib tests", () => {
             width: 1,
             height: 1,
             angle: 90
-        } as Ball;
+        } as BallState;
 
         // Act
         const result = getHitSide(ball, shape);

@@ -3,11 +3,11 @@ import React, { CSSProperties } from "react";
 import { Bounce, HitBlock } from "../Constants/Base64Audio";
 import { GameFieldBorderColor, GameTick } from "../Constants/Constants";
 import { Walls } from "../Constants/WallConstants";
-import { Ball } from "../Definitions/Ball";
 import { GameObject } from "../Definitions/GameObject";
 import { getGameDimensions } from "../GameDimensions";
 import { getBounceAction, getUpdatedOjbect, overlaps } from "../Lib";
-import { AppState } from "../State/AppState";
+import { AppState } from "../State/Definition/AppState";
+import { BallState } from "../State/Definition/BallState";
 import { GameActions } from "../State/GameActions";
 import { appState, appStore } from "../State/Store";
 
@@ -292,10 +292,10 @@ export class Main extends React.Component<{}, AppState> {
 
     /**
      * Returns css properties for positioning and drawing the ball.
-     * @param {Ball} ball.
+     * @param {BallState} ball.
      * @returns {CSSProperties}.
      */
-    private ballStyle(ball: Ball): CSSProperties {
+    private ballStyle(ball: BallState): CSSProperties {
         const newPosition = this.positionStyle(ball);
         newPosition.borderRadius = "50%";
         newPosition.backgroundImage = ball.color;

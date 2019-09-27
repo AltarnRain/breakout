@@ -1,9 +1,9 @@
-import { GameObject } from "./GameObject";
+import { GameObject } from "../../Definitions/GameObject";
 
 /**
  * Describes the ball object.
  */
-export interface Ball extends GameObject {
+export interface BallState extends GameObject {
     /**
      * The angle in degrees at where the ball is heading.
      */

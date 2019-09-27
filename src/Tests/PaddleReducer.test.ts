@@ -1,6 +1,6 @@
 import "jest";
-import { Paddle } from "../Definitions/Paddle";
 import { paddleReducer } from "../Reducers/PaddleReducer";
+import { PaddleState } from "../State/Definition/PaddleState";
 import { GameActions } from "../State/GameActions";
 
 describe("PaddleReducer tests", () => {
@@ -14,7 +14,7 @@ describe("PaddleReducer tests", () => {
 
     it("can move", () => {
         // Arrange
-        const paddle: Paddle = {
+        const paddle: PaddleState = {
             color: "white",
             height: 10,
             isPaddle: true,
@@ -35,7 +35,7 @@ describe("PaddleReducer tests", () => {
 
     it("wont set the paddle beyond the game left sizd", () => {
         // Arrange
-        const paddle: Paddle = {
+        const paddle: PaddleState = {
             color: "white",
             height: 10,
             isPaddle: true,
@@ -55,7 +55,7 @@ describe("PaddleReducer tests", () => {
 
     it("wont set the paddle beyond the game right side", () => {
         // Arrange
-        const paddle: Paddle = {
+        const paddle: PaddleState = {
             color: "white",
             height: 10,
             isPaddle: true,

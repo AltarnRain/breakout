@@ -1,7 +1,7 @@
 import "jest";
-import { Ball } from "../Definitions/Ball";
-import { Paddle } from "../Definitions/Paddle";
 import { ballReducer } from "../Reducers/BallReducer";
+import { BallState } from "../State/Definition/BallState";
+import { PaddleState } from "../State/Definition/PaddleState";
 import { GameActions } from "../State/GameActions";
 
 describe("ball reducer tests", () => {
@@ -20,12 +20,12 @@ describe("ball reducer tests", () => {
 
     it ("goes up at 90 degrees", () => {
         // Arrange
-        const ball: Ball = {
+        const ball: BallState = {
             left: 50,
             top: 50,
             angle: 180,
             velocity: 1,
-        } as Ball;
+        } as BallState;
 
         ball.angle = 90;
 
@@ -39,12 +39,12 @@ describe("ball reducer tests", () => {
 
     it ("goes right at 180 degrees", () => {
         // Arrange
-        const ball: Ball = {
+        const ball: BallState = {
             left: 50,
             top: 50,
             angle: 180,
             velocity: 1,
-        } as Ball;
+        } as BallState;
 
         // Act
         const newBall = ballReducer(ball, {type: GameActions.tick});
@@ -61,14 +61,14 @@ describe("ball reducer tests", () => {
             top: 50,
             angle: 180,
             width: 50
-        } as unknown as Ball;
+        } as unknown as BallState;
 
         const paddle = {
             left: 100,
             top: 50,
             width: 200,
             isPaddle: true
-        } as Paddle;
+        } as PaddleState;
 
         // Act
         const result = ballReducer(ball, { type: GameActions.ballBounceHorizantally, payload: paddle});
