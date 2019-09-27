@@ -6,6 +6,7 @@ import { angleRandomizer, changeAngle, getNextX, getNextY } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
 import { BallState } from "../State/Definition/BallState";
 import { GameActions } from "../State/GameActions";
+import produce from "immer";
 
 const gameDimensions = getGameDimensions();
 
@@ -23,10 +24,14 @@ export const ballReducer = (state: BallState = getNewState(), action: ActionPayl
         }
 
         case GameActions.tick: {
-            const x = getNextX(state.angle, state.velocity, state.left);
-            const y = getNextY(state.angle, state.velocity, state.top);
 
-            return { ...state, left: x, top: y };
+            return produce(state, (draftState) => {
+                const left = getNextX(state.angle, state.velocity, state.left);
+                const top = getNextY(state.angle, state.velocity, state.top);
+
+                draftState.top = left;
+                draftState.left = top;
+            });
         }
 
         case GameActions.ballBounceHorizantally:
