@@ -26,7 +26,7 @@ export const blockReducer = (state: BlockState = getNewState(), action: ActionPa
             }
 
         case GameActions.hitBlock:
-            if (action.payload && action.payload) {
+            if (action.payload) {
                 const hitBlockState = [...state.blocks];
                 const hitBlockIndex = hitBlockState.indexOf(action.payload);
 
