@@ -1,7 +1,7 @@
+import produce from "immer";
 import { Action } from "redux";
 import { GameState } from "../State/Definition/GameState";
 import { GameActions } from "../State/GameActions";
-import produce from "immer";
 
 /**
  * game state reducer. Keeps track of score, losing a game, etc.
@@ -23,7 +23,7 @@ export const gameStateReducer = (state: GameState = getNewState(), action: Actio
             });
         case GameActions.hitBlock:
             return produce(state, (draftObject) => {
-                draftObject.score +=1;
+                draftObject.score += 1;
             });
         case GameActions.resume:
             return produce(state, (draftObject) => {

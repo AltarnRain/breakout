@@ -1,4 +1,5 @@
 import { Howl } from "howler";
+import produce from "immer";
 import { Action } from "redux";
 import { Bounce, HitBlock } from "../Constants/Base64Audio";
 import { SoundState } from "../State/Definition/SoundState";
@@ -14,12 +15,22 @@ import { GameActions } from "../State/GameActions";
 export const soundReducer = (state: SoundState = getNewState(), action: Action): SoundState => {
     switch (action.type) {
         case GameActions.hitBlock:
-            state.hitBlock.play();
+            if (state.sounds) {
+                state.hitBlock.play();
+            }
+
             break;
         case GameActions.ballBounceHorizantally:
         case GameActions.ballBounceVertically:
-            state.bounce.play();
+            if (state.sounds) {
+                state.bounce.play();
+            }
+
             break;
+        case GameActions.toggleSound:
+            return produce(state, (draftObject) => {
+                draftObject.sounds = !draftObject.sounds;
+            });
     }
 
     return state;
@@ -31,6 +42,7 @@ const getNewState = (): SoundState => {
 
     return {
         bounce: bounceSound,
-        hitBlock: hitBlockSound
+        hitBlock: hitBlockSound,
+        sounds: true,
     };
 };

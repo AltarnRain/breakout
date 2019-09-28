@@ -92,14 +92,19 @@ export class Main extends React.Component<{}, AppState> {
     }
 
     private onKeyUp(e: KeyboardEvent): void {
-        switch (e.code) {
-            case "KeyW":
-                appStore().dispatch({ type: GameActions.nextLevel });
-                break;
-            case "Space":
-                appStore().dispatch({ type: GameActions.pause });
-                break;
+        if (this.state.gameState.gameMode === "running") {
+            switch (e.code) {
+                case "Space":
+                    appStore().dispatch({ type: GameActions.pause });
+                    return;
+                case "KeyW":
+                    appStore().dispatch({ type: GameActions.nextLevel });
+                    return;
+            }
+        }
 
+        if (e.code === "KeyS") {
+            appStore().dispatch({ type: GameActions.toggleSound });
         }
     }
 
@@ -203,6 +208,7 @@ export class Main extends React.Component<{}, AppState> {
                 draftObject.blockState = appState().blockState;
                 draftObject.gameState = appState().gameState;
                 draftObject.paddle = appState().paddle;
+                draftObject.soundState = appState().soundState;
             });
 
             this.setState(newComponentState);
@@ -291,8 +297,9 @@ export class Main extends React.Component<{}, AppState> {
         return (
             <div>
                 <div style={this.gameScorebarStyle()} >
-                    <div key={1} style={{ color: "white", justifyContent: "center", marginLeft: "10px" }}>Level: {this.state.gameState.level}</div>>
-                    <div key={2} style={{ color: "white", justifyContent: "center" }}>Score: {this.state.gameState.score}</div>>
+                    <div style={{ width: "10%", color: "white", marginTop: "3px", marginLeft: "10px" }}>Level: {this.state.gameState.level}</div>>
+                    <div style={{ width: "10%", color: "white", marginTop: "3px", }}>Score: {this.state.gameState.score}</div>>
+                    <div style={{ width: "80%", color: "white", marginRight: "10px", marginTop: "3px", textAlign: "right" }}>Press S to turn sound {this.state.soundState.sounds ? "off" : "on"}</div>
                 </div>
                 <>
                     {
