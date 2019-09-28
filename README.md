@@ -1,7 +1,11 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# Goals
+* Use Redux for state management
+* Figure out hit detection
+* Figure out how to make an object travel using an angle and not simple additions or deductions from an X and Y coordinate
+* Use React to render
+* Render at 60 fps.
+* Play sounds
 
-
-This projects uses redux for stage management and event management. Game changes are done using redux dispatches to manipulate game state. React is reduced (no pun intended) to a 'dumb' rendering engine of DOM elements 60 times a second.
-
-So far this game has been an interesting exploration of calculation of angles.
+This was a very educational project an I can safely say I'm going to use Redux for every future project as well as Immer.
