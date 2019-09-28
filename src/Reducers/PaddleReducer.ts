@@ -1,4 +1,5 @@
 
+import produce from "immer";
 import { PaddleColor, PaddleHeightFactor, PaddlePositionFactor, PaddleWithFactor } from "../Constants/Constants";
 import { getGameDimensions } from "../GameDimensions";
 import ActionPayload from "../State/ActionPayLoad";
@@ -21,41 +22,38 @@ export const paddleReducer = (state: PaddleState = getNewState(), action: Action
 
         case GameActions.paddleMove:
 
-            // Prevent the paddle from being drawn outside the playfield.
-            if (typeof (action.payload) !== "undefined") {
+            return produce(state, (draftObject) => {
 
-                let x;
+                // Prevent the paddle from being drawn outside the playfield.
+                if (typeof (action.payload) !== "undefined") {
 
-                if (action.payload - state.width / 2 <= 0) {
-                    x = 0;
-                } else if (action.payload - state.width / 2 >= (gameDimensions.size - state.width)) {
-                    x = gameDimensions.size - state.width;
-                } else {
-                    x = action.payload - (state.width / 2);
+                    let x;
+
+                    if (action.payload - state.width / 2 <= 0) {
+                        x = 0;
+                    } else if (action.payload - state.width / 2 >= (gameDimensions.size - state.width)) {
+                        x = gameDimensions.size - state.width;
+                    } else {
+                        x = action.payload - (state.width / 2);
+                    }
+
+                    draftObject.left = x;
                 }
-
-                if (state.left === x) {
-                    return state;
-                } else {
-                    const newState = { ...state, left: x };
-                    return newState;
-                }
-            } else {
-                return state;
-            }
+            });
 
         case GameActions.nextLevel:
-            const nextLevelPaddle = { ...state };
+            return produce(state, (draftObject) => {
 
-            // Redude the paddle size each level by 5%
-            nextLevelPaddle.width *= 0.95;
+                // Redude the paddle size each level by 5%
+                const newWidth = draftObject.width * 0.95;
 
-            if (nextLevelPaddle.width < gameDimensions.size / PaddleHeightFactor / 2) {
-                // Paddle doesn't get smaller than half its size.
-                return state;
-            } else {
-                return nextLevelPaddle;
-            }
+                if (newWidth < gameDimensions.size / PaddleHeightFactor / 2) {
+                    // Paddle doesn't get smaller than half its size.
+                    return state;
+                } else {
+                    draftObject.width = newWidth;
+                }
+            });
 
         default:
             return state;
