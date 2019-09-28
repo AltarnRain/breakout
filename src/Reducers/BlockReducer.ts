@@ -1,3 +1,4 @@
+import produce from "immer";
 import { Block } from "../Definitions/Block";
 import { getGameDimensions } from "../GameDimensions";
 import { getBlocks } from "../Lib";
@@ -26,55 +27,40 @@ export const blockReducer = (state: BlockState = getNewState(), action: ActionPa
             }
 
         case GameActions.hitBlock:
-            if (action.payload) {
-                const hitBlockState = [...state.blocks];
-                const hitBlockIndex = hitBlockState.indexOf(action.payload);
-
-                hitBlockState[hitBlockIndex].hit = true;
-
-                return { ...state, blocks: hitBlockState };
-            }
-
-            return state;
+            return produce(state, (draftObject) => {
+                if (action.payload) {
+                    const hitBlockIndex = state.blocks.indexOf(action.payload);
+                    draftObject.blocks[hitBlockIndex].hit = true;
+                }
+            });
 
         case GameActions.tick:
 
-            const hitBlocks = state.blocks.filter((b) => b.hit === true);
+            return produce(state, (draftObject) => {
+                const hitBlocks = draftObject.blocks.filter((b) => b.hit === true);
 
-            if (hitBlocks.length > 0) {
+                if (hitBlocks.length > 0) {
 
-                // Reduce a hit block by 10% of its original height
-                const widthReductionFactor = calculateBlockWidth(state.columns) * 0.1;
-                const heightReductionFactor = calculateBlockHeight(state.rows) * 0.1;
+                    // Reduce a hit block by 10% of its original height
+                    const widthReductionFactor = calculateBlockWidth(draftObject.columns) * 0.1;
+                    const heightReductionFactor = calculateBlockHeight(draftObject.rows) * 0.1;
 
-                const tickBlocks = [...state.blocks];
+                    // Redcue size for a hit block
+                    hitBlocks.forEach((block) => {
+                        block.width -= widthReductionFactor;
+                        block.height -= heightReductionFactor;
 
-                // Redcue size for a hit block
-                hitBlocks.forEach((block) => {
+                        // Add half of the mount of pixels to the top and left to make it appear as the block shrinks to its center.
+                        block.top += heightReductionFactor / 2;
+                        block.left += widthReductionFactor / 2;
 
-                    const smallerBlock = {...block};
-
-                    smallerBlock.width -= widthReductionFactor;
-                    smallerBlock.height -= heightReductionFactor;
-
-                    // Add half of the mount of pixels to the top and left to make it appear as the block shrinks to its center.
-                    smallerBlock.top += heightReductionFactor / 2;
-                    smallerBlock.left += widthReductionFactor / 2;
-
-                    const hitBlockIndex = tickBlocks.indexOf(block);
-                    tickBlocks[hitBlockIndex] = smallerBlock;
-
-                    if (block.height <= 0 || block.width <= 0) {
-                        // Block has reached size '0', time to remove it.
-                        tickBlocks.splice(hitBlockIndex, 1);
-                    }
-
-                });
-
-                return { ...state, blocks: tickBlocks };
-            } else {
-                return state;
-            }
+                        if (block.height <= 0 || block.width <= 0) {
+                            // Block has reached size '0', time to remove it.
+                            draftObject.blocks.splice(draftObject.blocks.indexOf(block), 1);
+                        }
+                    });
+                }
+            });
 
         default:
             return state;
