@@ -1,6 +1,7 @@
 import { Action } from "redux";
 import { GameState } from "../State/Definition/GameState";
 import { GameActions } from "../State/GameActions";
+import produce from "immer";
 
 /**
  * game state reducer. Keeps track of score, losing a game, etc.
@@ -13,15 +14,25 @@ export const gameStateReducer = (state: GameState = getNewState(), action: Actio
         case GameActions.reset:
             return getNewState();
         case GameActions.gameLost:
-            return { ...state, gameMode: "ended" };
+            return produce(state, (draftObject) => {
+                draftObject.gameMode = "ended";
+            });
         case GameActions.nextLevel:
-            return { ...state, level: state.level + 1 };
+            return produce(state, (draftObject) => {
+                draftObject.level += 1;
+            });
         case GameActions.hitBlock:
-            return { ...state, score: state.score + 1 };
+            return produce(state, (draftObject) => {
+                draftObject.score +=1;
+            });
         case GameActions.resume:
-            return { ...state, gameMode: "running" };
+            return produce(state, (draftObject) => {
+                draftObject.gameMode = "running";
+            });
         case GameActions.pause:
-            return { ...state, gameMode: "paused" };
+            return produce(state, (draftObject) => {
+                draftObject.gameMode = "paused";
+            });
         default:
             return state;
     }
