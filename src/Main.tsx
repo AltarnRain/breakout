@@ -1,9 +1,10 @@
+import produce from "immer";
 import React, { CSSProperties } from "react";
 import { GameFieldBorderColor, GameTick } from "./Constants/Constants";
 import { Walls } from "./Constants/WallConstants";
 import { GameObject } from "./Definitions/GameObject";
 import { getGameDimensions } from "./GameDimensions";
-import { getBounceAction, getUpdatedOjbect, overlaps } from "./Lib";
+import { getBounceAction, overlaps } from "./Lib";
 import { AppState } from "./State/Definition/AppState";
 import { BallState } from "./State/Definition/BallState";
 import { GameActions } from "./State/GameActions";
@@ -196,10 +197,15 @@ export class Main extends React.Component<{}, AppState> {
 
             appStore().dispatch({ type: GameActions.tick });
 
-            const updatedState = getUpdatedOjbect(appState(), this.state);
-            if (updatedState) {
-                this.setState(updatedState);
-            }
+            const newComponentState = produce(this.state, (draftObject) => {
+                draftObject.ball = appState().ball;
+                draftObject.blockState = appState().blockState;
+                draftObject.gameState = appState().gameState;
+                draftObject.paddle = appState().paddle;
+            });
+
+            this.setState(newComponentState);
+
             this.tickStart = tick;
         }
 

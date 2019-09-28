@@ -57,7 +57,7 @@ export const BallSpeedIncreasePerBlock = 1.02;
 /**
  * Speed increase factor for each level.
  */
-export const BallSpeedIncreasePerLevel = 0.5;
+export const BallSpeedIncreasePerLevel = 1.05;
 
 /**
  * Border color
