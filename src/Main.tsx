@@ -2,6 +2,7 @@ import produce from "immer";
 import React, { CSSProperties } from "react";
 import { GameFieldBorderColor, GameTick } from "./Constants/Constants";
 import { Walls } from "./Constants/WallConstants";
+import { Block } from "./Definitions/Block";
 import { GameObject } from "./Definitions/GameObject";
 import { getGameDimensions } from "./GameDimensions";
 import { getBounceAction, overlaps } from "./Lib";
@@ -265,6 +266,12 @@ export class Main extends React.Component<{}, AppState> {
         };
     }
 
+    private blockStyle(block: Block): CSSProperties {
+        const css = this.positionStyle(block);
+        css.backgroundColor = `rgba(${block.red}, ${block.green}, ${block.blue}, 1`;
+        return css;
+    }
+
     /**
      * Returns css properties for positioning and drawing the ball.
      * @param {BallState} ball.
@@ -292,7 +299,7 @@ export class Main extends React.Component<{}, AppState> {
                         this.state.blockState && this.state.paddle && this.state.ball ?
                             <div style={this.gameFieldStyle()}>
                                 {
-                                    this.state.blockState.blocks.map((b, index) => <div key={index} style={this.positionStyle(b)} />)
+                                    this.state.blockState.blocks.map((b, index) => <div key={index} style={this.blockStyle(b)} />)
                                 }
                                 <div style={this.positionStyle(this.state.paddle)} />
                                 <div style={this.ballStyle(this.state.ball)} />

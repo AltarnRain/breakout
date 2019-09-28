@@ -17,4 +17,34 @@ export interface Block extends GameObject {
      * True if the block is hit.
      */
     hit: boolean;
+
+    /**
+     * Red color.
+     */
+    red: number;
+
+    /**
+     * Blue color
+     */
+    blue: number;
+
+    /**
+     * Green color
+     */
+    green: number;
+
+    /**
+     * The value to be added to red
+     */
+    redAdd: number;
+
+    /**
+     * The value to be added to blue.
+     */
+    blueAdd: number;
+
+    /**
+     * The value to be added to green.
+     */
+    greenAdd: number;
 }

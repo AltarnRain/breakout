@@ -1,3 +1,4 @@
+import produce from "immer";
 import { BallResizeFactor, BallSpeedIncreasePerBlock, BallSpeedIncreasePerLevel, InitialBallVelocity } from "../Constants/Constants";
 import { ScreenObject } from "../Definitions/ScreenObject";
 import { getGameDimensions } from "../GameDimensions";
@@ -6,7 +7,6 @@ import { angleRandomizer, changeAngle, getNextX, getNextY } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
 import { BallState } from "../State/Definition/BallState";
 import { GameActions } from "../State/GameActions";
-import produce from "immer";
 
 const gameDimensions = getGameDimensions();
 

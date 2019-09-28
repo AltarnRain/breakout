@@ -1,4 +1,5 @@
 import produce from "immer";
+import { MaxBlue, MaxRed, MinBlue, MinRed, MinGreen, MaxGreen } from "../Constants/Constants";
 import { Block } from "../Definitions/Block";
 import { getGameDimensions } from "../GameDimensions";
 import { getBlocks } from "../Lib";
@@ -60,8 +61,26 @@ export const blockReducer = (state: BlockState = getNewState(), action: ActionPa
                         }
                     });
                 }
-            });
 
+                draftObject.blocks.forEach((block) => {
+
+                    if (block.red > MaxRed || block.red < MinRed) {
+                        block.redAdd *= -1;
+                    }
+
+                    if (block.green > MaxGreen || block.green < MinGreen) {
+                        block.greenAdd *= -1;
+                    }
+
+                    if (block.blue > MaxBlue || block.blue < MinBlue) {
+                        block.blueAdd *= -1;
+                    }
+
+                    block.red += block.redAdd;
+                    block.green += block.greenAdd;
+                    block.blue += block.blueAdd;
+                });
+            });
         default:
             return state;
     }

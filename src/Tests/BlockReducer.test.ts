@@ -21,7 +21,7 @@ describe("Block reduder tests", () => {
 
     it("marks a block as hit when it is hit", () => {
         // Arrange
-        const blockState = {
+        const blockState: BlockState = {
             blocks: [
                 {
                     color: "white",
@@ -32,9 +32,19 @@ describe("Block reduder tests", () => {
                     x: 0,
                     y: 0,
                     hit: false,
+                    red: 0,
+                    redAdd: 0,
+                    blue: 0,
+                    blueAdd: 0,
+                    green: 0,
+                    greenAdd: 0
                 }
             ],
-        } as BlockState;
+            columns: 0,
+            rows: 0,
+            height: 0,
+            width: 0
+        };
 
         // Act
         const newState = blockReducer(blockState, { type: GameActions.hitBlock, payload: blockState.blocks[0] }).blocks[0];
@@ -56,6 +66,12 @@ describe("Block reduder tests", () => {
                     top: 0,
                     x: 0,
                     y: 0,
+                    red: 0,
+                    redAdd: 0,
+                    blue: 0,
+                    blueAdd: 0,
+                    green: 0,
+                    greenAdd: 0
                 }
             ],
             width: 100,
@@ -85,6 +101,12 @@ describe("Block reduder tests", () => {
                     x: 0,
                     y: 0,
                     hit: true,
+                    red: 0,
+                    redAdd: 2,
+                    blue: 0,
+                    blueAdd: 2,
+                    green: 0,
+                    greenAdd: 0
                 }
             ],
             columns: 1,
@@ -98,5 +120,39 @@ describe("Block reduder tests", () => {
 
         // Assert
         expect(result).toBe(undefined);
+    });
+
+    it("increases the red a blue color of a block each game tick", () => {
+        // Arrange
+        const block: BlockState = {
+            blocks: [
+                {
+                    color: "white",
+                    height: 20,
+                    width: 20,
+                    left: 0,
+                    top: 0,
+                    x: 0,
+                    y: 0,
+                    hit: false,
+                    red: 0,
+                    blue: 0,
+                    green: 0,
+                    redAdd: 2,
+                    blueAdd: 0,
+                    greenAdd: 0}
+            ],
+            columns: 1,
+            rows: 1,
+            height: 10,
+            width: 10
+        };
+
+        // Act
+        const result = blockReducer(block, { type: GameActions.tick }).blocks[0];
+
+        // Assert
+        expect(result.red).toBeGreaterThan(0);
+        expect(result.blue).toBeGreaterThan(0);
     });
 });

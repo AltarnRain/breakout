@@ -68,3 +68,34 @@ export const GameFieldBorderColor = "#2c1145";
  * The paddle color
  */
 export const PaddleColor = "#8b25ae";
+
+/**
+ * Minimal amount of red in a block
+ */
+export const MinRed = 30;
+
+/**
+ * Maximum amount of red in a block
+ */
+export const MaxRed = 60;
+
+/**
+ * Minimal amount of green in a blcok
+ */
+
+export const MinGreen = 0;
+
+/**
+ * Maximum amount of green in a block
+ */
+export const MaxGreen = 60;
+
+/**
+ * Minimal amount of blue in a block
+ */
+export const MinBlue = 80;
+
+/**
+ * Maximum amount of blue in a block
+ */
+export const MaxBlue = 120;

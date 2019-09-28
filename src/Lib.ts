@@ -2,7 +2,7 @@
  * This is a library module that contains functions user throughout the entire game.
  */
 
-import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, DegreeToRadian } from "./Constants/Constants";
+import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, DegreeToRadian, MaxBlue, MaxRed, MinBlue, MinRed } from "./Constants/Constants";
 import { Block } from "./Definitions/Block";
 import { ScreenObject } from "./Definitions/ScreenObject";
 import { Direction, hitSide as HitSide } from "./Definitions/Types";
@@ -16,30 +16,45 @@ import { GameActions } from "./State/GameActions";
  * @returns {Block[]}. A 1d array that contains block objects.
  */
 export const getBlocks = (numberOfBlockRows: number, numberOfBlockColumns: number): Block[] => {
+    let red = MinRed;
+    let blue = MinBlue;
+
+    let redAdd =  5;
+    let blueAdd = 5;
 
     const blocks: Block[] = [];
     for (let r = 0; r < numberOfBlockRows; r++) {
         for (let c = 0; c < numberOfBlockColumns; c++) {
 
-            const red = Math.ceil(Math.random() * 70);
-            const green = Math.ceil(Math.random() * 200);
-
-            let trans = Math.random();
-            if (trans < 0.5) {
-                trans = 1;
-            }
             const block: Block = {
-                color: `rgba(${red}, ${green}, 120, ${trans})`,
+                color: `rgba(${red}, 0, ${blue}, 1`,
                 x: c,
                 y: r,
                 left: 0,
                 top: 0,
                 height: 0,
                 width: 0,
-                hit: false
+                hit: false,
+                red,
+                blue,
+                green: 0,
+                redAdd: 1,
+                blueAdd: 1,
+                greenAdd: 1
             };
 
+            red += redAdd;
+            blue += blueAdd;
+
             blocks.push(block);
+
+            if (red > MaxRed || red < MinRed) {
+                redAdd *= -1;
+            }
+
+            if (blue > MaxBlue || blue < MinBlue) {
+                blueAdd *= -1;
+            }
         }
     }
 
