@@ -36,9 +36,8 @@ export const ballReducer = (state: BallState = getNewState(), action: ActionPayl
 
         case GameActions.ballBounceHorizantally:
         case GameActions.ballBounceVertically: {
-            if (action.payload && action.payload !== state.lastObject) {
-
-                return produce(state, (draftObject) => {
+            return produce(state, (draftObject) => {
+                if (action.payload && action.payload !== state.lastObject) {
 
                     draftObject.lastObject = action.payload;
 
@@ -60,22 +59,20 @@ export const ballReducer = (state: BallState = getNewState(), action: ActionPayl
                             draftObject.angle = 180 - draftObject.angle;
                         }
                     }
-                });
-            }
-
-            return state;
+                }
+            });
         }
 
         case GameActions.hitBlock:
             // Increase the ball speed for each hit block
             return produce(state, (draftObject) => {
-                draftObject. velocity = state.velocity * BallSpeedIncreasePerBlock;
+                draftObject.velocity = state.velocity * BallSpeedIncreasePerBlock;
             });
         case GameActions.nextLevel:
             // Increase ball speed for each level.
             // Increase the ball speed for each hit block
             return produce(state, (draftObject) => {
-                draftObject. velocity = state.velocity * BallSpeedIncreasePerLevel ;
+                draftObject.velocity = state.velocity * BallSpeedIncreasePerLevel;
             });
         default:
             return state;
