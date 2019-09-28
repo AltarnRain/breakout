@@ -29,36 +29,38 @@ export const ballReducer = (state: BallState = getNewState(), action: ActionPayl
                 const left = getNextX(state.angle, state.velocity, state.left);
                 const top = getNextY(state.angle, state.velocity, state.top);
 
-                draftState.top = left;
-                draftState.left = top;
+                draftState.top = top;
+                draftState.left = left;
             });
         }
 
         case GameActions.ballBounceHorizantally:
         case GameActions.ballBounceVertically: {
             if (action.payload && action.payload !== state.lastObject) {
-                let angle = state.angle;
-                let angleChange = 1;
 
-                if (action.type === GameActions.ballBounceHorizantally) {
+                return produce(state, (draftObject) => {
 
-                    // If the baddle is hit we want the ball's angle to increase if it hit
-                    // the edges.
-                    if (Guard.isPaddle(action.payload)) {
-                        // calculate where the ball hit relative to the shape from the left size.
-                        angleChange = changeAngle(state, action.payload);
+                    draftObject.lastObject = action.payload;
+
+                    if (action.type === GameActions.ballBounceHorizantally) {
+                        let angleChange = 1;
+
+                        // If the baddle is hit we want the ball's angle to increase if it hit
+                        // the edges.
+                        if (Guard.isPaddle(action.payload)) {
+                            // calculate where the ball hit relative to the shape from the left size.
+                            angleChange = changeAngle(state, action.payload);
+                        }
+
+                        // When the ball top or bottom makes contact, multiply the current angle by -1 for it to bounce.
+                        draftObject.angle = (draftObject.angle + angleChange) * -1;
+                    } else {
+                        if (action.payload && action.payload !== state.lastObject) {
+                            // If the ball hits a side, the new angle is 180 - current angle.
+                            draftObject.angle = 180 - draftObject.angle;
+                        }
                     }
-
-                    // When the ball top or bottom makes contact, multiply the current angle by -1 for it to bounce.
-                    angle = (angle + angleChange) * -1;
-                } else {
-                    if (action.payload && action.payload !== state.lastObject) {
-                        // If the ball hits a side, the new angle is 180 - current angle.
-                        angle = 180 - angle;
-                    }
-                }
-
-                return { ...state, angle, lastObject: action.payload };
+                });
             }
 
             return state;
@@ -66,10 +68,15 @@ export const ballReducer = (state: BallState = getNewState(), action: ActionPayl
 
         case GameActions.hitBlock:
             // Increase the ball speed for each hit block
-            return { ...state, velocity: state.velocity * BallSpeedIncreasePerBlock };
+            return produce(state, (draftObject) => {
+                draftObject. velocity = state.velocity * BallSpeedIncreasePerBlock;
+            });
         case GameActions.nextLevel:
             // Increase ball speed for each level.
-            return { ...state, velocity: state.velocity + BallSpeedIncreasePerLevel };
+            // Increase the ball speed for each hit block
+            return produce(state, (draftObject) => {
+                draftObject. velocity = state.velocity * BallSpeedIncreasePerLevel ;
+            });
         default:
             return state;
     }

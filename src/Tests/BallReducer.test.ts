@@ -43,7 +43,7 @@ describe("ball reducer tests", () => {
             left: 50,
             top: 50,
             angle: 180,
-            velocity: 1,
+            velocity: 10,
         } as BallState;
 
         // Act
