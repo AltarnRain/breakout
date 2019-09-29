@@ -69,15 +69,15 @@ export const getBlocks = (numberOfBlockRows: number, numberOfBlockColumns: numbe
  */
 export const overlaps = (shape1: ScreenObject, shape2: ScreenObject): boolean => {
 
-    const left1 = Math.ceil(shape1.left);
-    const right1 = Math.floor(shape1.left + shape1.width);
-    const top1 = Math.ceil(shape1.top);
-    const bottom1 = Math.floor(shape1.top + shape1.height);
+    const left1 = shape1.left;
+    const right1 = shape1.left + shape1.width;
+    const top1 =  shape1.top;
+    const bottom1 = shape1.top + shape1.height;
 
-    const left2 = Math.ceil(shape2.left);
-    const right2 = Math.floor(shape2.left + shape2.width);
-    const top2 = Math.ceil(shape2.top);
-    const bottom2 = Math.floor(shape2.top + shape2.height);
+    const left2 = shape2.left;
+    const right2 = shape2.left + shape2.width;
+    const top2 = shape2.top;
+    const bottom2 = shape2.top + shape2.height;
 
     if (bottom1 < top2 || top1 > bottom2) {
         return false;
