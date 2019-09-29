@@ -42,7 +42,7 @@ export const ballReducer = (state: BallState = getNewState(), action: ActionPayl
                     draftObject.lastObject = action.payload;
 
                     if (action.type === GameActions.ballBounceHorizantally) {
-                        let angleChange = 1;
+                        let angleChange = 0;
 
                         // If the baddle is hit we want the ball's angle to increase if it hit
                         // the edges.

@@ -3,6 +3,8 @@ import { getBlocks } from "../Lib";
 import { blockReducer } from "../Reducers/BlockReducer";
 import { BlockState } from "../State/Definition/BlockState";
 import { GameActions } from "../State/GameActions";
+import { blockStatement } from "@babel/types";
+import { MaxRed, MinRed, MaxBlue, MinBlue } from "../Constants/Constants";
 
 describe("Block reduder tests", () => {
 
@@ -122,7 +124,7 @@ describe("Block reduder tests", () => {
         expect(result).toBe(undefined);
     });
 
-    it("increases the red a blue color of a block each game tick", () => {
+    it("increases the red a blue color of a block when a block is hit", () => {
         // Arrange
         const block: BlockState = {
             blocks: [
@@ -134,13 +136,14 @@ describe("Block reduder tests", () => {
                     top: 0,
                     x: 0,
                     y: 0,
-                    hit: false,
-                    red: 0,
-                    blue: 0,
-                    green: 0,
+                    hit: true,
+                    red: MaxRed - MinRed,
+                    blue: MaxBlue - MinBlue,
                     redAdd: 2,
-                    blueAdd: 0,
-                    greenAdd: 0}
+                    blueAdd: 2,
+                    green: 0,
+                    greenAdd: 0,
+                }
             ],
             columns: 1,
             rows: 1,
@@ -149,7 +152,7 @@ describe("Block reduder tests", () => {
         };
 
         // Act
-        const result = blockReducer(block, { type: GameActions.tick }).blocks[0];
+        const result = blockReducer(block, { type: GameActions.hitBlock, payload: block.blocks[0] }).blocks[0];
 
         // Assert
         expect(result.red).toBeGreaterThan(0);

@@ -32,6 +32,25 @@ export const blockReducer = (state: BlockState = getNewState(), action: ActionPa
                 if (action.payload) {
                     const hitBlockIndex = state.blocks.indexOf(action.payload);
                     draftObject.blocks[hitBlockIndex].hit = true;
+
+                    draftObject.blocks.forEach((block) => {
+
+                        if (block.red > MaxRed || block.red < MinRed) {
+                            block.redAdd *= -1;
+                        }
+
+                        if (block.green > MaxGreen || block.green < MinGreen) {
+                            block.greenAdd *= -1;
+                        }
+
+                        if (block.blue > MaxBlue || block.blue < MinBlue) {
+                            block.blueAdd *= -1;
+                        }
+
+                        block.red += block.redAdd;
+                        block.green += block.greenAdd;
+                        block.blue += block.blueAdd;
+                    });
                 }
             });
 
@@ -60,26 +79,9 @@ export const blockReducer = (state: BlockState = getNewState(), action: ActionPa
                             draftObject.blocks.splice(draftObject.blocks.indexOf(block), 1);
                         }
                     });
+
+                   
                 }
-
-                draftObject.blocks.forEach((block) => {
-
-                    if (block.red > MaxRed || block.red < MinRed) {
-                        block.redAdd *= -1;
-                    }
-
-                    if (block.green > MaxGreen || block.green < MinGreen) {
-                        block.greenAdd *= -1;
-                    }
-
-                    if (block.blue > MaxBlue || block.blue < MinBlue) {
-                        block.blueAdd *= -1;
-                    }
-
-                    block.red += block.redAdd;
-                    block.green += block.greenAdd;
-                    block.blue += block.blueAdd;
-                });
             });
         default:
             return state;
