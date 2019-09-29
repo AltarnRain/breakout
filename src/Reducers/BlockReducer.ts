@@ -1,5 +1,5 @@
 import produce from "immer";
-import { MaxBlue, MaxRed, MinBlue, MinRed, MinGreen, MaxGreen } from "../Constants/Constants";
+import { MaxBlue, MaxGreen, MaxRed, MinBlue, MinGreen, MinRed } from "../Constants/Constants";
 import { Block } from "../Definitions/Block";
 import { getGameDimensions } from "../GameDimensions";
 import { getBlocks } from "../Lib";
@@ -79,8 +79,6 @@ export const blockReducer = (state: BlockState = getNewState(), action: ActionPa
                             draftObject.blocks.splice(draftObject.blocks.indexOf(block), 1);
                         }
                     });
-
-                   
                 }
             });
         default:
