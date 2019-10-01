@@ -4,8 +4,10 @@
 
 import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, DegreeToRadian, MaxBlue, MaxRed, MinBlue, MinRed } from "./Constants/Constants";
 import { Block } from "./Definitions/Block";
+import { Direction } from "./Definitions/Direction";
+import { Line } from "./Definitions/Line";
 import { ScreenObject } from "./Definitions/ScreenObject";
-import { Direction, hitSide as HitSide } from "./Definitions/Types";
+import { getGameDimensions } from "./GameDimensions";
 import { BallState } from "./State/Definition/BallState";
 import { GameActions } from "./State/GameActions";
 
@@ -19,7 +21,7 @@ export const getBlocks = (numberOfBlockRows: number, numberOfBlockColumns: numbe
     let red = MinRed;
     let blue = MinBlue;
 
-    let redAdd =  5;
+    let redAdd = 5;
     let blueAdd = 5;
 
     const blocks: Block[] = [];
@@ -71,7 +73,7 @@ export const overlaps = (shape1: ScreenObject, shape2: ScreenObject): boolean =>
 
     const left1 = shape1.left;
     const right1 = shape1.left + shape1.width;
-    const top1 =  shape1.top;
+    const top1 = shape1.top;
     const bottom1 = shape1.top + shape1.height;
 
     const left2 = shape2.left;
@@ -111,63 +113,74 @@ export const angleRandomizer = (): number => {
  * @returns {GameActions.ballBounceHorizantally | GameActions.ballBounceVertically }. A ball can bounce vertically or horizantally.
  */
 export const getBounceAction = (ball: BallState, shape: ScreenObject): GameActions.ballBounceHorizantally | GameActions.ballBounceVertically => {
-    const hitSide = getHitSide(ball, shape);
-
-    if (hitSide === "left" || hitSide === "right") {
-        return GameActions.ballBounceVertically;
-    } else if (hitSide === "top" || hitSide === "bottom") {
-        return GameActions.ballBounceHorizantally;
-    } else {
-        // tslint:disable-next-line: no-console
-        console.log("Failed hit detection");
-        return GameActions.ballBounceHorizantally;
-    }
-};
-
-/**
- * Determine the right action to dispatch when the ball bounces off an object.
- * @param {BallState} ball. Ball object.
- * @param {ScreenObject} shape. A shape object.
- * @returns {HitSide}. The side where the ball would bounce based on its current position and the shape's position.
- */
-export const getHitSide = (ball: BallState, shape: ScreenObject): HitSide => {
-
-    const shapeLeft = shape.left;
-    const shapeRight = shape.left + shape.width;
-    const shapeTop = shape.top;
-    const shapeBottom = shape.top + shape.height;
-
-    const ballLeft = ball.left;
-    const ballRight = ball.left + ball.width;
-
-    const ballTop = ball.top;
-    const ballBottom = ball.top + ball.height;
-
-    const withinVerticalBounds = (ballBottom > shapeTop && ballTop < shapeBottom);
-    const withinHorizantalBounds = (ballRight > shapeLeft && ballLeft < shapeRight);
 
     const directions = getDirectionFromAngle(ball.angle);
 
-    const goingLeft = directions.some((d) => d === "left");
-    const goingRight = directions.some((d) => d === "right");
-    const goingUp = directions.some((d) => d === "up");
-    const goingDown = directions.some((d) => d === "down");
+    let horizantalLine: Line = {} as Line;
+    let verticalLine: Line = {} as Line;
 
-    // Most times the top or bottom of a ScreenObject will be hit so check those first.
-    if (goingUp && withinHorizantalBounds) {
-        return "bottom";
-        // bottom
-    } else if (goingDown && withinHorizantalBounds) {
-        // Top
-        return "top";
-    } else if (goingLeft && withinVerticalBounds) {
-        // Right
-        return "right";
-    } else if (goingRight && withinVerticalBounds) {
-        // Left
-        return "left";
+    if (directions.up) {
+        horizantalLine = {
+            a: {
+                x: shape.left,
+                y: shape.top
+            },
+            b: {
+                x: shape.left + shape.width,
+                y: shape.top
+            }
+        };
+    }
+
+    if (directions.right) {
+        verticalLine = {
+            a: {
+                x: shape.left + shape.width,
+                y: shape.top,
+            },
+            b: {
+                x: shape.left + shape.width,
+                y: shape.top + shape.height,
+            }
+        };
+    }
+
+    if (directions.down) {
+
+        horizantalLine = {
+            a: {
+                x: shape.left,
+                y: shape.top + shape.height,
+            },
+            b: {
+                x: shape.left + shape.width,
+                y: shape.top + shape.height,
+            }
+        };
+    }
+
+    if (directions.left) {
+        verticalLine = {
+            a: {
+                x: shape.left,
+                y: shape.top,
+            },
+            b: {
+                x: shape.left,
+                y: shape.top + shape.height
+            }
+        };
+    }
+
+    const hitLine = getHitLine(ball, horizantalLine, verticalLine);
+
+    if (hitLine === horizantalLine) {
+        return GameActions.ballBounceHorizantally;
+    } else if (hitLine === verticalLine) {
+        return GameActions.ballBounceVertically;
     } else {
-        return undefined;
+        // Default to a horizantal bounce because it is the most likely to occur.
+        return GameActions.ballBounceHorizantally;
     }
 };
 
@@ -214,33 +227,191 @@ export const getNextX = (angle: number, distance: number, currentX: number) => {
  * @param {number} angle. The angle of an object.
  * @returns {Direction[]}. The directions the object is traveling in. e.g. Down-left, or Up-right.
  */
-export const getDirectionFromAngle = (angle: number): Direction[] => {
+export const getDirectionFromAngle = (angle: number): Direction => {
 
     // A ball can travel at two directions at most so the return
     // Value has to be an array with a size of 1 or two.
-    const returnValue: Direction[] = [];
+    const returnValue: Direction = { up: false, down: false, left: false, right: false };
 
     const x = getNextX(angle, 10, 0);
     const y = getNextY(angle, 10, 0);
 
     if (x > 0) {
         // Ball travels to the right
-        returnValue.push("right");
+        returnValue.right = true;
     }
 
     if (x < 0) {
         // Ball travels to the left.
-        returnValue.push("left");
+        returnValue.left = true;
     }
 
     if (y > 0) {
         // Ball travels down.
-        returnValue.push("down");
+        returnValue.down = true;
     }
 
     if (y < 0) {
-        returnValue.push("up");
+        // Ball travels up
+        returnValue.up = true;
     }
 
     return returnValue;
 };
+
+const reverseAngle = (angle: number): number => {
+    let absAngle = Math.abs(angle) + 180;
+
+    if (absAngle > 360) {
+        absAngle -= 360;
+    }
+
+    return absAngle;
+};
+
+/**
+ * Determines which line was hit.
+ * @param {BallState} ball. The ball.
+ * @param {Line} horizantalLine. The horizantal line of a shape. Can be the top or bottom.
+ * @param {Line} verticalLine. The vertical line of a shape. Can be left or right.
+ * @returns {Line}. The hit line. Returns undefined when the hit line could not be found.
+ */
+export const getHitLine = (ball: BallState, horizantalLine: Line, verticalLine: Line): Line | undefined => {
+    const reversedAngle = reverseAngle(ball.angle);
+
+    const gameSize = 100;
+
+    const topLeftLine: Line = {
+        a: {
+            x: getNextX(reversedAngle, gameSize, ball.left),
+            y: getNextY(reversedAngle, gameSize, ball.top),
+        },
+        b: {
+            x: getNextX(ball.angle, gameSize, ball.left),
+            y: getNextY(ball.angle, gameSize, ball.top),
+        }
+    };
+
+    const topRightLine: Line = {
+        a: {
+            x: getNextX(reversedAngle, gameSize, ball.left + ball.width),
+            y: getNextY(reversedAngle, gameSize, ball.top),
+        },
+        b: {
+            x: getNextX(ball.angle, gameSize, ball.left + ball.width),
+            y: getNextY(ball.angle, gameSize, ball.top),
+        }
+    };
+
+    const bottomRightLine: Line = {
+        a: {
+            x: getNextX(reversedAngle, gameSize, ball.left + ball.width),
+            y: getNextY(reversedAngle, gameSize, ball.top + ball.height),
+        },
+        b: {
+            x: getNextX(ball.angle, gameSize, ball.left + ball.width),
+            y: getNextY(ball.angle, gameSize, ball.top + ball.height),
+        }
+    };
+
+    const bottomLeftLine: Line = {
+        a: {
+            x: getNextX(reversedAngle, gameSize, ball.left ),
+            y: getNextY(reversedAngle, gameSize, ball.top + ball.height),
+        },
+        b: {
+            x: getNextX(ball.angle, gameSize, ball.left),
+            y: getNextY(ball.angle, gameSize, ball.top + ball.height),
+        }
+    };
+
+    let horizantolIntersects = 0;
+    let verticalIntersects = 0;
+
+    horizantolIntersects += intersects(
+        topLeftLine,
+        horizantalLine) ? 1 : 0;
+
+    verticalIntersects += intersects(
+        topLeftLine,
+        verticalLine) ? 1 : 0;
+
+    horizantolIntersects += intersects(
+        topRightLine,
+        horizantalLine) ? 1 : 0;
+
+    verticalIntersects += intersects(
+        topRightLine,
+        verticalLine) ? 1 : 0;
+
+    horizantolIntersects += intersects(
+        bottomRightLine,
+        horizantalLine) ? 1 : 0;
+
+    verticalIntersects += intersects(
+        bottomRightLine,
+        verticalLine) ? 1 : 0;
+
+    horizantolIntersects += intersects(
+        bottomLeftLine,
+        horizantalLine) ? 1 : 0;
+
+    verticalIntersects += intersects(
+        bottomLeftLine,
+        verticalLine) ? 1 : 0;
+
+    if (horizantolIntersects > verticalIntersects) {
+        return horizantalLine;
+    } else if (verticalIntersects > horizantolIntersects) {
+        return verticalLine;
+    } else {
+        // tslint:disable-next-line: no-console
+        console.log("Could not determine the hit");
+        return undefined;
+    }
+};
+
+/**
+ * Returns true if the intercet.
+ * Source: https://stackoverflow.com/questions/9043805/test-if-two-lines-intersect-javascript-function
+ */
+export function intersects(line1: Line, line2: Line) {
+
+    const x1 = line1.a.x;
+    const y1 = line1.a.y;
+    const x2 = line1.b.x;
+    const y2 = line1.b.y;
+
+    const x3 = line2.a.x;
+    const y3 = line2.a.y;
+    const x4 = line2.b.x;
+    const y4 = line2.b.y;
+
+    const x = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4));
+    const y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4));
+    if (isNaN(x) || isNaN(y)) {
+        return false;
+    } else {
+        if (x1 >= x2) {
+            if (!(x2 <= x && x <= x1)) { return false; }
+        } else {
+            if (!(x1 <= x && x <= x2)) { return false; }
+        }
+        if (y1 >= y2) {
+            if (!(y2 <= y && y <= y1)) { return false; }
+        } else {
+            if (!(y1 <= y && y <= y2)) { return false; }
+        }
+        if (x3 >= x4) {
+            if (!(x4 <= x && x <= x3)) { return false; }
+        } else {
+            if (!(x3 <= x && x <= x4)) { return false; }
+        }
+        if (y3 >= y4) {
+            if (!(y4 <= y && y <= y3)) { return false; }
+        } else {
+            if (!(y3 <= y && y <= y4)) { return false; }
+        }
+    }
+    return true;
+}

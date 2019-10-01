@@ -1,6 +1,7 @@
 import "jest";
+import { Line } from "../Definitions/Line";
 import { ScreenObject } from "../Definitions/ScreenObject";
-import { angleRandomizer, getBlocks, getDirectionFromAngle, getHitSide, overlaps } from "../Lib";
+import { angleRandomizer, getBlocks, intersects, overlaps, getHitLine } from "../Lib";
 import { BallState } from "../State/Definition/BallState";
 
 describe("Lib tests", () => {
@@ -114,129 +115,79 @@ describe("Lib tests", () => {
         expect(result2).toBe(false);
     });
 
-    it("return left when the ball approaches from left side of a shape", () => {
+    it("returns true when two lines intersect", () => {
         // Arrange
-        const shape = {
-            left: 100,
-            top: 100,
-            width: 100,
-            height: 50
-        } as ScreenObject;
+        const horizantalLine: Line = {
+            a: {
+                x: 100,
+                y: 100,
+            },
+            b: {
+                x: 150,
+                y: 100,
+            }
+        };
 
-        const ball = {
-            left: shape.left + shape.width,
-            top: shape.top + shape.height / 2,
-            width: 1,
-            height: 1,
-            angle: 360
-        } as BallState;
+        const verticalLine: Line = {
+            a: {
+                x: 125,
+                y: 90,
+            },
+            b: {
+                x: 125,
+                y: 120
+            }
+        };
 
         // Act
-        const result = getHitSide(ball, shape);
+        // const intersect1 = intersects(verticalLine, horizantalLine);
+
+        const intersect2 = intersects(verticalLine, horizantalLine);
 
         // Assert
-        expect(result).toBe("left");
+        // expect(intersect1).toBe(true);
+        expect(intersect2).toBe(true);
     });
 
-    it("return top when the ball approaches the top side of a shape", () => {
+    it("returns the line that was hit when the object approaches from the top.", () => {
         // Arrange
-        const shape = {
-            left: 100,
-            top: 100,
-            width: 100,
-            height: 50
-        } as ScreenObject;
+        const horizantalLine: Line = {
+            a: {
+                x: 100,
+                y: 100,
+            },
+            b: {
+                x: 150,
+                y: 100,
+            }
+        };
 
-        const ball = {
-            left: shape.left + shape.width / 2,
-            top: shape.top,
-            width: 1,
-            height: 1,
-            angle: 270
-        } as BallState;
+        const verticalLine: Line = {
+            a: {
+                x: 100,
+                y: 100,
+            },
+            b: {
+                x: 100,
+                y: 150
+            }
+        };
 
-        // Act
-        const result = getHitSide(ball, shape);
-
-        // Assert
-        expect(result).toBe("top");
-    });
-
-    it("return right when the ball approaches from right side of a shape", () => {
-        // Arrange
-        const shape = {
-            left: 100,
-            top: 100,
-            width: 100,
-            height: 50
-        } as ScreenObject;
-
-        const ball = {
-            left: shape.left + shape.width,
-            top: shape.top + shape.height / 2,
-            width: 1,
-            height: 1,
-            angle: 180
-        } as BallState;
+        const ball: BallState = {
+            angle: 90,
+            color: "white",
+            height: 10,
+            width: 10,
+            lastObject: undefined,
+            left: 150,
+            top: 120,
+            velocity: 10,
+        };
 
         // Act
-        const result = getHitSide(ball, shape);
+        const hitLine = getHitLine(ball, horizantalLine, verticalLine);
 
         // Assert
-        expect(result).toBe("right");
-    });
-
-    it("return bottom when the ball approaches from the bottom side shape", () => {
-        // Arrange
-        const shape = {
-            left: 100,
-            top: 100,
-            width: 100,
-            height: 50
-        } as ScreenObject;
-
-        const ball = {
-            left: shape.left + shape.width / 2,
-            top: shape.top + shape.height,
-            width: 1,
-            height: 1,
-            angle: 90
-        } as BallState;
-
-        // Act
-        const result = getHitSide(ball, shape);
-
-        // Assert
-        expect(result).toBe("bottom");
-    });
-
-    it("gets up and right from an angle of 45", () => {
-        // Act
-        const result = getDirectionFromAngle(45);
-
-        // Assert
-        expect(result.length).toBe(2);
-        expect(result.some((r) => r === "up")).toBe(true);
-        expect(result.some((r) => r === "right")).toBe(true);
-    });
-
-    it("gets down and right from an angle of 315", () => {
-        // Act
-        const result = getDirectionFromAngle(315);
-
-        // Assert
-        expect(result.length).toBe(2);
-        expect(result.some((r) => r === "down")).toBe(true);
-        expect(result.some((r) => r === "right")).toBe(true);
-    });
-
-    it("gets left and down from an angle of 225", () => {
-        // Act
-        const result = getDirectionFromAngle(225);
-
-        // Assert
-        expect(result.length).toBe(2);
-        expect(result.some((r) => r === "down")).toBe(true);
-        expect(result.some((r) => r === "left")).toBe(true);
+        expect(hitLine).toBe(horizantalLine);
     });
 });
