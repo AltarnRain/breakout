@@ -174,7 +174,7 @@ describe("Lib tests", () => {
         };
 
         const ball: BallState = {
-            angle: 90,
+            angle: 270,
             color: "white",
             height: 10,
             width: 10,
@@ -192,17 +192,6 @@ describe("Lib tests", () => {
     });
 
     it("detects an intersect using real game values", () => {
-
-        const ball = {
-            angle: 93.97542846694799,
-            color: "radial-gradient(yellow, orange, brown)",
-            height: 18.162000000000003,
-            width: 18.162000000000003,
-            left: 416.54425027915454,
-            top: 187.30551170981298,
-            velocity: 10,
-            lastObject: {}
-        };
 
         const horizantalLine = {
             a: {

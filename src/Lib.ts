@@ -141,7 +141,7 @@ export const getBounceAction = (ball: BallState, shape: ScreenObject): GameActio
                 y: shape.top,
             },
             b: {
-                x: shape.top,
+                x: shape.left,
                 y: shapeBottom,
             }
         };
@@ -163,11 +163,11 @@ export const getBounceAction = (ball: BallState, shape: ScreenObject): GameActio
     if (directions.left) {
         verticalLine = {
             a: {
-                x: shape.left,
+                x: shapeRight,
                 y: shape.top,
             },
             b: {
-                x: shape.left,
+                x: shapeRight,
                 y: shapeBottom
             }
         };
