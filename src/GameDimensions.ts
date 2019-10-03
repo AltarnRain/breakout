@@ -7,7 +7,7 @@ import { GameDimensions } from "./Definitions/GameDimensions";
 
 let gameDimensions: GameDimensions;
 
-export const getGameDimensions = (): GameDimensions => {
+const getGameDimensions = (): GameDimensions => {
     if (!gameDimensions) {
         let size = 0;
 
@@ -25,3 +25,5 @@ export const getGameDimensions = (): GameDimensions => {
 
     return gameDimensions;
 };
+
+export default getGameDimensions;

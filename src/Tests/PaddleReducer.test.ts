@@ -1,7 +1,7 @@
 import "jest";
-import { paddleReducer } from "../Reducers/PaddleReducer";
-import { PaddleState } from "../State/Definition/PaddleState";
-import { GameActions } from "../State/GameActions";
+import paddleReducer from "../Reducers/PaddleReducer";
+import PaddleState from "../State/Definition/PaddleState";
+import GameActions from "../State/GameActions";
 
 describe("PaddleReducer tests", () => {
     it("resets", () => {

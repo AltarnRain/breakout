@@ -1,11 +1,11 @@
 import { combineReducers, createStore, ReducersMapObject, Store } from "redux";
-import { ballReducer } from "../Reducers/BallReducer";
-import { blockReducer } from "../Reducers/BlockReducer";
-import { gameStateReducer } from "../Reducers/GameStateReducer";
-import { paddleReducer } from "../Reducers/PaddleReducer";
-import { soundReducer } from "../Reducers/SoundReducer";
+import ballReducer from "../Reducers/BallReducer";
+import blockReducer from "../Reducers/BlockReducer";
+import gameStateReducer from "../Reducers/GameStateReducer";
+import paddleReducer from "../Reducers/PaddleReducer";
+import soundReducer from "../Reducers/SoundReducer";
 import ActionPayload from "./ActionPayLoad";
-import { AppState } from "./Definition/AppState";
+import AppState from "./Definition/AppState";
 
 /**
  * All reducer that build the application state.

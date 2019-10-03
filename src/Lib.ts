@@ -3,12 +3,12 @@
  */
 
 import { BallAngleStartRandomFactor, BounceAngleIncreaseConstant, DegreeToRadian, MaxBlue, MaxRed, MinBlue, MinRed } from "./Constants/Constants";
-import { Block } from "./Definitions/Block";
-import { Direction } from "./Definitions/Direction";
-import { Line } from "./Definitions/Line";
-import { ScreenObject } from "./Definitions/ScreenObject";
-import { BallState } from "./State/Definition/BallState";
-import { GameActions } from "./State/GameActions";
+import Block from "./Definitions/Block";
+import Direction from "./Definitions/Direction";
+import Line from "./Definitions/Line";
+import ScreenObject from "./Definitions/ScreenObject";
+import BallState from "./State/Definition/BallState";
+import GameActions from "./State/GameActions";
 
 /**
  * Returns the initial block setup.

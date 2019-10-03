@@ -1,7 +1,7 @@
 /**
  * GameState state. Used to keep track of non-game object state.
  */
-export interface GameState {
+export default interface GameState {
     /**
      * The state of the game.
      */

@@ -1,4 +1,4 @@
-export enum GameActions {
+enum  GameActions {
     /**
      * An action that instructs the reducers to return an initial objects to play the game.
      */
@@ -54,3 +54,5 @@ export enum GameActions {
      */
     toggleSound
 }
+
+export default GameActions;

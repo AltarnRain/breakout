@@ -1,10 +1,9 @@
 import "jest";
+import { MaxBlue, MaxRed, MinBlue, MinRed } from "../Constants/Constants";
 import { getBlocks } from "../Lib";
-import { blockReducer } from "../Reducers/BlockReducer";
-import { BlockState } from "../State/Definition/BlockState";
-import { GameActions } from "../State/GameActions";
-import { blockStatement } from "@babel/types";
-import { MaxRed, MinRed, MaxBlue, MinBlue } from "../Constants/Constants";
+import blockReducer from "../Reducers/BlockReducer";
+import BlockState from "../State/Definition/BlockState";
+import GameActions from "../State/GameActions";
 
 describe("Block reduder tests", () => {
 

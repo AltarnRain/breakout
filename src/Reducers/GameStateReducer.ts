@@ -1,7 +1,7 @@
 import produce from "immer";
 import { Action } from "redux";
-import { GameState } from "../State/Definition/GameState";
-import { GameActions } from "../State/GameActions";
+import GameState from "../State/Definition/GameState";
+import GameActions from "../State/GameActions";
 
 /**
  * game state reducer. Keeps track of score, losing a game, etc.
@@ -9,7 +9,7 @@ import { GameActions } from "../State/GameActions";
  * @param {Action}. A reduc action. No payload.
  * @returns {GameState}. The next game state.
  */
-export const gameStateReducer = (state: GameState = getNewState(), action: Action<GameActions>): GameState => {
+const gameStateReducer = (state: GameState = getNewState(), action: Action<GameActions>): GameState => {
     switch (action.type) {
         case GameActions.reset:
             return getNewState();
@@ -20,7 +20,6 @@ export const gameStateReducer = (state: GameState = getNewState(), action: Actio
         case GameActions.nextLevel:
             return produce(state, (draftObject) => {
                 draftObject.level += 1;
-                draftObject.gameMode = "paused";
             });
         case GameActions.hitBlock:
             return produce(state, (draftObject) => {
@@ -46,3 +45,5 @@ export const gameStateReducer = (state: GameState = getNewState(), action: Actio
 const getNewState = (): GameState => {
     return { gameMode: "paused", level: 1, score: 0 };
 };
+
+export default gameStateReducer;

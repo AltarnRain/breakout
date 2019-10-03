@@ -1,11 +1,11 @@
 import produce from "immer";
 import { MaxBlue, MaxGreen, MaxRed, MinBlue, MinGreen, MinRed } from "../Constants/Constants";
-import { Block } from "../Definitions/Block";
-import { getGameDimensions } from "../GameDimensions";
+import Block from "../Definitions/Block";
+import getGameDimensions from "../GameDimensions";
 import { getBlocks } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
-import { BlockState } from "../State/Definition/BlockState";
-import { GameActions } from "../State/GameActions";
+import BlockState from "../State/Definition/BlockState";
+import GameActions from "../State/GameActions";
 
 /**
  * The block reducer.
@@ -13,7 +13,7 @@ import { GameActions } from "../State/GameActions";
  * @param {ActionPayload} action. An action, payload optional.
  * @returns {BlockState}. A 'new' block state.
  */
-export const blockReducer = (state: BlockState = getNewState(), action: ActionPayload<Block>): BlockState => {
+const blockReducer = (state: BlockState = getNewState(), action: ActionPayload<Block>): BlockState => {
     switch (action.type) {
         case GameActions.reset:
             return getNewState();
@@ -29,7 +29,7 @@ export const blockReducer = (state: BlockState = getNewState(), action: ActionPa
 
         case GameActions.hitBlock:
             return produce(state, (draftObject) => {
-                if (action.payload) {
+                if (action.payload && action.payload) {
                     const hitBlockIndex = state.blocks.indexOf(action.payload);
                     draftObject.blocks[hitBlockIndex].hit = true;
 
@@ -133,3 +133,5 @@ function calculateBlockWidth(columns: number): number {
     const size = getGameDimensions().size;
     return size / columns;
 }
+
+export default blockReducer;

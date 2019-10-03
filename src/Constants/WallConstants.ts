@@ -2,7 +2,7 @@
 /**
  * A constant object that has an object for each wall. Used to eliminate double bounces.
  */
-export const Walls = {
+const Walls = {
     /**
      * Reference constant for the left wall.
      */
@@ -23,3 +23,5 @@ export const Walls = {
      */
     bottomWall: {}
 };
+
+export default Walls;

@@ -1,10 +1,10 @@
 
 import produce from "immer";
 import { PaddleColor, PaddleHeightFactor, PaddlePositionFactor, PaddleWithFactor } from "../Constants/Constants";
-import { getGameDimensions } from "../GameDimensions";
+import getGameDimensions from "../GameDimensions";
 import ActionPayload from "../State/ActionPayLoad";
-import { PaddleState } from "../State/Definition/PaddleState";
-import { GameActions } from "../State/GameActions";
+import PaddleState from "../State/Definition/PaddleState";
+import GameActions from "../State/GameActions";
 
 const gameDimensions = getGameDimensions();
 
@@ -14,7 +14,7 @@ const gameDimensions = getGameDimensions();
  * @param {ActionPayload<number> }action. An action to be performed on the paddle. Number is the 'left' coordinate of the paddle.
  * @returns {PaddleState}. Paddle state.
  */
-export const paddleReducer = (state: PaddleState = getNewState(), action: ActionPayload<number>): PaddleState => {
+const paddleReducer = (state: PaddleState = getNewState(), action: ActionPayload<number>): PaddleState => {
     switch (action.type) {
         case GameActions.reset:
 
@@ -74,3 +74,5 @@ const getNewState = (): PaddleState => {
         isPaddle: true
     };
 };
+
+export default paddleReducer;

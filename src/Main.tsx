@@ -1,14 +1,14 @@
 import produce from "immer";
 import React, { CSSProperties } from "react";
 import { GameFieldBorderColor, GameTick } from "./Constants/Constants";
-import { Walls } from "./Constants/WallConstants";
-import { Block } from "./Definitions/Block";
-import { GameObject } from "./Definitions/GameObject";
-import { getGameDimensions } from "./GameDimensions";
+import Walls from "./Constants/WallConstants";
+import Block from "./Definitions/Block";
+import GameObject from "./Definitions/GameObject";
+import getGameDimensions from "./GameDimensions";
 import { getBounceAction, overlaps } from "./Lib";
-import { AppState } from "./State/Definition/AppState";
-import { BallState } from "./State/Definition/BallState";
-import { GameActions } from "./State/GameActions";
+import AppState from "./State/Definition/AppState";
+import BallState from "./State/Definition/BallState";
+import GameActions from "./State/GameActions";
 import { appState, appStore } from "./State/Store";
 
 const gameDimensions = getGameDimensions();
@@ -168,13 +168,13 @@ export class Main extends React.Component<{}, AppState> {
 
             if (paddleHit) {
                 const paddleBounceAction = getBounceAction(ball, paddle);
-                appStore().dispatch({ type: paddleBounceAction, payload: paddle });
+                appStore().dispatch({ type: paddleBounceAction, payload: paddle  });
 
             } else if (blocks) {
 
                 const hitBlock = blocks.find((b) => overlaps(ball, b) && b.hit === false);
                 if (hitBlock) {
-                    appStore().dispatch({ type: GameActions.hitBlock, payload: hitBlock });
+                    appStore().dispatch({ type: GameActions.hitBlock, payload: hitBlock});
 
                     const action = getBounceAction(ball, hitBlock);
 
@@ -186,22 +186,22 @@ export class Main extends React.Component<{}, AppState> {
                     // The ball's top and left are inside the game field.
                     // Use the game dimension object to store a wall hit.
                     // Hit the top  wall
-                    appStore().dispatch({ type: GameActions.ballBounceHorizantally, payload: Walls.topWall });
+                    appStore().dispatch({ type: GameActions.ballBounceHorizantally, payload:  Walls.topWall  });
 
                 } else if (ball.left <= 0) {
                     // Hit the left wall
-                    appStore().dispatch({ type: GameActions.ballBounceVertically, payload: Walls.leftWall });
+                    appStore().dispatch({ type: GameActions.ballBounceVertically, payload:  Walls.leftWall  });
                 } else if (ball.left + ball.width >= gameDimensions.size) {
                     // Hit the right wall
 
-                    appStore().dispatch({ type: GameActions.ballBounceVertically, payload: Walls.rightWall });
+                    appStore().dispatch({ type: GameActions.ballBounceVertically, payload:  Walls.rightWall  });
                 } else if (ball.top + ball.width >= gameDimensions.size) {
                     // Hit bottom wall.
                     appStore().dispatch({ type: GameActions.gameLost });
                 }
             }
 
-            appStore().dispatch({ type: GameActions.tick });
+            appStore().dispatch({ type: GameActions.tick, action: { ticks: diff } });
 
             const newComponentState = produce(this.state, (draftObject) => {
                 draftObject.ball = appState().ball;

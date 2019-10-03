@@ -1,12 +1,12 @@
 import produce from "immer";
 import { BallResizeFactor, BallSpeedIncreasePerBlock, BallSpeedIncreasePerLevel, InitialBallVelocity } from "../Constants/Constants";
-import { ScreenObject } from "../Definitions/ScreenObject";
-import { getGameDimensions } from "../GameDimensions";
+import ScreenObject from "../Definitions/ScreenObject";
+import getGameDimensions from "../GameDimensions";
 import { Guard } from "../Guard";
 import { angleRandomizer, changeAngle, getNextX, getNextY } from "../Lib";
 import ActionPayload from "../State/ActionPayLoad";
-import { BallState } from "../State/Definition/BallState";
-import { GameActions } from "../State/GameActions";
+import BallState from "../State/Definition/BallState";
+import GameActions from "../State/GameActions";
 
 const gameDimensions = getGameDimensions();
 
@@ -16,7 +16,7 @@ const gameDimensions = getGameDimensions();
  * @param {ActionPayLoad}. An action, payload optional.
  * @returns {BallState}. The ball state.
  */
-export const ballReducer = (state: BallState = getNewState(), action: ActionPayload<ScreenObject>): BallState => {
+const ballReducer = (state: BallState = getNewState(), action: ActionPayload<ScreenObject>): BallState => {
 
     switch (action.type) {
         case GameActions.reset: {
@@ -26,6 +26,7 @@ export const ballReducer = (state: BallState = getNewState(), action: ActionPayl
         case GameActions.tick: {
 
             return produce(state, (draftState) => {
+
                 const left = getNextX(state.angle, state.velocity, state.left);
                 const top = getNextY(state.angle, state.velocity, state.top);
 
@@ -119,3 +120,5 @@ const getNewState = (): BallState => {
         lastObject: {},
     };
 };
+
+export default ballReducer;

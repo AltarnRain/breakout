@@ -1,9 +1,9 @@
-import { Block } from "../../Definitions/Block";
+import Block from "../../Definitions/Block";
 
 /**
  * The state of the blocks
  */
-export interface BlockState {
+export default interface BlockState {
     /**
      * An array of block objects currently on screen.
      */

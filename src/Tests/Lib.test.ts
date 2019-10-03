@@ -1,8 +1,8 @@
 import "jest";
-import { Line } from "../Definitions/Line";
-import { ScreenObject } from "../Definitions/ScreenObject";
+import Line from "../Definitions/Line";
+import ScreenObject from "../Definitions/ScreenObject";
 import { angleRandomizer, getBlocks, getHitLine, intersects, overlaps } from "../Lib";
-import { BallState } from "../State/Definition/BallState";
+import BallState from "../State/Definition/BallState";
 
 describe("Lib tests", () => {
 

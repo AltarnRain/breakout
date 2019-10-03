@@ -1,13 +1,13 @@
-import { BallState } from "./BallState";
-import { BlockState } from "./BlockState";
-import { GameState } from "./GameState";
-import { PaddleState } from "./PaddleState";
-import { SoundState } from "./SoundState";
+import BallState from "./BallState";
+import BlockState from "./BlockState";
+import GameState from "./GameState";
+import PaddleState from "./PaddleState";
+import SoundState from "./SoundState";
 
 /**
  * Describes the application state
  */
-export interface AppState {
+export default interface AppState {
 
     /**
      * Stores the state of the game blocks

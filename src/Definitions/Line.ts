@@ -1,7 +1,17 @@
-import { Coordinates } from "./Coordinates";
+import Coordinates from "./Coordinates";
 
-export interface Line {
+/**
+ * An object definition for a line.
+ */
+export default interface Line {
+
+    /**
+     * The first point of the line.
+     */
     a: Coordinates;
 
+    /**
+     * The second point of the line.
+     */
     b: Coordinates;
 }

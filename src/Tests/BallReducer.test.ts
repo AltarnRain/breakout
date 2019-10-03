@@ -1,8 +1,8 @@
 import "jest";
-import { ballReducer } from "../Reducers/BallReducer";
-import { BallState } from "../State/Definition/BallState";
-import { PaddleState } from "../State/Definition/PaddleState";
-import { GameActions } from "../State/GameActions";
+import ballReducer from "../Reducers/BallReducer";
+import BallState from "../State/Definition/BallState";
+import PaddleState from "../State/Definition/PaddleState";
+import GameActions from "../State/GameActions";
 
 describe("ball reducer tests", () => {
     it("can reset the state of the ball", () => {
@@ -18,7 +18,7 @@ describe("ball reducer tests", () => {
         expect(angleWithinLimits).toBe(true);
     });
 
-    it ("goes up at 90 degrees", () => {
+    it("goes up at 90 degrees", () => {
         // Arrange
         const ball: BallState = {
             left: 50,
@@ -30,14 +30,14 @@ describe("ball reducer tests", () => {
         ball.angle = 90;
 
         // Act
-        const newBall = ballReducer(ball, {type: GameActions.tick});
+        const newBall = ballReducer(ball, { type: GameActions.tick });
 
         // Assert
         expect(ball.left).toBe(newBall.left);
         expect(ball.top).toBeGreaterThan(newBall.top);
     });
 
-    it ("goes right at 180 degrees", () => {
+    it("goes right at 180 degrees", () => {
         // Arrange
         const ball: BallState = {
             left: 50,
@@ -47,17 +47,17 @@ describe("ball reducer tests", () => {
         } as BallState;
 
         // Act
-        const newBall = ballReducer(ball, {type: GameActions.tick});
+        const newBall = ballReducer(ball, { type: GameActions.tick });
 
         // Assert
         expect(ball.left).toBeGreaterThan(newBall.left);
         expect(ball.top).toBe(newBall.top);
     });
 
-    it ("changes the angle depending on where the ball hits the paddle", () => {
+    it("changes the angle depending on where the ball hits the paddle", () => {
         // Arrange
         const ball = {
-            left : 100,
+            left: 100,
             top: 50,
             angle: 180,
             width: 50
@@ -71,7 +71,7 @@ describe("ball reducer tests", () => {
         } as PaddleState;
 
         // Act
-        const result = ballReducer(ball, { type: GameActions.ballBounceHorizantally, payload: paddle});
+        const result = ballReducer(ball, { type: GameActions.ballBounceHorizantally, payload: { object: paddle }} );
 
         // Assert
         expect(result).toBeDefined();

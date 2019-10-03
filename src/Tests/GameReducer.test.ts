@@ -1,7 +1,7 @@
 import "jest";
-import { gameStateReducer } from "../Reducers/GameStateReducer";
-import { GameState } from "../State/Definition/GameState";
-import { GameActions } from "../State/GameActions";
+import gameStateReducer  from "../Reducers/GameStateReducer";
+import GameState  from "../State/Definition/GameState";
+import  GameActions from "../State/GameActions";
 
 describe("game reducer tests", () => {
     it("resets", () => {

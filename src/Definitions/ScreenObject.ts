@@ -1,7 +1,7 @@
 /**
  * Base interface for all game objects.
  */
-export interface ScreenObject {
+export default interface ScreenObject {
     /**
      * Left position in pixels.
      */
