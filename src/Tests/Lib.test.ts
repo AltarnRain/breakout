@@ -1,7 +1,7 @@
 import "jest";
 import { Line } from "../Definitions/Line";
 import { ScreenObject } from "../Definitions/ScreenObject";
-import { angleRandomizer, getBlocks, intersects, overlaps, getHitLine } from "../Lib";
+import { angleRandomizer, getBlocks, getHitLine, intersects, overlaps } from "../Lib";
 import { BallState } from "../State/Definition/BallState";
 
 describe("Lib tests", () => {
@@ -189,5 +189,47 @@ describe("Lib tests", () => {
 
         // Assert
         expect(hitLine).toBe(horizantalLine);
+    });
+
+    it("detects an intersect using real game values", () => {
+
+        const ball = {
+            angle: 93.97542846694799,
+            color: "radial-gradient(yellow, orange, brown)",
+            height: 18.162000000000003,
+            width: 18.162000000000003,
+            left: 416.54425027915454,
+            top: 187.30551170981298,
+            velocity: 10,
+            lastObject: {}
+        };
+
+        const horizantalLine = {
+            a: {
+                x: 378.375,
+                y: 189.1875
+            },
+            b: {
+                x: 454.05,
+                y: 189.1875
+            }
+        };
+
+        const topRightLine = {
+            a: {
+                x: 434.0129637005973,
+                y: 177.32957297102791
+            },
+            b: {
+                x: 435.3995368577117,
+                y: 197.28145044859804
+            }
+        };
+
+        // Act
+        const hitLine = intersects(horizantalLine, topRightLine);
+
+        // Assert
+        expect(hitLine).toBe(true);
     });
 });

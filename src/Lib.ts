@@ -7,7 +7,6 @@ import { Block } from "./Definitions/Block";
 import { Direction } from "./Definitions/Direction";
 import { Line } from "./Definitions/Line";
 import { ScreenObject } from "./Definitions/ScreenObject";
-import { getGameDimensions } from "./GameDimensions";
 import { BallState } from "./State/Definition/BallState";
 import { GameActions } from "./State/GameActions";
 
@@ -119,15 +118,18 @@ export const getBounceAction = (ball: BallState, shape: ScreenObject): GameActio
     let horizantalLine: Line = {} as Line;
     let verticalLine: Line = {} as Line;
 
+    const shapeBottom = shape.top + shape.height;
+    const shapeRight = shape.left + shape.width;
+
     if (directions.up) {
         horizantalLine = {
             a: {
                 x: shape.left,
-                y: shape.top
+                y: shapeBottom,
             },
             b: {
-                x: shape.left + shape.width,
-                y: shape.top
+                x: shapeRight,
+                y: shapeBottom
             }
         };
     }
@@ -135,26 +137,25 @@ export const getBounceAction = (ball: BallState, shape: ScreenObject): GameActio
     if (directions.right) {
         verticalLine = {
             a: {
-                x: shape.left + shape.width,
+                x: shape.left,
                 y: shape.top,
             },
             b: {
-                x: shape.left + shape.width,
-                y: shape.top + shape.height,
+                x: shape.top,
+                y: shapeBottom,
             }
         };
     }
 
     if (directions.down) {
-
         horizantalLine = {
             a: {
                 x: shape.left,
-                y: shape.top + shape.height,
+                y: shape.top,
             },
             b: {
-                x: shape.left + shape.width,
-                y: shape.top + shape.height,
+                x: shapeRight,
+                y: shape.top,
             }
         };
     }
@@ -167,7 +168,7 @@ export const getBounceAction = (ball: BallState, shape: ScreenObject): GameActio
             },
             b: {
                 x: shape.left,
-                y: shape.top + shape.height
+                y: shapeBottom
             }
         };
     }
@@ -259,16 +260,6 @@ export const getDirectionFromAngle = (angle: number): Direction => {
     return returnValue;
 };
 
-const reverseAngle = (angle: number): number => {
-    let absAngle = Math.abs(angle) + 180;
-
-    if (absAngle > 360) {
-        absAngle -= 360;
-    }
-
-    return absAngle;
-};
-
 /**
  * Determines which line was hit.
  * @param {BallState} ball. The ball.
@@ -277,51 +268,51 @@ const reverseAngle = (angle: number): number => {
  * @returns {Line}. The hit line. Returns undefined when the hit line could not be found.
  */
 export const getHitLine = (ball: BallState, horizantalLine: Line, verticalLine: Line): Line | undefined => {
-    const reversedAngle = reverseAngle(ball.angle);
 
-    const gameSize = 100;
+    const forward = ball.velocity;
+    const backward = ball.velocity * -1;
 
     const topLeftLine: Line = {
         a: {
-            x: getNextX(reversedAngle, gameSize, ball.left),
-            y: getNextY(reversedAngle, gameSize, ball.top),
+            x: getNextX(ball.angle, forward, ball.left),
+            y: getNextY(ball.angle, forward, ball.top),
         },
         b: {
-            x: getNextX(ball.angle, gameSize, ball.left),
-            y: getNextY(ball.angle, gameSize, ball.top),
+            x: getNextX(ball.angle, backward, ball.left),
+            y: getNextY(ball.angle, backward, ball.top),
         }
     };
 
     const topRightLine: Line = {
         a: {
-            x: getNextX(reversedAngle, gameSize, ball.left + ball.width),
-            y: getNextY(reversedAngle, gameSize, ball.top),
+            x: getNextX(ball.angle, forward, ball.left + ball.width),
+            y: getNextY(ball.angle, forward, ball.top),
         },
         b: {
-            x: getNextX(ball.angle, gameSize, ball.left + ball.width),
-            y: getNextY(ball.angle, gameSize, ball.top),
+            x: getNextX(ball.angle, backward, ball.left + ball.width),
+            y: getNextY(ball.angle, backward, ball.top),
         }
     };
 
     const bottomRightLine: Line = {
         a: {
-            x: getNextX(reversedAngle, gameSize, ball.left + ball.width),
-            y: getNextY(reversedAngle, gameSize, ball.top + ball.height),
+            x: getNextX(ball.angle, forward, ball.left + ball.width),
+            y: getNextY(ball.angle, forward, ball.top + ball.height),
         },
         b: {
-            x: getNextX(ball.angle, gameSize, ball.left + ball.width),
-            y: getNextY(ball.angle, gameSize, ball.top + ball.height),
+            x: getNextX(ball.angle, backward, ball.left + ball.width),
+            y: getNextY(ball.angle, backward, ball.top + ball.height),
         }
     };
 
     const bottomLeftLine: Line = {
         a: {
-            x: getNextX(reversedAngle, gameSize, ball.left ),
-            y: getNextY(reversedAngle, gameSize, ball.top + ball.height),
+            x: getNextX(ball.angle, forward, ball.left ),
+            y: getNextY(ball.angle, forward, ball.top + ball.height),
         },
         b: {
-            x: getNextX(ball.angle, gameSize, ball.left),
-            y: getNextY(ball.angle, gameSize, ball.top + ball.height),
+            x: getNextX(ball.angle, backward, ball.left),
+            y: getNextY(ball.angle, backward, ball.top + ball.height),
         }
     };
 
@@ -377,15 +368,15 @@ export const getHitLine = (ball: BallState, horizantalLine: Line, verticalLine: 
  */
 export function intersects(line1: Line, line2: Line) {
 
-    const x1 = line1.a.x;
-    const y1 = line1.a.y;
-    const x2 = line1.b.x;
-    const y2 = line1.b.y;
+    const x1 = Math.floor(line1.a.x);
+    const y1 = Math.floor(line1.a.y);
+    const x2 = Math.floor(line1.b.x);
+    const y2 = Math.floor(line1.b.y);
 
-    const x3 = line2.a.x;
-    const y3 = line2.a.y;
-    const x4 = line2.b.x;
-    const y4 = line2.b.y;
+    const x3 = Math.floor(line2.a.x);
+    const y3 = Math.floor(line2.a.y);
+    const x4 = Math.floor(line2.b.x);
+    const y4 = Math.floor(line2.b.y);
 
     const x = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4));
     const y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4));
