@@ -174,13 +174,13 @@ describe("Lib tests", () => {
         };
 
         const ball: BallState = {
-            angle: 270,
+            angle: 90,
             color: "white",
             height: 10,
             width: 10,
             lastObject: undefined,
-            left: 150,
-            top: 120,
+            left: 125,
+            top: 99,
             velocity: 10,
         };
 
