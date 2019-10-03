@@ -20,6 +20,7 @@ export const gameStateReducer = (state: GameState = getNewState(), action: Actio
         case GameActions.nextLevel:
             return produce(state, (draftObject) => {
                 draftObject.level += 1;
+                draftObject.gameMode = "paused";
             });
         case GameActions.hitBlock:
             return produce(state, (draftObject) => {

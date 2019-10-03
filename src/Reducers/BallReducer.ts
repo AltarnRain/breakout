@@ -69,11 +69,10 @@ export const ballReducer = (state: BallState = getNewState(), action: ActionPayl
                 draftObject.velocity = state.velocity * BallSpeedIncreasePerBlock;
             });
         case GameActions.nextLevel:
-            // Increase ball speed for each level.
-            // Increase the ball speed for each hit block
-            return produce(state, (draftObject) => {
-                draftObject.velocity = state.velocity * BallSpeedIncreasePerLevel;
-            });
+            const newState = getNewState();
+            newState.velocity = state.velocity * BallSpeedIncreasePerLevel;
+
+            return newState;
         default:
             return state;
     }
